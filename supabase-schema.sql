@@ -1,6 +1,8 @@
--- Nebula Records Supabase schema - hardened v4.1 RLS upload fix
+-- Nebula Records Supabase schema - hardened v4.2 editable preview track library
 -- Run this in Supabase SQL Editor after creating your project.
 -- Supports admin and signed artist dashboards with role-based access.
+-- Creates: profiles, tracks, events, artists_pipeline, demo_leads, ensure_profile(), hardened RLS policies, and nebula-audio storage.
+-- v4.2 adds track_key and cover_url so the six public preview slots can be edited/re-uploaded safely.
 
 create extension if not exists pgcrypto;
 
@@ -24,6 +26,8 @@ create table if not exists public.tracks (
   status text default 'Draft',
   link text,
   audio_url text,
+  track_key text,
+  cover_url text,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
@@ -57,7 +61,13 @@ create table if not exists public.demo_leads (
   created_at timestamptz default now()
 );
 
+-- Safe migrations for existing projects rerunning this schema.
+alter table if exists public.tracks add column if not exists track_key text;
+alter table if exists public.tracks add column if not exists cover_url text;
+
 create index if not exists tracks_owner_created_idx on public.tracks(owner_id, created_at desc);
+create index if not exists tracks_track_key_idx on public.tracks(track_key);
+create unique index if not exists tracks_owner_track_key_unique on public.tracks(owner_id, track_key) where track_key is not null;
 create index if not exists events_owner_created_idx on public.events(owner_id, created_at desc);
 create index if not exists demo_leads_created_idx on public.demo_leads(created_at desc);
 

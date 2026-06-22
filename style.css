@@ -88,3 +88,32 @@ main{position:relative;z-index:2}.section-wrap{width:min(1180px,calc(100% - 40px
 .preset-meta-grid b{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px;}
 @media (max-width: 780px){.preset-upload-card{grid-template-columns:1fr}.preset-cover-wrap{max-width:260px}.preset-meta-grid{grid-template-columns:1fr 1fr}}
 @media (max-width: 520px){.preset-meta-grid{grid-template-columns:1fr}}
+
+/* Editable preview track library - Nebula Records v4.2 */
+.track-library-suite{position:relative;overflow:hidden;}
+.track-library-suite:before{content:"";position:absolute;right:-120px;top:-160px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(96,231,255,.18),transparent 68%);pointer-events:none;}
+.track-library-table th:first-child,.track-library-table td:first-child{width:72px;}
+.track-library-cover{width:58px;height:58px;border-radius:15px;object-fit:cover;display:block;box-shadow:0 14px 30px rgba(7,17,38,.12);border:1px solid rgba(7,17,38,.08);background:#061126;}
+.track-library-table td strong{display:block;font-weight:1000;color:#061126;line-height:1.1;}
+.library-key{display:block;margin-top:5px;color:#7c8aa2;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;}
+.library-badge,.audio-state{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;font-size:11px;font-weight:1000;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.library-badge{background:rgba(58,119,255,.1);color:#173a86;border:1px solid rgba(58,119,255,.14);}
+.audio-state.good{background:rgba(98,214,107,.11);color:#13713a;border:1px solid rgba(98,214,107,.22);}
+.audio-state.pending{background:rgba(255,193,7,.13);color:#8d6500;border:1px solid rgba(255,193,7,.24);}
+.library-actions{display:flex;gap:8px;flex-wrap:wrap;min-width:210px;}
+.library-preview-btn,.library-edit-btn{border:1px solid rgba(7,17,38,.1)!important;background:#fff!important;color:#061126!important;box-shadow:0 12px 26px rgba(7,17,38,.07);}
+.library-edit-btn{background:linear-gradient(135deg,#061126,#173a86)!important;color:#fff!important;border-color:rgba(96,231,255,.28)!important;}
+.track-edit-modal{position:fixed;inset:0;z-index:6000;background:rgba(2,7,20,.72);backdrop-filter:blur(14px);display:grid;place-items:center;padding:24px;}
+.track-edit-modal[hidden]{display:none!important;}
+.track-edit-card{width:min(920px,100%);max-height:min(92vh,900px);overflow:auto;position:relative;border-radius:34px;padding:28px;background:radial-gradient(circle at 96% 0,rgba(96,231,255,.18),transparent 34%),linear-gradient(145deg,#ffffff,#f3f7ff);box-shadow:0 36px 120px rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.76);}
+.track-edit-close{position:absolute;right:20px;top:20px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(7,17,38,.12);background:#fff;color:#061126;font-size:28px;line-height:1;cursor:pointer;box-shadow:0 14px 34px rgba(7,17,38,.12);}
+.track-edit-header{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;margin-bottom:24px;padding-right:46px;}
+.track-edit-header img{width:150px;height:150px;border-radius:26px;object-fit:cover;box-shadow:0 24px 70px rgba(7,17,38,.16);border:1px solid rgba(7,17,38,.08);background:#061126;}
+.track-edit-header h2{font-size:clamp(2rem,4vw,3.4rem);line-height:.95;letter-spacing:-.06em;margin:10px 0;}
+.track-edit-header p{color:#596981;line-height:1.65;margin:0;max-width:620px;}
+.track-edit-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.track-edit-form .span-2{grid-column:1/-1;}
+.upload-dropzone{border:1px dashed rgba(58,119,255,.34);background:rgba(58,119,255,.05);border-radius:20px;padding:16px;}
+.upload-dropzone input{margin-top:8px;}
+.upload-dropzone small{display:block;color:#6d7b91;margin-top:8px;line-height:1.5;font-weight:700;}
+@media(max-width:780px){.track-edit-header{grid-template-columns:1fr;padding-right:0}.track-edit-header img{width:120px;height:120px}.track-edit-form{grid-template-columns:1fr}.track-edit-form .span-2{grid-column:auto}.library-actions{min-width:0}.track-library-table{min-width:760px}}

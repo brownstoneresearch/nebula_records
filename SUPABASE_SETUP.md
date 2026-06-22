@@ -46,3 +46,40 @@ If you already ran an older schema and see this error while uploading snippets:
 4. Refresh `dashboard.html`, sign out/in again, then upload the snippet.
 
 The hotfix updates Storage policies and makes dashboard uploads save under your authenticated user ID folder.
+
+## v4.2 Editable Six-Song Preview Library
+
+This package includes a complete `supabase-schema.sql` that creates:
+
+- `profiles` for admin and signed artist roles
+- `tracks` for uploaded songs/snippets
+- `events` for analytics
+- `artists_pipeline` for future roster spots
+- `demo_leads` for public demo submissions
+- `ensure_profile()` secure role helper
+- hardened Row Level Security policies
+- the public `nebula-audio` Storage bucket for preview MP3 files
+
+The `tracks` table also includes `track_key` and `cover_url`. These fields allow the six public Blocboykiddie preview songs in the dashboard Track Library to remain fixed as official preview slots while still being editable.
+
+To update an existing Supabase project, run either the full `supabase-schema.sql` again or run `SUPABASE_TRACK_LIBRARY_EDIT_HOTFIX.sql` once in Supabase SQL Editor.
+
+The six editable preview slots are:
+
+1. Money
+2. Wacko Jacko
+3. Jmapelle_Hushpuppi
+4. No Seke
+5. Rich and Sad
+6. Mi Casa Su Casa
+
+Dashboard flow:
+
+1. Sign in through `login.html`.
+2. Open `dashboard.html`.
+3. Go to **Library**.
+4. Click **Edit / Re-upload** beside any of the six preview songs.
+5. Choose a replacement MP3 preview.
+6. Save the update.
+
+The new MP3 is uploaded to Supabase Storage and its public URL is saved to `tracks.audio_url`. The public website player then reads published Supabase tracks and uses the latest preview URL.

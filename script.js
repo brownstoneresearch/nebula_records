@@ -35,29 +35,52 @@ async function hydrateTracksFromSupabase(){
     const cfg = window.NEBULA_SUPABASE_CONFIG;
     if(!cfg || !cfg.url || !cfg.anonKey || String(cfg.url).includes('YOUR_') || !window.supabase) return;
     const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
-    const {data, error} = await sb.from('tracks')
-      .select('title,artist,type,status,link,audio_url')
+    let query = sb.from('tracks')
+      .select('title,artist,type,status,link,audio_url,track_key,cover_url,created_at')
       .eq('status','Published')
-      .ilike('title','Jmapelle%')
       .order('created_at',{ascending:false})
-      .limit(3);
+      .limit(30);
+    let {data, error} = await query;
+    if(error && /track_key|cover_url|column/i.test(error.message || '')){
+      const retry = await sb.from('tracks')
+        .select('title,artist,type,status,link,audio_url,created_at')
+        .eq('status','Published')
+        .order('created_at',{ascending:false})
+        .limit(30);
+      data = retry.data; error = retry.error;
+    }
     if(error || !data || !data.length) return;
     data.forEach(row=>{
       if(!row.audio_url) return;
-      const idx = tracks.findIndex(t => normalizeTrackTitle(t.title) === normalizeTrackTitle(row.title));
+      const idx = tracks.findIndex(t =>
+        normalizeTrackTitle(t.title) === normalizeTrackTitle(row.title) ||
+        (row.track_key && normalizeTrackTitle(t.title) === normalizeTrackTitle(row.track_key))
+      );
       if(idx > -1){
         tracks[idx].src = row.audio_url;
         tracks[idx].artist = row.artist || tracks[idx].artist;
         tracks[idx].type = row.type ? `${row.type} preview` : tracks[idx].type;
         tracks[idx].link = row.link || tracks[idx].link;
+        tracks[idx].cover = row.cover_url || tracks[idx].cover;
         if(idx === currentTrack){ audio.src = tracks[idx].src; syncPlayer(); }
       }
     });
+    registerPlayerApi();
   }catch(err){ console.warn('Supabase preview hydration skipped:', err?.message || err); }
+}
+
+function registerPlayerApi(){
+  window.NEBULA_PLAYER = {
+    tracks,
+    loadTrack,
+    closePlayer,
+    openPlayer,
+    refresh: hydrateTracksFromSupabase
+  };
 }
 
 function setupTrackButtons(){ document.querySelectorAll('.play-track').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();loadTrack(Number(btn.dataset.track||0),true)})); }
 function setupMagneticButtons(){ document.querySelectorAll('.magnetic').forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(); const x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;el.style.transform=`translate(${x*.08}px,${y*.12}px)`});el.addEventListener('mouseleave',()=>{el.style.transform=''})}); }
 function setupContactForm(){ const form=document.getElementById('demoForm'), note=document.getElementById('formNote'); if(!form)return; form.addEventListener('submit',async e=>{e.preventDefault(); const payload=Object.fromEntries(new FormData(form).entries()); try{const leads=JSON.parse(localStorage.getItem('nebulaDemoLeads')||'[]'); leads.push({...payload,created_at:new Date().toISOString()}); localStorage.setItem('nebulaDemoLeads',JSON.stringify(leads));}catch(err){} let saved=false; try{ if(window.createNebulaSupabaseClient&&window.isNebulaSupabaseConfigured&&window.isNebulaSupabaseConfigured()){ const client=window.createNebulaSupabaseClient(); const res=await client.from('demo_leads').insert({name:payload.name||'',email:payload.email||'',link:payload.link||'',message:payload.message||'',status:'new'}); if(res.error) throw res.error; saved=true; }}catch(err){ console.warn('Supabase demo save failed:',err.message); } if(note){note.textContent=saved?'Demo submitted to Nebula Records. Thank you.':'Demo saved in site preview mode. Connect Supabase before public launch.';note.style.fontWeight='900'} form.reset();}); }
-document.addEventListener('DOMContentLoaded',()=>{ renderPlayer(); bindAudioEvents(); setupNavigation(); setupScrollEffects(); setupIntro(); setupTrackButtons(); setupMagneticButtons(); setupContactForm(); hydrateTracksFromSupabase(); const year=document.getElementById('year'); if(year) year.textContent=new Date().getFullYear(); });
+document.addEventListener('DOMContentLoaded',()=>{ renderPlayer(); bindAudioEvents(); registerPlayerApi(); setupNavigation(); setupScrollEffects(); setupIntro(); setupTrackButtons(); setupMagneticButtons(); setupContactForm(); hydrateTracksFromSupabase(); const year=document.getElementById('year'); if(year) year.textContent=new Date().getFullYear(); });
 document.addEventListener('keydown',e=>{ const tag=document.activeElement?.tagName||''; const typing=['INPUT','TEXTAREA','SELECT','BUTTON'].includes(tag); if(e.key==='Escape'&&!isPlayerClosed()) closePlayer(); if(e.code==='Space'&&!typing&&!isPlayerClosed()){e.preventDefault();togglePlay()} });

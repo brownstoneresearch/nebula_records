@@ -1,22 +1,39 @@
 {
-  "version": "v4.1-rls-upload-fixed",
+  "version": "v4.2-editable-preview-track-library",
   "brand": "Nebula Records",
   "powered_by": "EKOUNLOCKED",
   "current_artist": "Blocboykiddie",
-  "replaced_track": "third snippet updated to Jmapelle_hushpuppi",
-  "preview_asset": "assets/jmapelle_hushpuppi.mp3",
   "database": "Supabase Auth + Postgres + Storage",
-  "validated": [
-    "node --check JS files",
-    "HTML parse/duplicate footer check",
-    "asset reference check",
-    "old track reference grep"
+  "schema_file": "supabase-schema.sql",
+  "schema_creates": [
+    "profiles for admin and artist roles",
+    "tracks for uploaded songs/snippets",
+    "events for analytics",
+    "artists_pipeline for future roster spots",
+    "demo_leads for public demo submissions",
+    "ensure_profile() secure role helper",
+    "hardened Row Level Security policies"
   ],
-  "jmapelle_svg_style": "Updated to match the 1200x1200 Nebula Records release-cover SVG template used by the other cover assets.",
+  "editable_preview_slots": [
+    "Money",
+    "Wacko Jacko",
+    "Jmapelle_Hushpuppi",
+    "No Seke",
+    "Rich and Sad",
+    "Mi Casa Su Casa"
+  ],
   "changes": [
-    "Fixed Supabase RLS upload error by writing audio files under authenticated user UID folders.",
-    "Added SUPABASE_RLS_UPLOAD_HOTFIX.sql for existing Supabase projects.",
-    "Updated profile sync so admin/artist roles are corrected on login.",
-    "Added public select policy for published track metadata."
+    "Added editable Track Library rows for all six public preview songs.",
+    "Added Edit / Re-upload modal for replacing any preview MP3.",
+    "Updated public player hydration to read all six published Supabase track audio URLs, not only Jmapelle_Hushpuppi.",
+    "Added track_key and cover_url fields to the Supabase schema for stable preview slots.",
+    "Added SUPABASE_TRACK_LIBRARY_EDIT_HOTFIX.sql for existing Supabase projects.",
+    "Kept RLS-safe upload paths under authenticated user UID folders."
+  ],
+  "validated": [
+    "node --check dashboard.js",
+    "node --check script.js",
+    "asset reference check",
+    "schema includes required tables, ensure_profile(), and RLS policies"
   ]
 }

@@ -105,3 +105,9 @@ using (
 drop policy if exists "tracks_public_select_published" on public.tracks;
 create policy "tracks_public_select_published" on public.tracks
 for select using (lower(status) = 'published');
+
+-- v4.2 editable preview library columns
+alter table if exists public.tracks add column if not exists track_key text;
+alter table if exists public.tracks add column if not exists cover_url text;
+create index if not exists tracks_track_key_idx on public.tracks(track_key);
+create unique index if not exists tracks_owner_track_key_unique on public.tracks(owner_id, track_key) where track_key is not null;

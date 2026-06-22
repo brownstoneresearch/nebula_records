@@ -104,7 +104,7 @@
           </section>
         </div>
         <div class="dash-panel" data-panel="library">
-          <section class="dash-card"><h2>Track Library</h2><p class="dash-note" id="libraryNote">Your Supabase track records will appear here.</p><div class="table-wrap"><table><thead><tr><th>Title</th><th>Artist</th><th>Type</th><th>Status</th><th>Link</th></tr></thead><tbody id="trackTable"></tbody></table></div></section>
+          <section class="dash-card track-library-suite"><h2>Track Library</h2><p class="dash-note" id="libraryNote">The six public preview songs are now editable. Use <strong>Edit / Re-upload</strong> to replace any MP3 preview while keeping the public player connected to Supabase.</p><div class="table-wrap"><table class="track-library-table"><thead><tr><th>Cover</th><th>Title</th><th>Artist</th><th>Status</th><th>Audio</th><th>Actions</th></tr></thead><tbody id="trackTable"></tbody></table></div></section>
         </div>
         <div class="dash-panel" data-panel="analytics">
           <section class="dash-card"><h2>Analytics Lab</h2><p class="dash-note">Track preview plays, portal actions and campaign events from Supabase. Artists see their own events; admin sees the label view.</p><div class="analytics-actions"><button id="simulateEvent" class="button primary" type="button">Log Demo Play</button><button id="refreshDashboard" class="button ghost" type="button">Refresh Data</button></div><canvas id="analyticsChart" height="175"></canvas></section>
@@ -122,6 +122,33 @@
     </section>
   </main>
   
+  <div class="track-edit-modal" id="trackEditModal" hidden aria-hidden="true">
+    <div class="track-edit-card" role="dialog" aria-modal="true" aria-labelledby="editTrackTitleLabel">
+      <button class="track-edit-close" id="closeTrackEditor" type="button" aria-label="Close preview editor">×</button>
+      <div class="track-edit-header">
+        <img id="editTrackCover" src="assets/cover-jmapelle-hushpuppi.svg" alt="Preview cover artwork">
+        <div>
+          <span class="dash-pill">Editable preview slot</span>
+          <h2 id="editTrackTitleLabel">Edit preview song</h2>
+          <p>Replace the MP3 preview, update metadata, and keep Blocboykiddie’s six-track preview library fresh.</p>
+        </div>
+      </div>
+      <form id="trackEditForm" class="dashboard-form track-edit-form">
+        <input type="hidden" name="id" id="editTrackId">
+        <input type="hidden" name="key" id="editTrackKey">
+        <input type="hidden" id="editTrackIndex">
+        <label>Track Title<input name="title" id="editTitle" required></label>
+        <label>Artist<input name="artist" id="editArtist" required></label>
+        <label>Release Type<select name="type" id="editType"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
+        <label>Status<select name="status" id="editStatus"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
+        <label class="span-2">Songwhip / Stream Link<input name="link" id="editLink" type="url" value="https://songwhip.com/blocboykiddie"></label>
+        <label class="span-2 upload-dropzone">Replace MP3 Preview<input name="audio" id="editAudio" type="file" accept="audio/mpeg,audio/mp3,audio/*"><small id="editCurrentAudio">Choose a new MP3 only if you want to replace the current preview.</small></label>
+        <button class="button primary span-2" type="submit">Save Preview Update →</button>
+        <p id="trackEditStatus" class="dashboard-status small-status span-2"></p>
+      </form>
+    </div>
+  </div>
+
 
 <footer class="site-footer-pro">
   <div class="footer-pro-glow" aria-hidden="true"></div>
