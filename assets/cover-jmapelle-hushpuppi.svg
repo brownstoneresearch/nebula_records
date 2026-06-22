@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-label="Jmapelle_hushpuppi cover artwork">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#6ee7ff" stop-opacity=".9"/>
+      <stop offset="35%" stop-color="#1b3f82" stop-opacity=".9"/>
+      <stop offset="76%" stop-color="#061026"/>
+      <stop offset="100%" stop-color="#020511"/>
+    </radialGradient>
+    <linearGradient id="silver" x1="0" x2="1">
+      <stop offset="0" stop-color="#e8f1ff"/>
+      <stop offset=".48" stop-color="#5c6b83"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="900" height="900" rx="80" fill="#020511"/>
+  <circle cx="450" cy="420" r="310" fill="url(#g)" opacity=".98"/>
+  <circle cx="450" cy="420" r="230" fill="none" stroke="#e8f1ff" stroke-opacity=".16" stroke-width="2"/>
+  <circle cx="450" cy="420" r="180" fill="none" stroke="#e8f1ff" stroke-opacity=".20" stroke-width="2"/>
+  <path d="M138 454c92-36 175-74 254-74 78 0 140 43 207 43 65 0 120-32 169-67-41 85-110 146-200 170-121 31-271 5-430-72z" fill="#ffffff" opacity=".10"/>
+  <path d="M180 288c106-128 281-175 438-104 71 32 123 84 154 145" fill="none" stroke="url(#silver)" stroke-width="28" stroke-linecap="round" opacity=".94"/>
+  <path d="M721 583c-119 118-299 151-451 73-56-29-99-70-129-117" fill="none" stroke="#8cb4e6" stroke-width="18" stroke-linecap="round" opacity=".65"/>
+  <g opacity=".9" stroke="#e8f1ff" stroke-width="10" stroke-linecap="round" filter="url(#glow)">
+    <path d="M119 421h38l22-42 29 86 35-122 37 162 28-84h54"/>
+    <path d="M538 421h54l28 84 37-162 35 122 29-86 22 42h38"/>
+  </g>
+  <g fill="#fff" opacity=".9">
+    <circle cx="236" cy="227" r="5"/><circle cx="698" cy="249" r="4"/><circle cx="733" cy="530" r="6"/><circle cx="298" cy="608" r="4"/>
+    <path d="M450 146l14 43 43 14-43 14-14 43-14-43-43-14 43-14z" opacity=".95"/>
+    <path d="M603 557l10 31 31 10-31 10-10 31-10-31-31-10 31-10z" opacity=".9"/>
+  </g>
+  <text x="450" y="710" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="58" fill="#ffffff" letter-spacing="4">JMAPELLE</text>
+  <text x="450" y="772" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="42" fill="#b7c9ea" letter-spacing="3">HUSHPUPPI</text>
+  <text x="450" y="821" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="20" fill="#e8f1ff" opacity=".75" letter-spacing="8">BLOCBOYKIDDIE</text>
+</svg>

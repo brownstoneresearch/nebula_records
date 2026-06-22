@@ -26,3 +26,10 @@ Full production-ready static website package with a Supabase-backed label and ar
 5. Create Auth users for signed artists when they join the label.
 
 Do not place private passwords or service-role keys in any frontend file.
+
+
+## Jmapelle_hushpuppi preview update
+
+- `Lean Gone Cold` has been replaced with `Jmapelle_hushpuppi` across the website and dashboard.
+- The preview player for this track points to `assets/jmapelle_hushpuppi.mp3`.
+- The Jmapelle_hushpuppi preview is wired to assets/jmapelle_hushpuppi.mp3. Replace that file with the original uploaded MP3 before public deployment if needed.

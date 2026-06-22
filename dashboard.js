@@ -3,7 +3,7 @@
   const sampleTracks = [
     { title:'Money', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP },
     { title:'Wacko Jacko', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP },
-    { title:'Lean Gone Cold', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP }
+    { title:'Jmapelle_hushpuppi', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP }
   ];
   let client = null, user = null, profile = null, tracks = [], events = [], demos = [], artists = [];
   const q = (id) => document.getElementById(id);
