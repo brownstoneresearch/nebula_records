@@ -71,13 +71,33 @@
           <section class="dash-card upload-suite">
             <h2>Upload Song / Snippet</h2>
             <p class="dash-note">Audio files are stored in Supabase Storage. Metadata is saved in Supabase Postgres so admin and artists have role-based dashboards.</p>
+            <div class="preset-upload-card jmapelle-upload-card" aria-label="Jmapelle Hushpuppi preview upload layout">
+              <div class="preset-cover-wrap">
+                <img src="assets/cover-jmapelle-hushpuppi.svg" alt="Jmapelle_Hushpuppi cover artwork">
+                <button class="mini-play play-track" data-track="2" type="button">Test Preview</button>
+              </div>
+              <div class="preset-upload-body">
+                <span class="dash-pill">Official preview upload layout</span>
+                <h3>Jmapelle_Hushpuppi</h3>
+                <p>Use this preset when uploading Blocboykiddie’s Jmapelle_Hushpuppi MP3 preview. Save it as <strong>Published</strong> so the public website player can use the uploaded Supabase URL.</p>
+                <div class="preset-meta-grid">
+                  <span><b>Artist</b>Blocboykiddie</span>
+                  <span><b>Type</b>Single</span>
+                  <span><b>Status</b>Published</span>
+                  <span><b>Bucket</b>nebula-audio</span>
+                  <span><b>Folder</b>previews/blocboykiddie</span>
+                  <span><b>File</b>jmapelle-hushpuppi.mp3</span>
+                </div>
+                <button class="button primary" id="loadJmapellePreset" type="button">Load Jmapelle Layout →</button>
+              </div>
+            </div>
             <form id="uploadForm" class="dashboard-form">
-              <label>Track Title<input name="title" required placeholder="Song title"></label>
+              <label>Track Title<input name="title" id="uploadTitle" required placeholder="Song title"></label>
               <label>Artist<input name="artist" id="uploadArtist" required value="Blocboykiddie"></label>
-              <label>Release Type<select name="type"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
-              <label>Status<select name="status"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
-              <label>Songwhip / Stream Link<input name="link" type="url" value="https://songwhip.com/blocboykiddie"></label>
-              <label>Audio File<input name="audio" type="file" accept="audio/*"></label>
+              <label>Release Type<select name="type" id="uploadType"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
+              <label>Status<select name="status" id="uploadStatusSelect"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
+              <label>Songwhip / Stream Link<input name="link" id="uploadLink" type="url" value="https://songwhip.com/blocboykiddie"></label>
+              <label>Audio File<input name="audio" id="uploadAudio" type="file" accept="audio/*"></label>
               <button class="button primary" type="submit">Save to Supabase →</button>
               <p id="uploadStatus" class="dashboard-status small-status"></p>
             </form>

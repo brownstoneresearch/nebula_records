@@ -112,6 +112,19 @@
   }
 
   async function bindForms() {
+    q('loadJmapellePreset')?.addEventListener('click', () => {
+      const form = q('uploadForm');
+      if (!form) return;
+      if (form.elements.title) form.elements.title.value = 'Jmapelle_Hushpuppi';
+      if (form.elements.artist) form.elements.artist.value = 'Blocboykiddie';
+      if (form.elements.type) form.elements.type.value = 'Single';
+      if (form.elements.status) form.elements.status.value = 'Published';
+      if (form.elements.link) form.elements.link.value = SONGWHIP;
+      q('uploadAudio')?.focus();
+      const status = q('uploadStatus');
+      if (status) status.textContent = 'Jmapelle_Hushpuppi layout loaded. Choose jmapelle-hushpuppi.mp3, then save to Supabase.';
+      setStatus('Jmapelle_Hushpuppi upload layout loaded.', 'success');
+    });
     q('uploadForm')?.addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.currentTarget;
@@ -137,13 +150,16 @@
           const publicData = client.storage.from(bucket()).getPublicUrl(path);
           audio_url = publicData.data?.publicUrl || '';
         }
-        const payload = { owner_id:user.id, title:String(fd.get('title')||''), artist:String(fd.get('artist')||''), type:String(fd.get('type')||'Snippet'), status:String(fd.get('status')||'Draft'), link:String(fd.get('link')||SONGWHIP), audio_url };
+        const rawTitle = String(fd.get('title')||'').trim();
+        const keyTitle = rawTitle.toLowerCase().replace(/[^a-z0-9]/g,'');
+        const isJmapelle = keyTitle === 'jmapellehushpuppi' || keyTitle === 'jmapellehushpupi';
+        const payload = { owner_id:user.id, title:isJmapelle ? 'Jmapelle_Hushpuppi' : rawTitle, artist:String(fd.get('artist')||'Blocboykiddie'), type:isJmapelle ? 'Single' : String(fd.get('type')||'Snippet'), status:isJmapelle ? 'Published' : String(fd.get('status')||'Draft'), link:String(fd.get('link')||SONGWHIP), audio_url };
         const res = await client.from('tracks').insert(payload).select('*').single(); if (res.error) throw res.error;
         tracks.unshift(res.data);
         form.reset();
         if(q('uploadArtist')) q('uploadArtist').value = profile?.artist_name || 'Blocboykiddie';
         renderTables();
-        if(status) status.textContent='Saved successfully.';
+        if(status) status.textContent='Saved successfully. If status is Published, public preview cards can now use this Supabase audio URL.';
         setStatus('Track saved to Supabase.', 'success');
       } catch (err) {
         const rawMessage = err.message || 'Upload failed.';

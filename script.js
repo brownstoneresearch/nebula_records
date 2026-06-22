@@ -28,8 +28,36 @@ function recordAnalytics(type){ try{ const key='nebulaAnalyticsEvents'; const ar
 function setupNavigation(){ const page=document.body.dataset.page; document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===page)a.classList.add('active')}); const toggle=document.getElementById('navToggle'), nav=document.getElementById('mainNav'); if(toggle&&nav){toggle.addEventListener('click',()=>{nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(nav.classList.contains('open')))});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false')}))} }
 function setupScrollEffects(){ const header=document.getElementById('siteHeader'); const cursor=document.getElementById('cursorGlow'); window.addEventListener('mousemove',e=>{if(cursor){cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'}}); const onScroll=()=>{ if(header) header.classList.toggle('scrolled',window.scrollY>30); document.querySelectorAll('[data-parallax]').forEach(el=>{const speed=Number(el.dataset.parallax||.12); el.style.transform=`translate3d(0,${window.scrollY*speed}px,0)`});}; window.addEventListener('scroll',onScroll,{passive:true}); onScroll(); const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('in-view')})},{threshold:.12}); document.querySelectorAll('.reveal').forEach(el=>observer.observe(el)); }
 function setupIntro(){ const intro=document.getElementById('introScreen'); if(!intro) return; const hide=()=>{intro.classList.add('hide'); sessionStorage.setItem('nebulaIntroSeen','1')}; document.getElementById('skipIntro')?.addEventListener('click',hide); if(sessionStorage.getItem('nebulaIntroSeen')){intro.classList.add('hide');return;} setTimeout(hide,3800); }
+
+function normalizeTrackTitle(value){return String(value||'').toLowerCase().replace(/[^a-z0-9]/g,'')}
+async function hydrateTracksFromSupabase(){
+  try{
+    const cfg = window.NEBULA_SUPABASE_CONFIG;
+    if(!cfg || !cfg.url || !cfg.anonKey || String(cfg.url).includes('YOUR_') || !window.supabase) return;
+    const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
+    const {data, error} = await sb.from('tracks')
+      .select('title,artist,type,status,link,audio_url')
+      .eq('status','Published')
+      .ilike('title','Jmapelle%')
+      .order('created_at',{ascending:false})
+      .limit(3);
+    if(error || !data || !data.length) return;
+    data.forEach(row=>{
+      if(!row.audio_url) return;
+      const idx = tracks.findIndex(t => normalizeTrackTitle(t.title) === normalizeTrackTitle(row.title));
+      if(idx > -1){
+        tracks[idx].src = row.audio_url;
+        tracks[idx].artist = row.artist || tracks[idx].artist;
+        tracks[idx].type = row.type ? `${row.type} preview` : tracks[idx].type;
+        tracks[idx].link = row.link || tracks[idx].link;
+        if(idx === currentTrack){ audio.src = tracks[idx].src; syncPlayer(); }
+      }
+    });
+  }catch(err){ console.warn('Supabase preview hydration skipped:', err?.message || err); }
+}
+
 function setupTrackButtons(){ document.querySelectorAll('.play-track').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();loadTrack(Number(btn.dataset.track||0),true)})); }
 function setupMagneticButtons(){ document.querySelectorAll('.magnetic').forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(); const x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;el.style.transform=`translate(${x*.08}px,${y*.12}px)`});el.addEventListener('mouseleave',()=>{el.style.transform=''})}); }
 function setupContactForm(){ const form=document.getElementById('demoForm'), note=document.getElementById('formNote'); if(!form)return; form.addEventListener('submit',async e=>{e.preventDefault(); const payload=Object.fromEntries(new FormData(form).entries()); try{const leads=JSON.parse(localStorage.getItem('nebulaDemoLeads')||'[]'); leads.push({...payload,created_at:new Date().toISOString()}); localStorage.setItem('nebulaDemoLeads',JSON.stringify(leads));}catch(err){} let saved=false; try{ if(window.createNebulaSupabaseClient&&window.isNebulaSupabaseConfigured&&window.isNebulaSupabaseConfigured()){ const client=window.createNebulaSupabaseClient(); const res=await client.from('demo_leads').insert({name:payload.name||'',email:payload.email||'',link:payload.link||'',message:payload.message||'',status:'new'}); if(res.error) throw res.error; saved=true; }}catch(err){ console.warn('Supabase demo save failed:',err.message); } if(note){note.textContent=saved?'Demo submitted to Nebula Records. Thank you.':'Demo saved in site preview mode. Connect Supabase before public launch.';note.style.fontWeight='900'} form.reset();}); }
-document.addEventListener('DOMContentLoaded',()=>{ renderPlayer(); bindAudioEvents(); setupNavigation(); setupScrollEffects(); setupIntro(); setupTrackButtons(); setupMagneticButtons(); setupContactForm(); const year=document.getElementById('year'); if(year) year.textContent=new Date().getFullYear(); });
+document.addEventListener('DOMContentLoaded',()=>{ renderPlayer(); bindAudioEvents(); setupNavigation(); setupScrollEffects(); setupIntro(); setupTrackButtons(); setupMagneticButtons(); setupContactForm(); hydrateTracksFromSupabase(); const year=document.getElementById('year'); if(year) year.textContent=new Date().getFullYear(); });
 document.addEventListener('keydown',e=>{ const tag=document.activeElement?.tagName||''; const typing=['INPUT','TEXTAREA','SELECT','BUTTON'].includes(tag); if(e.key==='Escape'&&!isPlayerClosed()) closePlayer(); if(e.code==='Space'&&!typing&&!isPlayerClosed()){e.preventDefault();togglePlay()} });
