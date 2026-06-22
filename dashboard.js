@@ -1,12 +1,12 @@
 (() => {
   const SONGWHIP = 'https://songwhip.com/blocboykiddie';
   const previewSlots = [
-    { key:'money', title:'Money', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-money.svg' },
-    { key:'wacko-jacko', title:'Wacko Jacko', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-wacko-jacko.svg' },
-    { key:'jmapelle-hushpuppi', title:'Jmapelle_Hushpuppi', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/jmapelle_hushpuppi.mp3', cover:'assets/cover-jmapelle-hushpuppi.svg' },
-    { key:'no-seke', title:'No Seke', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-no-seke.svg' },
-    { key:'rich-and-sad', title:'Rich and Sad', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-rich-and-sad.svg' },
-    { key:'mi-casa-su-casa', title:'Mi Casa Su Casa', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-mi-casa-su-casa.svg' }
+    { key:'money', title:'Money', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-money.svg' },
+    { key:'wacko-jacko', title:'Wacko Jacko', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-wacko-jacko.svg' },
+    { key:'jmapelle-hushpuppi', title:'Jmapelle_Hushpuppi', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/jmapelle-hushpuppi.mp3', fallback_audio_url:'assets/jmapelle-hushpuppi.mp3', cover:'assets/cover-jmapelle-hushpuppi.svg' },
+    { key:'no-seke', title:'No Seke', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-no-seke.svg' },
+    { key:'rich-and-sad', title:'Rich and Sad', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-rich-and-sad.svg' },
+    { key:'mi-casa-su-casa', title:'Mi Casa Su Casa', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-mi-casa-su-casa.svg' }
   ];
 
   let client = null;
@@ -68,6 +68,7 @@
         status: row?.status || slot.status,
         link: row?.link || slot.link,
         audio_url: row?.audio_url || slot.audio_url,
+        fallback_audio_url: slot.fallback_audio_url || slot.audio_url,
         cover: row?.cover_url || slot.cover,
         cover_url: row?.cover_url || slot.cover,
         _slotIndex: index,
@@ -420,9 +421,18 @@
         if (window.NEBULA_PLAYER?.tracks && tracks[index]) {
           const playerTrack = window.NEBULA_PLAYER.tracks.findIndex(pt => normalize(pt.title) === normalize(tracks[index].title));
           window.NEBULA_PLAYER.loadTrack(playerTrack > -1 ? playerTrack : index, true);
-        } else if (tracks[index]?.audio_url) {
-          const audio = new Audio(tracks[index].audio_url);
-          audio.play().catch(() => setStatus('Tap again or use the public player to preview.', 'error'));
+        } else if (tracks[index]?.audio_url || tracks[index]?.fallback_audio_url) {
+          const t = tracks[index];
+          let previewAudio = new Audio(t.audio_url || t.fallback_audio_url);
+          previewAudio.addEventListener('error', () => {
+            if (t.fallback_audio_url && previewAudio.src !== new URL(t.fallback_audio_url, window.location.href).href) {
+              previewAudio = new Audio(t.fallback_audio_url);
+              previewAudio.play().catch(() => setStatus('Preview unavailable. Re-upload the MP3 or use the public player.', 'error'));
+            } else {
+              setStatus('Preview unavailable. Re-upload the MP3 or open the Songwhip hub.', 'error');
+            }
+          });
+          previewAudio.play().catch(() => setStatus('Tap again or use the public player to preview.', 'error'));
         }
       }
     });

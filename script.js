@@ -1,27 +1,78 @@
 const SONGWHIP_URL = 'https://songwhip.com/blocboykiddie';
 const tracks = [
-  {title:'Money', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', cover:'assets/cover-money.svg', type:'Preview snippet', link: SONGWHIP_URL},
-  {title:'Wacko Jacko', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', cover:'assets/cover-wacko-jacko.svg', type:'Preview snippet', link: SONGWHIP_URL},
-  {title:'Jmapelle_hushpuppi', artist:'Blocboykiddie', src:'assets/jmapelle_hushpuppi.mp3', cover:'assets/cover-jmapelle-hushpuppi.svg', type:'Official preview', link: SONGWHIP_URL},
-  {title:'No Seke', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', cover:'assets/cover-no-seke.svg', type:'Preview snippet', link: SONGWHIP_URL},
-  {title:'Rich and Sad', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', cover:'assets/cover-rich-and-sad.svg', type:'Preview snippet', link: SONGWHIP_URL},
-  {title:'Mi Casa Su Casa', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', cover:'assets/cover-mi-casa-su-casa.svg', type:'Preview snippet', link: SONGWHIP_URL}
+  {title:'Money', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', fallbackSrc:'assets/nebula-demo-loop.wav', cover:'assets/cover-money.svg', type:'Preview snippet', link: SONGWHIP_URL},
+  {title:'Wacko Jacko', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', fallbackSrc:'assets/nebula-demo-loop.wav', cover:'assets/cover-wacko-jacko.svg', type:'Preview snippet', link: SONGWHIP_URL},
+  {title:'Jmapelle_hushpuppi', artist:'Blocboykiddie', src:'assets/jmapelle-hushpuppi.mp3', fallbackSrc:'assets/jmapelle-hushpuppi.mp3', cover:'assets/cover-jmapelle-hushpuppi.svg', type:'Official preview', link: SONGWHIP_URL},
+  {title:'No Seke', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', fallbackSrc:'assets/nebula-demo-loop.wav', cover:'assets/cover-no-seke.svg', type:'Preview snippet', link: SONGWHIP_URL},
+  {title:'Rich and Sad', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', fallbackSrc:'assets/nebula-demo-loop.wav', cover:'assets/cover-rich-and-sad.svg', type:'Preview snippet', link: SONGWHIP_URL},
+  {title:'Mi Casa Su Casa', artist:'Blocboykiddie', src:'assets/nebula-demo-loop.wav', fallbackSrc:'assets/nebula-demo-loop.wav', cover:'assets/cover-mi-casa-su-casa.svg', type:'Preview snippet', link: SONGWHIP_URL}
 ];
 let currentTrack = 0;
-let audio = new Audio(tracks[currentTrack].src);
-audio.preload = 'metadata';
-audio.loop = false;
+let audio = createAudioForTrack(tracks[currentTrack]);
 
 function formatTime(seconds){ if(!Number.isFinite(seconds)) return '0:00'; const m=Math.floor(seconds/60); const s=String(Math.floor(seconds%60)).padStart(2,'0'); return `${m}:${s}`; }
+
+function createAudioForTrack(track, useFallback=false){
+  const source = useFallback ? track?.fallbackSrc : (track?.src || track?.fallbackSrc || '');
+  const nextAudio = new Audio(source);
+  nextAudio.preload = 'metadata';
+  nextAudio.loop = false;
+  nextAudio.dataset.nebulaFallback = useFallback ? '1' : '0';
+  return nextAudio;
+}
+function cleanAudioUrl(value){
+  const url = String(value || '').trim();
+  if(!url || url === 'null' || url === 'undefined') return '';
+  if(url.includes('File stream access denied')) return '';
+  return url;
+}
+function setPlayerStatus(message){ const s=document.getElementById('playerStatus'); if(s) s.textContent=message || ''; }
+function clearPlayerStatus(){ setPlayerStatus(''); }
+
 function getPlayer(){return document.querySelector('.player')}
 function isPlayerClosed(){const p=getPlayer();return !p||p.classList.contains('is-closed')}
 function openPlayer(){const p=getPlayer();if(p){p.classList.remove('is-closed');document.body.classList.add('has-player')}}
 function closePlayer(){audio.pause();syncPlayer();const p=getPlayer();if(p)p.classList.add('is-closed');document.body.classList.remove('has-player')}
 function renderPlayer(){ const mount=document.getElementById('nebulaPlayer'); if(!mount) return; const t=tracks[currentTrack]; mount.innerHTML=`<div class="player is-closed" role="region" aria-label="Nebula popup music player"><button class="player-close" id="closePlayer" type="button" aria-label="Close music player">×</button><img id="playerCover" src="${t.cover}" alt="Current release cover"><div class="player-meta"><span class="player-label">Blocboykiddie Snippet</span><h4 id="playerTitle">${t.title}</h4><p id="playerArtist">${t.artist} · ${t.type}</p><p id="playerStatus" class="player-status" aria-live="polite"></p></div><div class="player-controls"><button id="prevTrack" type="button" aria-label="Previous track">‹</button><button id="playPause" type="button" aria-label="Play or pause">▶</button><button id="nextTrack" type="button" aria-label="Next track">›</button></div><a class="player-link" id="playerLink" href="${t.link}" target="_blank" rel="noopener">Full song ↗</a><div class="progress-wrap"><span id="currentTime">0:00</span><input class="progress" id="progress" type="range" value="0" min="0" max="100" aria-label="Track progress"><span id="duration">0:00</span></div></div>`; document.getElementById('playPause')?.addEventListener('click',togglePlay); document.getElementById('nextTrack')?.addEventListener('click',nextTrack); document.getElementById('prevTrack')?.addEventListener('click',prevTrack); document.getElementById('closePlayer')?.addEventListener('click',closePlayer); document.getElementById('progress')?.addEventListener('input',e=>{ if(audio.duration) audio.currentTime=e.target.value/100*audio.duration; }); }
 function syncPlayer(){ const t=tracks[currentTrack]; const q=id=>document.getElementById(id); if(q('playerCover')) q('playerCover').src=t.cover; if(q('playerTitle')) q('playerTitle').textContent=t.title; if(q('playerArtist')) q('playerArtist').textContent=`${t.artist} · ${t.type}`; if(q('playerLink')) q('playerLink').href=t.link; if(q('playPause')) q('playPause').textContent=audio.paused?'▶':'Ⅱ'; if(q('duration')) q('duration').textContent=formatTime(audio.duration); }
-function bindAudioEvents(){ audio.addEventListener('timeupdate',()=>{ const progress=document.getElementById('progress'), current=document.getElementById('currentTime'), duration=document.getElementById('duration'); if(progress&&audio.duration) progress.value=audio.currentTime/audio.duration*100; if(current) current.textContent=formatTime(audio.currentTime); if(duration) duration.textContent=formatTime(audio.duration); }); audio.addEventListener('play',()=>{syncPlayer();recordAnalytics('play')}); audio.addEventListener('pause',syncPlayer); audio.addEventListener('ended',nextTrack); audio.addEventListener('error',()=>{const s=document.getElementById('playerStatus'); if(s) s.textContent='Preview file unavailable. Open the full Songwhip hub.';}); audio.addEventListener('loadedmetadata',syncPlayer); }
-function loadTrack(index, autoplay=false){ currentTrack=(index+tracks.length)%tracks.length; const wasPlaying=!audio.paused; audio.pause(); audio = new Audio(tracks[currentTrack].src); audio.preload='metadata'; audio.loop=false; bindAudioEvents(); syncPlayer(); openPlayer(); if(autoplay||wasPlaying) audio.play().catch(()=>{const s=document.getElementById('playerStatus'); if(s) s.textContent='Tap play to start preview.';}); }
-function togglePlay(){ openPlayer(); if(audio.paused) audio.play().catch(()=>{const s=document.getElementById('playerStatus'); if(s) s.textContent='Tap play to start preview.';}); else audio.pause(); syncPlayer(); }
+function bindAudioEvents(){
+  audio.addEventListener('timeupdate',()=>{
+    const progress=document.getElementById('progress'), current=document.getElementById('currentTime'), duration=document.getElementById('duration');
+    if(progress&&audio.duration) progress.value=audio.currentTime/audio.duration*100;
+    if(current) current.textContent=formatTime(audio.currentTime);
+    if(duration) duration.textContent=formatTime(audio.duration);
+  });
+  audio.addEventListener('play',()=>{ clearPlayerStatus(); syncPlayer(); recordAnalytics('play') });
+  audio.addEventListener('pause',syncPlayer);
+  audio.addEventListener('ended',nextTrack);
+  audio.addEventListener('loadedmetadata',()=>{ clearPlayerStatus(); syncPlayer(); });
+  audio.addEventListener('canplay',clearPlayerStatus);
+  audio.addEventListener('error',()=>{
+    const t=tracks[currentTrack] || {};
+    if(t.fallbackSrc && audio.dataset.nebulaFallback !== '1'){
+      setPlayerStatus('Online preview unavailable. Playing the local Jmapelle preview fallback…');
+      try{ audio.pause(); }catch(e){}
+      audio = createAudioForTrack(t, true);
+      bindAudioEvents();
+      syncPlayer();
+      openPlayer();
+      audio.play().catch(()=>setPlayerStatus('Tap play again to start the local preview.'));
+      return;
+    }
+    setPlayerStatus(`${t.title || 'Preview'} file unavailable. Open the full Songwhip hub.`);
+  });
+}
+function loadTrack(index, autoplay=false){
+  currentTrack=(index+tracks.length)%tracks.length;
+  const wasPlaying=!audio.paused;
+  try{ audio.pause(); }catch(e){}
+  audio = createAudioForTrack(tracks[currentTrack]);
+  bindAudioEvents();
+  syncPlayer();
+  openPlayer();
+  if(autoplay||wasPlaying) audio.play().catch(()=>setPlayerStatus('Tap play to start preview.'));
+}
+function togglePlay(){ openPlayer(); if(audio.paused) audio.play().catch(()=>setPlayerStatus('Tap play to start preview.')); else audio.pause(); syncPlayer(); }
 function nextTrack(){loadTrack(currentTrack+1,true)}
 function prevTrack(){loadTrack(currentTrack-1,true)}
 function recordAnalytics(type){ try{ const key='nebulaAnalyticsEvents'; const arr=JSON.parse(localStorage.getItem(key)||'[]'); arr.push({type,track:tracks[currentTrack].title,artist:tracks[currentTrack].artist,date:new Date().toISOString()}); localStorage.setItem(key,JSON.stringify(arr.slice(-500))); }catch(e){} }
@@ -51,13 +102,14 @@ async function hydrateTracksFromSupabase(){
     }
     if(error || !data || !data.length) return;
     data.forEach(row=>{
-      if(!row.audio_url) return;
+      const candidateAudioUrl = cleanAudioUrl(row.audio_url);
+      if(!candidateAudioUrl) return;
       const idx = tracks.findIndex(t =>
         normalizeTrackTitle(t.title) === normalizeTrackTitle(row.title) ||
         (row.track_key && normalizeTrackTitle(t.title) === normalizeTrackTitle(row.track_key))
       );
       if(idx > -1){
-        tracks[idx].src = row.audio_url;
+        tracks[idx].src = candidateAudioUrl;
         tracks[idx].artist = row.artist || tracks[idx].artist;
         tracks[idx].type = row.type ? `${row.type} preview` : tracks[idx].type;
         tracks[idx].link = row.link || tracks[idx].link;

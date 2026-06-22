@@ -1,5 +1,5 @@
 {
-  "version": "v4.2-editable-preview-track-library",
+  "version": "4.3-jmapelle-preview-fixed",
   "brand": "Nebula Records",
   "powered_by": "EKOUNLOCKED",
   "current_artist": "Blocboykiddie",
@@ -28,7 +28,10 @@
     "Updated public player hydration to read all six published Supabase track audio URLs, not only Jmapelle_Hushpuppi.",
     "Added track_key and cover_url fields to the Supabase schema for stable preview slots.",
     "Added SUPABASE_TRACK_LIBRARY_EDIT_HOTFIX.sql for existing Supabase projects.",
-    "Kept RLS-safe upload paths under authenticated user UID folders."
+    "Kept RLS-safe upload paths under authenticated user UID folders.",
+    "Added fallback-safe public music player for broken/private Supabase audio URLs.",
+    "Added hyphenated Jmapelle_Hushpuppi preview asset path for dashboard/upload consistency.",
+    "Added optional SQL cleanup for broken Jmapelle preview rows."
   ],
   "validated": [
     "node --check dashboard.js",
