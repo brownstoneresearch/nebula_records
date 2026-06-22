@@ -1,25 +1,28 @@
-# Nebula Records + EKOUNLOCKED Label Platform
+# Nebula Records + EKOUNLOCKED Website
 
-This package includes a cinematic multi-page Nebula Records website, Blocboykiddie artist integration, future artist slots, pop-up player with close button, advanced music-label footer, EKOUNLOCKED powered branding, Firebase login, Firebase Firestore dashboard data, Firebase Storage song/snippet upload support, analytics panels and live deployment files.
+Full production-ready static website package with a Supabase-backed label and artist dashboard.
 
-## Key pages
-- `index.html` — cinematic homepage with animated intro.
-- `artists.html` — Blocboykiddie current artist page plus future artist spaces.
-- `releases.html` — Blocboykiddie release/snippet hub connected to Songwhip.
-- `login.html` — Firebase admin login page.
-- `dashboard.html` — protected admin dashboard for uploads, roster pipeline and analytics.
+## Included
 
-## Admin account
-Use this email for the dashboard admin user:
+- Cinematic Nebula Records homepage
+- Blocboykiddie current artist integration
+- Future artist roster slots
+- Popup player with close button
+- Concise premium footer with POWERED BY EKOUNLOCKED branding
+- `login.html` secure label/artist portal
+- `dashboard.html` role-based dashboard for admin and signed artists
+- Supabase Auth login
+- Supabase Postgres tables + Row Level Security policies
+- Supabase Storage upload support for song/snippet audio
+- Demo lead capture support
+- Netlify/Vercel deployment files
 
-`nebulamusic_rh@outlook.com`
+## Important setup
 
-Create that account in Firebase Authentication, then paste your Firebase web config into `firebase-config.js`.
+1. Edit `supabase-config.js` with your Supabase Project URL and anon public key.
+2. Run `supabase-schema.sql` in Supabase SQL Editor.
+3. Create a Storage bucket named `nebula-audio`.
+4. Create the admin user `nebulamusic_rh@outlook.com` in Supabase Auth using your private admin password.
+5. Create Auth users for signed artists when they join the label.
 
-## EKOUNLOCKED
-The website includes a branded POWERED BY EKOUNLOCKED section with linked social buttons:
-- TikTok: `@ekounlocked`
-- Instagram: `@ekounlocked_`
-
-## Audio note
-The local player uses a demo loop placeholder. Replace it with licensed 15–30 second Blocboykiddie snippets or use Firebase Storage uploads through the dashboard before public launch.
+Do not place private passwords or service-role keys in any frontend file.
