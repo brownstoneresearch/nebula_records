@@ -113,30 +113,51 @@
 
   async function bindForms() {
     q('uploadForm')?.addEventListener('submit', async e => {
-      e.preventDefault(); const status=q('uploadStatus'); if(status) status.textContent = 'Saving to Supabase…';
+      e.preventDefault();
+      const form = e.currentTarget;
+      if (!form || typeof form.reset !== 'function') {
+        setStatus('Upload form was not available. Please refresh and try again.', 'error');
+        return;
+      }
+      const submitBtn = form.querySelector('[type="submit"]');
+      const status=q('uploadStatus');
+      if(status) status.textContent = 'Saving to Supabase…';
+      if (submitBtn) submitBtn.disabled = true;
       try {
-        const fd = new FormData(e.currentTarget); let audio_url = '';
+        const fd = new FormData(form); let audio_url = '';
         const file = fd.get('audio');
         if (file && file.size) {
           const safe = file.name.replace(/[^a-z0-9_.-]/gi,'-').toLowerCase();
-          const path = `${user.id}/${Date.now()}-${safe}`;
-          const up = await client.storage.from(bucket()).upload(path, file, { cacheControl:'3600', upsert:false });
+          const path = `previews/${(profile?.artist_name || 'artist').replace(/[^a-z0-9_-]/gi,'-').toLowerCase()}/${Date.now()}-${safe}`;
+          const up = await client.storage.from(bucket()).upload(path, file, { cacheControl:'3600', upsert:false, contentType:file.type || 'audio/mpeg' });
           if (up.error) throw up.error;
           const publicData = client.storage.from(bucket()).getPublicUrl(path);
           audio_url = publicData.data?.publicUrl || '';
         }
         const payload = { owner_id:user.id, title:String(fd.get('title')||''), artist:String(fd.get('artist')||''), type:String(fd.get('type')||'Snippet'), status:String(fd.get('status')||'Draft'), link:String(fd.get('link')||SONGWHIP), audio_url };
         const res = await client.from('tracks').insert(payload).select('*').single(); if (res.error) throw res.error;
-        tracks.unshift(res.data); e.currentTarget.reset(); if(q('uploadArtist')) q('uploadArtist').value = profile?.artist_name || 'Blocboykiddie'; renderTables(); if(status) status.textContent='Saved successfully.'; setStatus('Track saved to Supabase.', 'success');
-      } catch (err) { if(status) status.textContent = err.message || 'Upload failed.'; setStatus(err.message || 'Upload failed.', 'error'); }
+        tracks.unshift(res.data);
+        form.reset();
+        if(q('uploadArtist')) q('uploadArtist').value = profile?.artist_name || 'Blocboykiddie';
+        renderTables();
+        if(status) status.textContent='Saved successfully.';
+        setStatus('Track saved to Supabase.', 'success');
+      } catch (err) {
+        if(status) status.textContent = err.message || 'Upload failed.';
+        setStatus(err.message || 'Upload failed.', 'error');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
     });
 
     q('artistForm')?.addEventListener('submit', async e => {
       e.preventDefault(); if(!isAdmin()) return;
-      const fd = new FormData(e.currentTarget);
+      const form = e.currentTarget;
+      if (!form || typeof form.reset !== 'function') { setStatus('Artist form was not available. Please refresh and try again.', 'error'); return; }
+      const fd = new FormData(form);
       const payload = { owner_id:user.id, name:String(fd.get('name')||'Future Artist'), genre:String(fd.get('genre')||'Open'), status:'pipeline' };
       const res = await client.from('artists_pipeline').insert(payload).select('*').single();
-      if (!res.error) { artists.unshift(res.data); e.currentTarget.reset(); renderTables(); setStatus('Future artist slot added.', 'success'); }
+      if (!res.error) { artists.unshift(res.data); form.reset(); renderTables(); setStatus('Future artist slot added.', 'success'); }
       else setStatus(res.error.message, 'error');
     });
 

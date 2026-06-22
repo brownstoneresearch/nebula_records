@@ -11,5 +11,6 @@
     "HTML parse/duplicate footer check",
     "asset reference check",
     "old track reference grep"
-  ]
+  ],
+  "jmapelle_svg_style": "Updated to match the 1200x1200 Nebula Records release-cover SVG template used by the other cover assets."
 }

@@ -19,3 +19,13 @@
 
 - The admin password must be created inside Supabase Auth. It is intentionally not hard-coded in public website files.
 - Replace remaining demo-loop preview placeholders with licensed snippets before public deployment.
+
+- Updated `assets/cover-jmapelle-hushpuppi.svg` to match the same 1200×1200 Nebula cover-art SVG structure and visual system as the other release SVG assets.
+
+## Upload snippet form reset fix
+
+Fixed the browser error: `can't access property "reset", e.currentTarget is null`.
+
+Cause: the upload and future artist forms were using `e.currentTarget.reset()` after asynchronous Supabase upload/insert operations. In some browsers, the event object's `currentTarget` may be cleared after `await`, so the form reference becomes null.
+
+Fix: the form is now captured immediately at the start of the submit handler using `const form = e.currentTarget;`, then `form.reset()` is called after the async operation. The upload button is also temporarily disabled while Supabase is saving to prevent duplicate submissions.
