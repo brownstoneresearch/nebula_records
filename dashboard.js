@@ -128,7 +128,10 @@
         const file = fd.get('audio');
         if (file && file.size) {
           const safe = file.name.replace(/[^a-z0-9_.-]/gi,'-').toLowerCase();
-          const path = `previews/${(profile?.artist_name || 'artist').replace(/[^a-z0-9_-]/gi,'-').toLowerCase()}/${Date.now()}-${safe}`;
+          const artistFolder = (profile?.artist_name || 'artist').replace(/[^a-z0-9_-]/gi,'-').toLowerCase();
+          // Storage RLS requires every authenticated upload to live inside the user's own UID folder.
+          // This prevents the Supabase "new row violates row-level security policy" error.
+          const path = `${user.id}/previews/${artistFolder}/${Date.now()}-${safe}`;
           const up = await client.storage.from(bucket()).upload(path, file, { cacheControl:'3600', upsert:false, contentType:file.type || 'audio/mpeg' });
           if (up.error) throw up.error;
           const publicData = client.storage.from(bucket()).getPublicUrl(path);
@@ -143,8 +146,12 @@
         if(status) status.textContent='Saved successfully.';
         setStatus('Track saved to Supabase.', 'success');
       } catch (err) {
-        if(status) status.textContent = err.message || 'Upload failed.';
-        setStatus(err.message || 'Upload failed.', 'error');
+        const rawMessage = err.message || 'Upload failed.';
+        const friendlyMessage = /row-level security|policy/i.test(rawMessage)
+          ? 'Upload blocked by Supabase Row Level Security. Deploy this updated dashboard and run SUPABASE_RLS_UPLOAD_HOTFIX.sql once in Supabase SQL Editor.'
+          : rawMessage;
+        if(status) status.textContent = friendlyMessage;
+        setStatus(friendlyMessage, 'error');
       } finally {
         if (submitBtn) submitBtn.disabled = false;
       }

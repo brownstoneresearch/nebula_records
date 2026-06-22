@@ -1,4 +1,4 @@
--- Nebula Records Supabase schema - hardened v4
+-- Nebula Records Supabase schema - hardened v4.1 RLS upload fix
 -- Run this in Supabase SQL Editor after creating your project.
 -- Supports admin and signed artist dashboards with role-based access.
 
@@ -111,7 +111,11 @@ begin
     coalesce(new.raw_user_meta_data->>'artist_name', split_part(new.email, '@', 1)),
     'active'
   )
-  on conflict (id) do update set email = excluded.email, updated_at = now();
+  on conflict (id) do update set
+    email = excluded.email,
+    role = excluded.role,
+    status = 'active',
+    updated_at = now();
   return new;
 end;
 $$;
@@ -145,7 +149,11 @@ begin
     split_part(current_email, '@', 1),
     'active'
   )
-  on conflict (id) do update set email = excluded.email, updated_at = now()
+  on conflict (id) do update set
+    email = excluded.email,
+    role = excluded.role,
+    status = 'active',
+    updated_at = now()
   returning * into result;
 
   return result;
@@ -168,6 +176,7 @@ drop policy if exists "profiles_insert_self_artist_only" on public.profiles;
 drop policy if exists "profiles_update_self_artist_or_admin" on public.profiles;
 
 drop policy if exists "tracks_select_own_or_admin" on public.tracks;
+drop policy if exists "tracks_public_select_published" on public.tracks;
 drop policy if exists "tracks_insert_own_or_admin" on public.tracks;
 drop policy if exists "tracks_update_own_or_admin" on public.tracks;
 drop policy if exists "tracks_delete_own_or_admin" on public.tracks;
@@ -192,6 +201,8 @@ with check ((auth.uid() = id and role = 'artist') or public.is_admin());
 -- Tracks
 create policy "tracks_select_own_or_admin" on public.tracks
 for select using (owner_id = auth.uid() or public.is_admin());
+create policy "tracks_public_select_published" on public.tracks
+for select using (lower(status) = 'published');
 create policy "tracks_insert_own_or_admin" on public.tracks
 for insert with check (owner_id = auth.uid() or public.is_admin());
 create policy "tracks_update_own_or_admin" on public.tracks
@@ -231,7 +242,10 @@ create policy "audio_authenticated_upload" on storage.objects
 for insert to authenticated
 with check (
   bucket_id = 'nebula-audio'
-  and (storage.foldername(name))[1] = auth.uid()::text
+  and (
+    (storage.foldername(name))[1] = auth.uid()::text
+    or public.is_admin()
+  )
 );
 
 create policy "audio_owner_or_admin_read" on storage.objects

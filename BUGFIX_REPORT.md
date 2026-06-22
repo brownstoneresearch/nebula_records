@@ -29,3 +29,16 @@ Fixed the browser error: `can't access property "reset", e.currentTarget is null
 Cause: the upload and future artist forms were using `e.currentTarget.reset()` after asynchronous Supabase upload/insert operations. In some browsers, the event object's `currentTarget` may be cleared after `await`, so the form reference becomes null.
 
 Fix: the form is now captured immediately at the start of the submit handler using `const form = e.currentTarget;`, then `form.reset()` is called after the async operation. The upload button is also temporarily disabled while Supabase is saving to prevent duplicate submissions.
+
+
+## v4.1 RLS Upload Fix
+
+Fixed Supabase error: `new row violates row-level security policy` during snippet uploads.
+
+Cause: the dashboard uploaded files to `previews/...`, but the Storage RLS policy required files to be inside the authenticated user's UID folder.
+
+Fixes included:
+- Dashboard uploads now use `USER_ID/previews/artist/file.mp3` paths.
+- Storage upload policy now accepts authenticated user UID folders and admin uploads.
+- `ensure_profile()` now re-syncs admin/artist roles, so `nebulamusic_rh@outlook.com` is promoted to admin if the profile was created before the schema fix.
+- Added `SUPABASE_RLS_UPLOAD_HOTFIX.sql` for existing Supabase projects.

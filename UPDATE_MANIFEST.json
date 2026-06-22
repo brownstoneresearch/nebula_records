@@ -1,5 +1,5 @@
 {
-  "version": "v4-error-fixed-supabase",
+  "version": "v4.1-rls-upload-fixed",
   "brand": "Nebula Records",
   "powered_by": "EKOUNLOCKED",
   "current_artist": "Blocboykiddie",
@@ -12,5 +12,11 @@
     "asset reference check",
     "old track reference grep"
   ],
-  "jmapelle_svg_style": "Updated to match the 1200x1200 Nebula Records release-cover SVG template used by the other cover assets."
+  "jmapelle_svg_style": "Updated to match the 1200x1200 Nebula Records release-cover SVG template used by the other cover assets.",
+  "changes": [
+    "Fixed Supabase RLS upload error by writing audio files under authenticated user UID folders.",
+    "Added SUPABASE_RLS_UPLOAD_HOTFIX.sql for existing Supabase projects.",
+    "Updated profile sync so admin/artist roles are corrected on login.",
+    "Added public select policy for published track metadata."
+  ]
 }

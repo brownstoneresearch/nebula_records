@@ -34,3 +34,15 @@ For every signed artist, create an Auth user. The SQL trigger automatically crea
 
 ## 5. Deploy
 Upload the folder to Netlify, Vercel, Supabase-compatible static hosting, or any static web host. Domain/DNS connection requires your hosting account and registrar access.
+
+
+## Fixing `new row violates row-level security policy` during uploads
+
+If you already ran an older schema and see this error while uploading snippets:
+
+1. Open Supabase Dashboard → SQL Editor.
+2. Open `SUPABASE_RLS_UPLOAD_HOTFIX.sql` from this package.
+3. Paste and run the whole file.
+4. Refresh `dashboard.html`, sign out/in again, then upload the snippet.
+
+The hotfix updates Storage policies and makes dashboard uploads save under your authenticated user ID folder.
