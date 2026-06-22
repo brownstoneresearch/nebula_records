@@ -15,24 +15,21 @@
     return;
   }
 
-  async function getOrCreateProfile(user) {
-    const adminEmail = (window.NEBULA_SUPABASE_CONFIG.adminEmail || '').toLowerCase();
-    let { data: profile, error } = await client.from('profiles').select('*').eq('id', user.id).maybeSingle();
-    if (error && error.code !== 'PGRST116') throw error;
-    if (!profile) {
-      const payload = {
-        id: user.id,
-        email: user.email,
-        role: user.email && user.email.toLowerCase() === adminEmail ? 'admin' : 'artist',
-        artist_name: user.user_metadata?.artist_name || user.email?.split('@')[0] || 'Nebula Artist',
-        status: 'active'
-      };
-      const inserted = await client.from('profiles').upsert(payload).select('*').single();
-      if (inserted.error) throw inserted.error;
-      profile = inserted.data;
+  async function ensureProfile(user) {
+    const rpc = await client.rpc('ensure_profile');
+    if (!rpc.error && rpc.data) {
+      localStorage.setItem('nebulaProfile', JSON.stringify(rpc.data));
+      return rpc.data;
     }
-    localStorage.setItem('nebulaProfile', JSON.stringify(profile));
-    return profile;
+
+    const { data: profile, error } = await client.from('profiles').select('*').eq('id', user.id).maybeSingle();
+    if (error && error.code !== 'PGRST116') throw error;
+    if (profile) {
+      localStorage.setItem('nebulaProfile', JSON.stringify(profile));
+      return profile;
+    }
+
+    throw new Error('Profile not found. Run supabase-schema.sql before logging into the portal.');
   }
 
   form?.addEventListener('submit', async (event) => {
@@ -44,9 +41,9 @@
     try {
       const { data, error } = await client.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      await getOrCreateProfile(data.user);
+      await ensureProfile(data.user);
       setMessage('Access granted. Redirecting…', 'success');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 550);
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 450);
     } catch (err) {
       setMessage(err.message || 'Login failed. Confirm the account exists in Supabase Auth.', 'error');
       button.disabled = false;

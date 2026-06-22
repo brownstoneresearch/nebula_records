@@ -1,9 +1,12 @@
 (() => {
   const SONGWHIP = 'https://songwhip.com/blocboykiddie';
   const sampleTracks = [
-    { title:'Money', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP },
-    { title:'Wacko Jacko', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP },
-    { title:'Jmapelle_hushpuppi', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP }
+    { title:'Money', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav' },
+    { title:'Wacko Jacko', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav' },
+    { title:'Jmapelle_hushpuppi', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/jmapelle_hushpuppi.mp3' },
+    { title:'No Seke', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav' },
+    { title:'Rich and Sad', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav' },
+    { title:'Mi Casa Su Casa', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav' }
   ];
   let client = null, user = null, profile = null, tracks = [], events = [], demos = [], artists = [];
   const q = (id) => document.getElementById(id);
@@ -14,12 +17,30 @@
 
   function paintChart(id, numbers) {
     const canvas = q(id); if (!canvas) return;
-    const ctx = canvas.getContext('2d'); const w = canvas.width = canvas.offsetWidth * devicePixelRatio; const h = canvas.height = Number(canvas.getAttribute('height')||160) * devicePixelRatio;
-    ctx.clearRect(0,0,w,h); const max = Math.max(1, ...numbers); const pad = 18 * devicePixelRatio; const gap = (w - pad*2) / numbers.length;
-    const grad = ctx.createLinearGradient(0,0,w,h); grad.addColorStop(0,'#60e7ff'); grad.addColorStop(.55,'#3a77ff'); grad.addColorStop(1,'#62d66b');
-    ctx.lineWidth = 3 * devicePixelRatio; ctx.strokeStyle = grad; ctx.beginPath();
+    const dpr = window.devicePixelRatio || 1;
+    const ctx = canvas.getContext('2d');
+    const rectWidth = canvas.offsetWidth || 420;
+    const logicalHeight = Number(canvas.getAttribute('height') || 160);
+    const w = canvas.width = rectWidth * dpr;
+    const h = canvas.height = logicalHeight * dpr;
+    ctx.clearRect(0,0,w,h);
+    const max = Math.max(1, ...numbers);
+    const pad = 18 * dpr;
+    const gap = (w - pad*2) / Math.max(1, numbers.length);
+    const grad = ctx.createLinearGradient(0,0,w,h);
+    grad.addColorStop(0,'#60e7ff'); grad.addColorStop(.55,'#3a77ff'); grad.addColorStop(1,'#62d66b');
+    ctx.lineWidth = 3 * dpr; ctx.strokeStyle = grad; ctx.beginPath();
     numbers.forEach((n,i)=>{ const x = pad + i*gap + gap/2; const y = h - pad - (n/max)*(h-pad*2); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }); ctx.stroke();
-    ctx.fillStyle = 'rgba(58,119,255,.08)'; numbers.forEach((n,i)=>{ const x=pad+i*gap+gap/2; const barH=(n/max)*(h-pad*2); ctx.fillRect(x-7*devicePixelRatio, h-pad-barH, 14*devicePixelRatio, barH); });
+    ctx.fillStyle = 'rgba(58,119,255,.08)'; numbers.forEach((n,i)=>{ const x=pad+i*gap+gap/2; const barH=(n/max)*(h-pad*2); ctx.fillRect(x-7*dpr, h-pad-barH, 14*dpr, barH); });
+  }
+
+  async function ensureProfile() {
+    const rpc = await client.rpc('ensure_profile');
+    if (!rpc.error && rpc.data) return rpc.data;
+    const res = await client.from('profiles').select('*').eq('id', user.id).maybeSingle();
+    if (res.error && res.error.code !== 'PGRST116') throw res.error;
+    if (res.data) return res.data;
+    throw new Error('Profile missing. Run supabase-schema.sql, then create admin/artist users in Supabase Auth.');
   }
 
   function renderAccess() {
@@ -28,11 +49,11 @@
     q('workspaceName').textContent = profile?.artist_name || (role === 'admin' ? 'Nebula Records HQ' : 'Artist Workspace');
     q('workspaceEmail').textContent = user?.email || '';
     q('dashRole').textContent = role.toUpperCase();
-    q('dashboardKicker').textContent = role === 'admin' ? 'Supabase Admin Portal' : 'Supabase Artist Portal';
-    q('dashboardTitle').textContent = role === 'admin' ? 'Label command centre.' : 'Your artist workspace.';
-    q('dashboardSubtitle').textContent = role === 'admin' ? 'Manage artists, songs, demos and release analytics.' : 'Upload snippets, track your releases and view your personal performance.';
+    q('dashboardKicker').textContent = role === 'admin' ? 'Admin Command Centre' : 'Signed Artist Portal';
+    q('dashboardTitle').textContent = role === 'admin' ? 'Label operations, beautifully organized.' : 'Your artist workspace.';
+    q('dashboardSubtitle').textContent = role === 'admin' ? 'Manage roster slots, uploads, demo leads, analytics and release data from one clean panel.' : 'Upload snippets, track your releases and view your performance without seeing private label-only tools.';
     q('overviewTitle').textContent = role === 'admin' ? 'Label Overview' : 'Artist Overview';
-    all('[data-admin-only]').forEach(el => { el.style.display = isAdmin() ? '' : 'none'; });
+    all('[data-admin-only]').forEach(el => { el.hidden = !isAdmin(); });
     if (!isAdmin()) {
       const artist = q('uploadArtist'); if (artist) { artist.value = profile?.artist_name || 'Blocboykiddie'; artist.readOnly = true; }
       const pipelineTab = document.querySelector('[data-tab="pipeline"]'); if (pipelineTab?.classList.contains('active')) document.querySelector('[data-tab="overview"]')?.click();
@@ -54,8 +75,8 @@
       const rows = artists.length ? artists : [{name:'Future Artist', genre:'Open', status:'reserved'}, {name:'Future Artist', genre:'Afrobeats / Hip-Hop', status:'reserved'}];
       artistPipeline.innerHTML = rows.map((a,i) => `<article class="pipeline-card"><span>Slot ${String(i+2).padStart(2,'0')}</span><h3>${escapeHtml(a.name||'Future Artist')}</h3><p>${escapeHtml(a.genre||'Open')}</p><small>${escapeHtml(a.status||'pipeline')}</small></article>`).join('');
     }
-    q('dashUploads').textContent = String((tracks.length ? tracks : sampleTracks).length);
-    q('dashPlays').textContent = String(events.length || JSON.parse(localStorage.getItem('nebulaAnalyticsEvents')||'[]').length || 0);
+    if (q('dashUploads')) q('dashUploads').textContent = String((tracks.length ? tracks : sampleTracks).length);
+    if (q('dashPlays')) q('dashPlays').textContent = String(events.length || JSON.parse(localStorage.getItem('nebulaAnalyticsEvents')||'[]').length || 0);
     if (q('dashLeads')) q('dashLeads').textContent = String(demos.length);
     const values = [6,10,8,13,12,18,Math.max(5, events.length || 9)];
     paintChart('overviewChart', values); paintChart('analyticsChart', values.slice().reverse());
@@ -107,7 +128,7 @@
         const payload = { owner_id:user.id, title:String(fd.get('title')||''), artist:String(fd.get('artist')||''), type:String(fd.get('type')||'Snippet'), status:String(fd.get('status')||'Draft'), link:String(fd.get('link')||SONGWHIP), audio_url };
         const res = await client.from('tracks').insert(payload).select('*').single(); if (res.error) throw res.error;
         tracks.unshift(res.data); e.currentTarget.reset(); if(q('uploadArtist')) q('uploadArtist').value = profile?.artist_name || 'Blocboykiddie'; renderTables(); if(status) status.textContent='Saved successfully.'; setStatus('Track saved to Supabase.', 'success');
-      } catch (err) { if(status) status.textContent = err.message || 'Upload failed.'; }
+      } catch (err) { if(status) status.textContent = err.message || 'Upload failed.'; setStatus(err.message || 'Upload failed.', 'error'); }
     });
 
     q('artistForm')?.addEventListener('submit', async e => {
@@ -120,7 +141,7 @@
     });
 
     q('simulateEvent')?.addEventListener('click', async () => {
-      const payload = { owner_id:user.id, event_type:'play', track:'Money', artist:profile?.artist_name || 'Blocboykiddie' };
+      const payload = { owner_id:user.id, event_type:'play', track:'Jmapelle_hushpuppi', artist:profile?.artist_name || 'Blocboykiddie' };
       const res = await client.from('events').insert(payload).select('*').single();
       if (!res.error) { events.unshift(res.data); renderTables(); setStatus('Play event saved.', 'success'); }
       else setStatus(res.error.message, 'error');
@@ -134,24 +155,15 @@
     q('logoutBtn')?.addEventListener('click', async () => { await client.auth.signOut(); localStorage.removeItem('nebulaProfile'); window.location.href='login.html'; });
   }
 
-  async function getOrCreateProfile() {
-    const adminEmail = (window.NEBULA_SUPABASE_CONFIG.adminEmail || '').toLowerCase();
-    let res = await client.from('profiles').select('*').eq('id', user.id).maybeSingle();
-    if (res.error && res.error.code !== 'PGRST116') throw res.error;
-    if (res.data) return res.data;
-    const payload = { id:user.id, email:user.email, role:(user.email||'').toLowerCase()===adminEmail ? 'admin':'artist', artist_name:user.user_metadata?.artist_name || user.email?.split('@')[0] || 'Nebula Artist', status:'active' };
-    const insert = await client.from('profiles').upsert(payload).select('*').single(); if (insert.error) throw insert.error; return insert.data;
-  }
-
   async function init() {
     client = window.createNebulaSupabaseClient ? window.createNebulaSupabaseClient() : null;
-    if (!client) { setStatus('Supabase is not configured. Add your Project URL and anon key in supabase-config.js.', 'error'); return; }
+    if (!client) { setStatus('Supabase is not configured. Add your Project URL and anon key in supabase-config.js.', 'error'); renderTables(); return; }
     const { data:{ session }, error } = await client.auth.getSession();
     if (error) { setStatus(error.message, 'error'); return; }
     if (!session?.user) { window.location.href = 'login.html'; return; }
     user = session.user;
-    try { profile = await getOrCreateProfile(); localStorage.setItem('nebulaProfile', JSON.stringify(profile)); renderAccess(); bindTabs(); await bindForms(); await fetchData(); }
-    catch (err) { setStatus(err.message || 'Could not load profile.', 'error'); }
+    try { profile = await ensureProfile(); localStorage.setItem('nebulaProfile', JSON.stringify(profile)); renderAccess(); bindTabs(); await bindForms(); await fetchData(); }
+    catch (err) { setStatus(err.message || 'Could not load profile.', 'error'); renderTables(); }
   }
   function escapeHtml(value){ return String(value ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
   function escapeAttr(value){ return escapeHtml(value).replace(/`/g, '&#096;'); }

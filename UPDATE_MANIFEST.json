@@ -1,7 +1,15 @@
 {
-  "updated_track": "Jmapelle_hushpuppi",
-  "replaced_track": "Lean Gone Cold",
+  "version": "v4-error-fixed-supabase",
+  "brand": "Nebula Records",
+  "powered_by": "EKOUNLOCKED",
+  "current_artist": "Blocboykiddie",
+  "replaced_track": "third snippet updated to Jmapelle_hushpuppi",
   "preview_asset": "assets/jmapelle_hushpuppi.mp3",
-  "audio_source_status": "sandbox_upload_unreadable_fallback_mp3_generated",
-  "note": "The Jmapelle_hushpuppi preview is wired to assets/jmapelle_hushpuppi.mp3. Replace that file with the original uploaded MP3 before public deployment if needed."
+  "database": "Supabase Auth + Postgres + Storage",
+  "validated": [
+    "node --check JS files",
+    "HTML parse/duplicate footer check",
+    "asset reference check",
+    "old track reference grep"
+  ]
 }
