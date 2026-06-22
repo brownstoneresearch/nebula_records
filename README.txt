@@ -1,32 +1,22 @@
-NEBULA RECORDS WEBSITE PACKAGE
-================================
+NEBULA RECORDS WEBSITE — ARTIST/FOOTER/PLAYER UPGRADE
 
-This zip contains a complete static multi-page website for Nebula Records.
+Updated package includes:
+- Premium music-niche footer with animated equalizer styling.
+- Inline SVG social icons for Instagram, X, TikTok and YouTube.
+- Social handle updated to @nebulamusic_rh.
+- Blocboykiddie added as the current/only artist across Home, Artists and Releases pages.
+- Songwhip artist catalogue link integrated: https://songwhip.com/blocboykiddie
+- Blocboykiddie snippet cards added for selected releases.
+- Dismissible pop-up music player added with a close “×” button.
+- Escape key also closes the player.
+- Player no longer blocks scrolling/navigation after closing.
 
-Files included:
-- index.html        Home cinematic landing page
-- artists.html      Artist roster page
-- releases.html     Releases page with playable release cards
-- services.html     Label services page
-- about.html        About page
-- contact.html      Demo submission/contact page
-- style.css         Full responsive styling, animations, glow effects and layout
-- script.js         Navigation, reveal animations, parallax, and music player logic
-- assets/           Logo, covers, artist visuals, favicon and demo audio loop
+Important audio note:
+The website includes a bundled royalty-free Nebula demo loop for the local preview player.
+Replace the local snippet sources in script.js with official licensed 15–30 second preview audio files whenever you have them.
+For official full listening, users are routed to the Blocboykiddie Songwhip hub.
 
 How to run:
 1. Unzip the folder.
-2. Open index.html in your browser.
-3. Keep all files in the same folder structure.
-
-Music player:
-- Includes a generated royalty-free demo WAV loop.
-- Click any release card to play.
-- Press Spacebar to play/pause when not typing.
-
-Logo:
-- Uploaded logo: assets/logo-nebula-transparent.png
-- White footer logo: assets/logo-nebula-white.png
-
-Deployment:
-Upload the full folder to Netlify, Vercel, GitHub Pages, cPanel, or any static host. The contact form is static preview mode until connected to a backend.
+2. Open index.html in a browser.
+3. For live deployment, upload the full nebula-records-website folder to Netlify, Vercel, cPanel or any static host.
