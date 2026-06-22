@@ -30,27 +30,30 @@
   <aside class="dashboard-sidebar">
     <img src="assets/logo-nebula-white.png" alt="Nebula Records">
     <p class="dash-powered"><img src="assets/ekounlocked-powered.jpeg" alt="EKOUNLOCKED"> Powered by EKOUNLOCKED</p>
+    <div class="dash-admin-card"><span>Admin Access</span><strong id="adminEmail">nebulamusic_rh@outlook.com</strong><small id="adminStatus">Checking Firebase session…</small></div>
     <nav class="dash-tabs" aria-label="Dashboard sections"><button data-tab="overview" class="active">Overview</button><button data-tab="uploads">Upload Songs</button><button data-tab="artists">Artists</button><button data-tab="analytics">Analytics</button><button data-tab="deployment">Deployment</button></nav>
     <a class="button ghost small-button" href="index.html">View Website →</a>
+    <button id="logoutBtn" class="button ghost small-button logout-button" type="button">Sign Out</button>
   </aside>
   <section class="dashboard-content">
-    <div class="dashboard-header"><div><p class="section-kicker">Artist Dashboard</p><h1>Release control, uploads and analytics.</h1></div><button id="exportDashboard" class="button ghost" type="button">Export Report</button></div>
+    <div class="dashboard-header"><div><p class="section-kicker">Firebase Artist Dashboard · Admin: <span id="adminIdentity">nebulamusic_rh@outlook.com</span></p><h1>Release control, uploads and analytics.</h1></div><button id="exportDashboard" class="button ghost" type="button">Export Report</button></div><p id="dashboardStatus" class="dashboard-status">Connecting to Firebase…</p>
     <div class="dash-stat-grid"><article><span>Current Artist</span><strong>Blocboykiddie</strong><small>Active roster</small></article><article><span>Total Plays</span><strong id="dashPlays">0</strong><small>Preview/player events</small></article><article><span>Uploads</span><strong id="dashUploads">0</strong><small>Tracks in dashboard</small></article><article><span>Demo Leads</span><strong id="dashLeads">0</strong><small>Future artist pipeline</small></article></div>
     <div class="dash-panel active" data-panel="overview"><div class="dashboard-grid"><section class="dash-card wide"><h2>Launch Overview</h2><canvas id="overviewChart" height="140"></canvas></section><section class="dash-card"><h2>Quick Actions</h2><button class="button primary" data-jump="uploads">Upload New Song</button><button class="button ghost" data-jump="artists">Add Future Artist</button><button class="button ghost" data-jump="deployment">Deployment Checklist</button></section></div></div>
-    <div class="dash-panel" data-panel="uploads"><section class="dash-card"><h2>Upload Song / Snippet</h2><p class="dash-note">Static mode stores metadata locally. Connect the included backend starter for real cloud upload storage.</p><form id="uploadForm" class="dashboard-form"><label>Track Title<input name="title" required placeholder="Song title"></label><label>Artist<input name="artist" required value="Blocboykiddie"></label><label>Release Type<select name="type"><option>Single</option><option>EP</option><option>Album</option><option>Snippet</option></select></label><label>Songwhip / Stream Link<input name="link" type="url" value="https://songwhip.com/blocboykiddie"></label><label>Audio File<input name="audio" type="file" accept="audio/*"></label><button class="button primary" type="submit">Save Track</button></form></section><section class="dash-card"><h2>Track Library</h2><div class="table-wrap"><table><thead><tr><th>Title</th><th>Artist</th><th>Type</th><th>Link</th></tr></thead><tbody id="trackTable"></tbody></table></div></section></div>
+    <div class="dash-panel" data-panel="uploads"><section class="dash-card"><h2>Upload Song / Snippet</h2><p class="dash-note">Uploads are saved with Firebase: audio files go to Firebase Storage and track metadata is written to Cloud Firestore.</p><form id="uploadForm" class="dashboard-form"><label>Track Title<input name="title" required placeholder="Song title"></label><label>Artist<input name="artist" required value="Blocboykiddie"></label><label>Release Type<select name="type"><option>Single</option><option>EP</option><option>Album</option><option>Snippet</option></select></label><label>Songwhip / Stream Link<input name="link" type="url" value="https://songwhip.com/blocboykiddie"></label><label>Audio File<input name="audio" type="file" accept="audio/*"></label><button class="button primary" type="submit">Save Track</button><p id="uploadStatus" class="dashboard-status small-status"></p></form></section><section class="dash-card"><h2>Track Library</h2><div class="table-wrap"><table><thead><tr><th>Title</th><th>Artist</th><th>Type</th><th>Link</th></tr></thead><tbody id="trackTable"></tbody></table></div></section></div>
     <div class="dash-panel" data-panel="artists"><section class="dash-card"><h2>Artist Roster Pipeline</h2><form id="artistForm" class="dashboard-form inline"><input name="name" required placeholder="Future artist name"><input name="genre" placeholder="Genre"><button class="button primary" type="submit">Add Artist Slot</button></form><div id="artistPipeline" class="pipeline-grid"></div></section></div>
-    <div class="dash-panel" data-panel="analytics"><section class="dash-card"><h2>Analytics Lab</h2><p class="dash-note">Use this panel for campaign reporting. Demo metrics can be simulated, exported and replaced with backend analytics events.</p><div class="analytics-actions"><button id="simulateEvent" class="button primary" type="button">Simulate New Play</button><button id="resetAnalytics" class="button ghost" type="button">Reset Demo Data</button></div><canvas id="analyticsChart" height="170"></canvas></section></div>
-    <div class="dash-panel" data-panel="deployment"><section class="dash-card"><h2>Live Domain Deployment Control</h2><p class="dash-note">This ZIP includes Netlify/Vercel configuration and a backend starter. Actual live deployment requires your hosting account and domain/DNS access.</p><div class="launch-checklist"><label><input type="checkbox"> Upload frontend folder to Netlify or Vercel</label><label><input type="checkbox"> Deploy backend folder to Render/Railway/VPS</label><label><input type="checkbox"> Set environment variables from backend/.env.example</label><label><input type="checkbox"> Point domain DNS to hosting provider</label><label><input type="checkbox"> Replace demo audio with licensed 15–30 sec snippets</label><label><input type="checkbox"> Connect form + upload storage to production backend</label></div><a class="button primary" href="DEPLOYMENT.md">Open deployment guide</a></section></div>
+    <div class="dash-panel" data-panel="analytics"><section class="dash-card"><h2>Analytics Lab</h2><p class="dash-note">Use this panel for campaign reporting. Analytics events are stored in Cloud Firestore for the admin account.</p><div class="analytics-actions"><button id="simulateEvent" class="button primary" type="button">Simulate New Play</button><button id="resetAnalytics" class="button ghost" type="button">Reset Demo Data</button></div><canvas id="analyticsChart" height="170"></canvas></section></div>
+    <div class="dash-panel" data-panel="deployment"><section class="dash-card"><h2>Live Domain Deployment Control</h2><p class="dash-note">This ZIP includes Firebase-ready login, Firestore database storage, Firebase Storage uploads, Netlify/Vercel configuration and live domain deployment notes. Actual live deployment requires your hosting account and domain/DNS access.</p><div class="launch-checklist"><label><input type="checkbox"> Upload frontend folder to Netlify or Vercel</label><label><input type="checkbox"> Create Firebase project and paste config into firebase-config.js</label><label><input type="checkbox"> Enable Firebase Authentication email/password sign-in</label><label><input type="checkbox"> Publish Firestore and Storage rules from this ZIP</label><label><input type="checkbox"> Point domain DNS to hosting provider</label><label><input type="checkbox"> Replace demo audio with licensed 15–30 sec snippets</label><label><input type="checkbox"> Confirm dashboard login with nebulamusic_rh@outlook.com</label></div><a class="button primary" href="DEPLOYMENT.md">Open deployment guide</a></section></div>
   </section>
 </section>
 
   </main>
   
+
 <footer class="music-footer">
   <div class="footer-aurora" aria-hidden="true"></div>
   <div class="footer-topline">
     <div class="footer-equalizer" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-    <p>NEBULA RECORDS · MUSIC LABEL · ARTIST DEVELOPMENT · DISTRIBUTION · PROMOTION</p>
+    <p>NEBULA RECORDS · ARTIST DEVELOPMENT · STREAMING STRATEGY · DISTRIBUTION · PROMOTION</p>
     <div class="footer-equalizer" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   </div>
   <div class="footer-main">
@@ -68,9 +71,9 @@
           <p>Entertainment media · content amplification · culture signal.</p>
         </div>
       </div>
-      <div class="powered-socials">
-        <a href="https://instagram.com/ekounlocked_" target="_blank" rel="noopener" aria-label="EKOUNLOCKED Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1"></circle></svg><span>@ekounlocked_</span></a>
-        <a href="https://tiktok.com/@ekounlocked" target="_blank" rel="noopener" aria-label="EKOUNLOCKED TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.2a4.2 4.2 0 1 1-4.2-4.2c.4 0 .8.1 1.2.2v3.1a1.5 1.5 0 1 0 1 1.4V3h2zm0 0c.7 2.7 2.4 4.2 5 4.6v3.1c-2-.1-3.7-.8-5-2.1"></path></svg><span>@ekounlocked</span></a>
+      <div class="powered-socials compact-socials">
+        <a href="https://instagram.com/ekounlocked_" target="_blank" rel="noopener" aria-label="EKOUNLOCKED Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1"></circle></svg><span>Instagram</span></a>
+        <a href="https://tiktok.com/@ekounlocked" target="_blank" rel="noopener" aria-label="EKOUNLOCKED TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.2a4.2 4.2 0 1 1-4.2-4.2c.4 0 .8.1 1.2.2v3.1a1.5 1.5 0 1 0 1 1.4V3h2zm0 0c.7 2.7 2.4 4.2 5 4.6v3.1c-2-.1-3.7-.8-5-2.1"></path></svg><span>TikTok</span></a>
       </div>
     </section>
     <section class="footer-links">
@@ -79,7 +82,7 @@
       <a href="releases.html">Releases</a>
       <a href="services.html">Services</a>
       <a href="about.html">About</a>
-      <a href="dashboard.html">Artist Dashboard</a>
+      <a href="login.html">Artist Dashboard</a>
     </section>
     <section class="footer-social-panel">
       <h3>Follow Nebula</h3>
@@ -91,16 +94,21 @@
         <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener" aria-label="Blocboykiddie streaming hub"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M7.4 10.1c3.6-1 6.9-.7 9.6.9M8.1 13c2.8-.7 5.5-.5 7.6.7M8.7 15.7c2-.4 3.8-.3 5.6.5"></path></svg></a>
       </div>
       <p class="handle">@nebulamusic_rh</p>
-      <p class="footer-contact">Bookings / demos: <a href="mailto:info@nebularecords.com">info@nebularecords.com</a></p>
+      <p class="footer-contact">Admin: <a href="mailto:nebulamusic_rh@outlook.com">nebulamusic_rh@outlook.com</a></p>
     </section>
   </div>
   <div class="footer-bottom">
     <p>© <span id="year"></span> Nebula Records. All rights reserved.</p>
-    <p>Powered by EKOUNLOCKED · TikTok @ekounlocked · Instagram @ekounlocked_</p>
+    <p>Powered by EKOUNLOCKED</p>
   </div>
 </footer>
   <div id="nebulaPlayer"></div>
   <script src="script.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-storage-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <script src="dashboard.js"></script>
 </body>
 </html>
