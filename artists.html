@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Nebula Records — independent music label, artist development, releases, promotion and distribution." />
+  <meta name="description" content="Nebula Records — official artist-first music label website powered by EKOUNLOCKED." />
   <title>Artists | Nebula Records</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-page="artists">
   <div class="page-noise" aria-hidden="true"></div>
-  <header class="site-header" id="siteHeader">
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+  
+<header class="site-header" id="siteHeader">
   <a class="brand" href="index.html" aria-label="Nebula Records home"><img src="assets/logo-nebula-transparent.png" alt="Nebula Records" /></a>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <nav class="main-nav" id="mainNav" aria-label="Main navigation">
@@ -18,161 +20,81 @@
     <a href="releases.html" data-nav="releases">Releases</a>
     <a href="services.html" data-nav="services">Services</a>
     <a href="about.html" data-nav="about">About</a>
+    <a href="dashboard.html" data-nav="dashboard">Dashboard</a>
     <a href="contact.html" data-nav="contact" class="nav-cta">Submit Demo</a>
   </nav>
 </header>
   <main>
-<section class="page-hero reveal"><p class="section-kicker">Artist Roster</p><h1>Blocboykiddie leads the Nebula Records roster.</h1><p>Our current artist focus is Blocboykiddie. Explore the profile, listen to song snippets and open the full catalogue on Songwhip.</p></section>
+
+<section class="page-hero artist-page-hero"><p class="section-kicker">Nebula Roster</p><h1>Current artist + future roster slots.</h1><p>Blocboykiddie is the present flagship artist. The site is structured to scale as Nebula Records signs more talent.</p></section>
 <section class="section-wrap reveal">
   <div class="solo-artist-layout">
-    <article class="profile-card solo-profile">
-      <img src="assets/artist-blocboykiddie.svg" alt="Blocboykiddie Nebula Records artist artwork">
-      <div>
-        <span class="snippet-tag">Current Nebula Records Artist</span>
-        <h3>Blocboykiddie</h3>
-        <p>Hip-Hop / Afro-fusion / Melodic Trap</p>
-        <span>Blocboykiddie is the present artist focus for Nebula Records, with a catalogue experience connected directly to Songwhip for platform choice and full listening access.</span>
-        <div class="artist-actions"><a class="button primary" href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Open Songwhip ↗</a><a class="button ghost" href="releases.html">Play Snippets →</a></div>
-      </div>
-    </article>
-    <aside class="artist-facts-card">
-      <p class="section-kicker">Artist Hub</p>
-      <h3>Blocboykiddie Works</h3>
-      <ul>
-        <li>Official smart link: songwhip.com/blocboykiddie</li>
-        <li>Song snippets available on the Releases page</li>
-        <li>More artist announcements can be added later</li>
-      </ul>
-      <div class="mini-wave"><span></span><span></span><span></span><span></span><span></span></div>
-    </aside>
+    <article class="solo-profile"><img src="assets/artist-blocboykiddie.svg" alt="Blocboykiddie artist artwork"><div><span class="snippet-tag">Current Artist</span><h2>Blocboykiddie</h2><p>Blocboykiddie is the current official Nebula Records artist, with all work linked through the official Songwhip hub.</p><div class="artist-meta"><span>Genre: Hip-Hop / Afro-fusion / Melodic Trap</span><span>Status: Active roster</span><span>Powered support: EKOUNLOCKED</span></div><a class="button primary" href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Listen to all artist work ↗</a></div></article>
+    <aside class="artist-dashboard-teaser"><h3>Artist Pipeline</h3><p>Use the dashboard to add future artist candidates, store release plans and monitor growth signals.</p><a class="button ghost" href="dashboard.html">Open dashboard →</a></aside>
   </div>
 </section>
-<section class="section-wrap reveal"><div class="section-header"><div><p class="section-kicker">Selected Songs</p><h2>Preview tracks from the catalogue.</h2></div><a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">All works on Songwhip →</a></div><div class="snippet-grid release-grid compact"><article class="snippet-card release-card" data-song-card="0">
-  <img src="assets/cover-money.svg" alt="Money cover artwork">
-  <div class="snippet-copy">
-    <span class="snippet-tag">Snippet Preview</span>
-    <h3>Money</h3>
-    <p>Blocboykiddie · Single</p>
-    <div class="snippet-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="snippet-actions">
-      <button class="mini-play play-track" data-track="0" type="button">Play Preview</button>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Full song ↗</a>
-    </div>
+<section class="section-wrap reveal"><div class="section-header"><div><p class="section-kicker">Next Signings</p><h2>Future artist spaces.</h2></div></div><div class="future-grid">
+<article class="future-artist-card"><span>Slot 02</span><h3>Future Artist</h3><p>Reserved for the next Nebula Records signing.</p><a href="contact.html">Submit demo →</a></article>
+<article class="future-artist-card"><span>Slot 03</span><h3>Future Artist</h3><p>Built for a new voice, rollout, image and release strategy.</p><a href="contact.html">Join the roster →</a></article>
+<article class="future-artist-card"><span>Slot 04</span><h3>Future Artist</h3><p>Flexible roster space for future Afrobeats, hip-hop, trap, R&B and alternative talent.</p><a href="dashboard.html">Track pipeline →</a></article></div></section>
+
+  </main>
+  
+<footer class="music-footer">
+  <div class="footer-aurora" aria-hidden="true"></div>
+  <div class="footer-topline">
+    <div class="footer-equalizer" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <p>NEBULA RECORDS · MUSIC LABEL · ARTIST DEVELOPMENT · DISTRIBUTION · PROMOTION</p>
+    <div class="footer-equalizer" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   </div>
-</article>
-<article class="snippet-card release-card" data-song-card="1">
-  <img src="assets/cover-wacko-jacko.svg" alt="Wacko Jacko cover artwork">
-  <div class="snippet-copy">
-    <span class="snippet-tag">Snippet Preview</span>
-    <h3>Wacko Jacko</h3>
-    <p>Blocboykiddie · Single</p>
-    <div class="snippet-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="snippet-actions">
-      <button class="mini-play play-track" data-track="1" type="button">Play Preview</button>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Full song ↗</a>
-    </div>
-  </div>
-</article>
-<article class="snippet-card release-card" data-song-card="2">
-  <img src="assets/cover-lean-gone-cold.svg" alt="Lean Gone Cold cover artwork">
-  <div class="snippet-copy">
-    <span class="snippet-tag">Snippet Preview</span>
-    <h3>Lean Gone Cold</h3>
-    <p>Blocboykiddie · Single</p>
-    <div class="snippet-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="snippet-actions">
-      <button class="mini-play play-track" data-track="2" type="button">Play Preview</button>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Full song ↗</a>
-    </div>
-  </div>
-</article>
-<article class="snippet-card release-card" data-song-card="3">
-  <img src="assets/cover-no-seke.svg" alt="No Seke cover artwork">
-  <div class="snippet-copy">
-    <span class="snippet-tag">Snippet Preview</span>
-    <h3>No Seke</h3>
-    <p>Blocboykiddie · Single</p>
-    <div class="snippet-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="snippet-actions">
-      <button class="mini-play play-track" data-track="3" type="button">Play Preview</button>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Full song ↗</a>
-    </div>
-  </div>
-</article>
-<article class="snippet-card release-card" data-song-card="4">
-  <img src="assets/cover-rich-and-sad.svg" alt="Rich and Sad cover artwork">
-  <div class="snippet-copy">
-    <span class="snippet-tag">Snippet Preview</span>
-    <h3>Rich and Sad</h3>
-    <p>Blocboykiddie · Single</p>
-    <div class="snippet-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="snippet-actions">
-      <button class="mini-play play-track" data-track="4" type="button">Play Preview</button>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Full song ↗</a>
-    </div>
-  </div>
-</article>
-<article class="snippet-card release-card" data-song-card="5">
-  <img src="assets/cover-mi-casa-su-casa.svg" alt="Mi Casa Su Casa cover artwork">
-  <div class="snippet-copy">
-    <span class="snippet-tag">Snippet Preview</span>
-    <h3>Mi Casa Su Casa</h3>
-    <p>Blocboykiddie · Single</p>
-    <div class="snippet-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="snippet-actions">
-      <button class="mini-play play-track" data-track="5" type="button">Play Preview</button>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Full song ↗</a>
-    </div>
-  </div>
-</article></div></section>
-</main>
-  <footer class="nebula-footer footer-stage">
-  <div class="footer-lightbeam" aria-hidden="true"></div>
-  <div class="footer-marquee" aria-hidden="true"><span>Nebula Records · Sound Meets Vision · Blocboykiddie · New music orbit · </span><span>Nebula Records · Sound Meets Vision · Blocboykiddie · New music orbit · </span></div>
-  <div class="footer-studio-panel">
-    <div class="footer-brand-block">
-      <img src="assets/logo-nebula-white.png" alt="Nebula Records" />
-      <p>Premium artist development, release strategy, promotion and music brand direction for the next wave of culture.</p>
-      <a class="footer-artist-pill" href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 .1 0H12Zm0 2.2a7.8 7.8 0 0 1 6.9 11.4l-3.6-3.6a3.4 3.4 0 0 0-3.3-4.2 3.4 3.4 0 0 0-3.4 3.4c0 .5.1 1 .3 1.4l-2.6 2.6A7.8 7.8 0 0 1 12 4.2Zm0 5.7a1.3 1.3 0 0 1 0 2.6 1.3 1.3 0 0 1 0-2.6Zm0 9.9a7.8 7.8 0 0 1-4.1-1.2l2.5-2.5a3.4 3.4 0 0 0 3.3-.3l3.5 3.5a7.8 7.8 0 0 1-5.2.5Z"/></svg> Listen to Blocboykiddie on Songwhip</a>
-    </div>
-    <div class="footer-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-  </div>
-  <div class="footer-grid footer-grid-pro">
-    <div class="footer-column footer-about">
-      <h4>Label Office</h4>
-      <p>Nebula Records<br/>Where sound meets vision.</p>
-      <p class="footer-handle">@nebulamusic_rh</p>
-    </div>
-    <div class="footer-column">
-      <h4>Explore</h4>
+  <div class="footer-main">
+    <section class="footer-brand-panel">
+      <img src="assets/logo-nebula-white.png" alt="Nebula Records" class="footer-logo" />
+      <p>Where sound meets vision. Building a focused artist-first label universe around Blocboykiddie while preparing roster slots for future talent.</p>
+      <a class="footer-songwhip" href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Listen to Blocboykiddie on Songwhip ↗</a>
+    </section>
+    <section class="powered-panel">
+      <div class="powered-badge">
+        <img src="assets/ekounlocked-powered.jpeg" alt="EKOUNLOCKED" />
+        <div>
+          <span>POWERED BY</span>
+          <strong>EKOUNLOCKED</strong>
+          <p>Entertainment media · content amplification · culture signal.</p>
+        </div>
+      </div>
+      <div class="powered-socials">
+        <a href="https://instagram.com/ekounlocked_" target="_blank" rel="noopener" aria-label="EKOUNLOCKED Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1"></circle></svg><span>@ekounlocked_</span></a>
+        <a href="https://tiktok.com/@ekounlocked" target="_blank" rel="noopener" aria-label="EKOUNLOCKED TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.2a4.2 4.2 0 1 1-4.2-4.2c.4 0 .8.1 1.2.2v3.1a1.5 1.5 0 1 0 1 1.4V3h2zm0 0c.7 2.7 2.4 4.2 5 4.6v3.1c-2-.1-3.7-.8-5-2.1"></path></svg><span>@ekounlocked</span></a>
+      </div>
+    </section>
+    <section class="footer-links">
+      <h3>Label</h3>
       <a href="artists.html">Artists</a>
       <a href="releases.html">Releases</a>
       <a href="services.html">Services</a>
       <a href="about.html">About</a>
-      <a href="contact.html">Submit Demo</a>
-    </div>
-    <div class="footer-column">
-      <h4>Current Artist</h4>
-      <a href="artists.html">Blocboykiddie</a>
-      <a href="releases.html">Song Snippets</a>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Full catalogue on Songwhip</a>
-    </div>
-    <div class="footer-column footer-social-column">
-      <h4>Social Orbit</h4>
-      <div class="socials social-icons" aria-label="Nebula Records social links">
-        <a href="https://instagram.com/nebulamusic_rh" target="_blank" rel="noopener" aria-label="Instagram @nebulamusic_rh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4A5.8 5.8 0 0 1 16.2 22H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm4.2 3.2a4.8 4.8 0 1 1 0 9.6 4.8 4.8 0 0 1 0-9.6Zm0 2a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6Zm5.2-2.35a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3Z"/></svg><span>Instagram</span></a>
-        <a href="https://x.com/nebulamusic_rh" target="_blank" rel="noopener" aria-label="X @nebulamusic_rh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.6 3h3.1l-6.8 7.8L22 21h-6.4l-5-6.5L4.9 21H1.8l7.3-8.4L1.3 3h6.6l4.5 5.9L17.6 3Zm-1.1 16.2h1.7L7 4.7H5.2l11.3 14.5Z"/></svg><span>X</span></a>
-        <a href="https://tiktok.com/@nebulamusic_rh" target="_blank" rel="noopener" aria-label="TikTok @nebulamusic_rh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.7 2c.4 3.1 2.2 5 5.3 5.2v3.3c-1.8.1-3.4-.4-5.2-1.5v6.2c0 4.1-2.6 6.8-6.6 6.8-3.5 0-6.2-2.6-6.2-6 0-3.8 3-6.5 7-6.1v3.5c-1.9-.3-3.5.7-3.5 2.5 0 1.5 1.1 2.6 2.7 2.6 1.8 0 2.9-1.1 2.9-3.3V2h3.6Z"/></svg><span>TikTok</span></a>
-        <a href="https://youtube.com/@nebulamusic_rh" target="_blank" rel="noopener" aria-label="YouTube @nebulamusic_rh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2s-.2-1.7-.9-2.4c-.9-.9-1.9-.9-2.4-1C14.9 3.6 12 3.6 12 3.6s-2.9 0-6.3.2c-.5.1-1.5.1-2.4 1-.7.7-.9 2.4-.9 2.4S2.2 9.2 2.2 11.1v1.8c0 1.9.2 3.9.2 3.9s.2 1.7.9 2.4c.9.9 2.1.9 2.6 1 1.9.2 6.1.2 6.1.2s2.9 0 6.3-.2c.5-.1 1.5-.1 2.4-1 .7-.7.9-2.4.9-2.4s.2-2 .2-3.9v-1.8c0-1.9-.2-3.9-.2-3.9ZM10.2 15.2V8.8l5.8 3.2-5.8 3.2Z"/></svg><span>YouTube</span></a>
+      <a href="dashboard.html">Artist Dashboard</a>
+    </section>
+    <section class="footer-social-panel">
+      <h3>Follow Nebula</h3>
+      <div class="social-icons">
+        <a href="https://instagram.com/nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1"></circle></svg></a>
+        <a href="https://tiktok.com/@nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.2a4.2 4.2 0 1 1-4.2-4.2c.4 0 .8.1 1.2.2v3.1a1.5 1.5 0 1 0 1 1.4V3h2zm0 0c.7 2.7 2.4 4.2 5 4.6v3.1c-2-.1-3.7-.8-5-2.1"></path></svg></a>
+        <a href="https://youtube.com/@nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"></rect><path d="M10 9.5l5 2.5-5 2.5z"></path></svg></a>
+        <a href="https://x.com/nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"></path></svg></a>
+        <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener" aria-label="Blocboykiddie streaming hub"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M7.4 10.1c3.6-1 6.9-.7 9.6.9M8.1 13c2.8-.7 5.5-.5 7.6.7M8.7 15.7c2-.4 3.8-.3 5.6.5"></path></svg></a>
       </div>
-    </div>
+      <p class="handle">@nebulamusic_rh</p>
+      <p class="footer-contact">Bookings / demos: <a href="mailto:info@nebularecords.com">info@nebularecords.com</a></p>
+    </section>
   </div>
-  <div class="footer-bottom footer-bottom-pro">
-    <span>© <span id="year">2026</span> Nebula Records. All rights reserved.</span>
-    <span>Built for artists · releases · culture · future sound</span>
+  <div class="footer-bottom">
+    <p>© <span id="year"></span> Nebula Records. All rights reserved.</p>
+    <p>Powered by EKOUNLOCKED · TikTok @ekounlocked · Instagram @ekounlocked_</p>
   </div>
 </footer>
   <div id="nebulaPlayer"></div>
   <script src="script.js"></script>
+  
 </body>
 </html>

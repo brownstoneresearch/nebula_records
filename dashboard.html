@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Nebula Records — official artist-first music label website powered by EKOUNLOCKED." />
-  <title>Services | Nebula Records</title>
+  <title>Dashboard | Nebula Records</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body data-page="services">
+<body data-page="dashboard">
   <div class="page-noise" aria-hidden="true"></div>
   <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
   
@@ -26,8 +26,23 @@
 </header>
   <main>
 
-<section class="page-hero services-page-hero"><p class="section-kicker">Label Services</p><h1>Music infrastructure for rollout, brand and growth.</h1><p>From artist development to deployment, Nebula Records is structured as a modern label platform.</p></section>
-<section class="section-wrap reveal"><div class="service-grid large"><article class="service-card"><div class="service-icon">✦</div><h3>Artist Development</h3><p>Coaching, image direction, songwriting feedback, performance strategy and creative accountability.</p></article><article class="service-card"><div class="service-icon">≋</div><h3>Music Production</h3><p>Production planning, arrangement notes, mix references, sonic identity and quality-control workflows.</p></article><article class="service-card"><div class="service-icon">◉</div><h3>Distribution</h3><p>Platform-ready metadata, release checklist, links, pre-save planning and rollout cadence.</p></article><article class="service-card"><div class="service-icon">◇</div><h3>Branding</h3><p>Visual identity, cover-art direction, press kit, content look, profile optimization and release language.</p></article><article class="service-card"><div class="service-icon">↗</div><h3>Promotion</h3><p>Campaign concepts, content calendars, social scheduling and EKOUNLOCKED-powered amplification.</p></article><article class="service-card"><div class="service-icon">▣</div><h3>Dashboard + Analytics</h3><p>Upload workflow, performance tracking, roster pipeline and campaign reporting.</p></article></div></section>
+<section class="dashboard-shell">
+  <aside class="dashboard-sidebar">
+    <img src="assets/logo-nebula-white.png" alt="Nebula Records">
+    <p class="dash-powered"><img src="assets/ekounlocked-powered.jpeg" alt="EKOUNLOCKED"> Powered by EKOUNLOCKED</p>
+    <nav class="dash-tabs" aria-label="Dashboard sections"><button data-tab="overview" class="active">Overview</button><button data-tab="uploads">Upload Songs</button><button data-tab="artists">Artists</button><button data-tab="analytics">Analytics</button><button data-tab="deployment">Deployment</button></nav>
+    <a class="button ghost small-button" href="index.html">View Website →</a>
+  </aside>
+  <section class="dashboard-content">
+    <div class="dashboard-header"><div><p class="section-kicker">Artist Dashboard</p><h1>Release control, uploads and analytics.</h1></div><button id="exportDashboard" class="button ghost" type="button">Export Report</button></div>
+    <div class="dash-stat-grid"><article><span>Current Artist</span><strong>Blocboykiddie</strong><small>Active roster</small></article><article><span>Total Plays</span><strong id="dashPlays">0</strong><small>Preview/player events</small></article><article><span>Uploads</span><strong id="dashUploads">0</strong><small>Tracks in dashboard</small></article><article><span>Demo Leads</span><strong id="dashLeads">0</strong><small>Future artist pipeline</small></article></div>
+    <div class="dash-panel active" data-panel="overview"><div class="dashboard-grid"><section class="dash-card wide"><h2>Launch Overview</h2><canvas id="overviewChart" height="140"></canvas></section><section class="dash-card"><h2>Quick Actions</h2><button class="button primary" data-jump="uploads">Upload New Song</button><button class="button ghost" data-jump="artists">Add Future Artist</button><button class="button ghost" data-jump="deployment">Deployment Checklist</button></section></div></div>
+    <div class="dash-panel" data-panel="uploads"><section class="dash-card"><h2>Upload Song / Snippet</h2><p class="dash-note">Static mode stores metadata locally. Connect the included backend starter for real cloud upload storage.</p><form id="uploadForm" class="dashboard-form"><label>Track Title<input name="title" required placeholder="Song title"></label><label>Artist<input name="artist" required value="Blocboykiddie"></label><label>Release Type<select name="type"><option>Single</option><option>EP</option><option>Album</option><option>Snippet</option></select></label><label>Songwhip / Stream Link<input name="link" type="url" value="https://songwhip.com/blocboykiddie"></label><label>Audio File<input name="audio" type="file" accept="audio/*"></label><button class="button primary" type="submit">Save Track</button></form></section><section class="dash-card"><h2>Track Library</h2><div class="table-wrap"><table><thead><tr><th>Title</th><th>Artist</th><th>Type</th><th>Link</th></tr></thead><tbody id="trackTable"></tbody></table></div></section></div>
+    <div class="dash-panel" data-panel="artists"><section class="dash-card"><h2>Artist Roster Pipeline</h2><form id="artistForm" class="dashboard-form inline"><input name="name" required placeholder="Future artist name"><input name="genre" placeholder="Genre"><button class="button primary" type="submit">Add Artist Slot</button></form><div id="artistPipeline" class="pipeline-grid"></div></section></div>
+    <div class="dash-panel" data-panel="analytics"><section class="dash-card"><h2>Analytics Lab</h2><p class="dash-note">Use this panel for campaign reporting. Demo metrics can be simulated, exported and replaced with backend analytics events.</p><div class="analytics-actions"><button id="simulateEvent" class="button primary" type="button">Simulate New Play</button><button id="resetAnalytics" class="button ghost" type="button">Reset Demo Data</button></div><canvas id="analyticsChart" height="170"></canvas></section></div>
+    <div class="dash-panel" data-panel="deployment"><section class="dash-card"><h2>Live Domain Deployment Control</h2><p class="dash-note">This ZIP includes Netlify/Vercel configuration and a backend starter. Actual live deployment requires your hosting account and domain/DNS access.</p><div class="launch-checklist"><label><input type="checkbox"> Upload frontend folder to Netlify or Vercel</label><label><input type="checkbox"> Deploy backend folder to Render/Railway/VPS</label><label><input type="checkbox"> Set environment variables from backend/.env.example</label><label><input type="checkbox"> Point domain DNS to hosting provider</label><label><input type="checkbox"> Replace demo audio with licensed 15–30 sec snippets</label><label><input type="checkbox"> Connect form + upload storage to production backend</label></div><a class="button primary" href="DEPLOYMENT.md">Open deployment guide</a></section></div>
+  </section>
+</section>
 
   </main>
   
@@ -86,6 +101,6 @@
 </footer>
   <div id="nebulaPlayer"></div>
   <script src="script.js"></script>
-  
+  <script src="dashboard.js"></script>
 </body>
 </html>
