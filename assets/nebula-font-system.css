@@ -1,0 +1,209 @@
+/*
+  Nebula Records v12 Font System
+  Uses only the typography/font styling extracted from the uploaded CSS reference:
+  - Plus Jakarta Sans: primary interface/body family
+  - Playfair Display: premium editorial/display family
+  - Geist Mono: technical label/metadata family
+  No color palette or layout system from the reference CSS was imported.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@font-face{
+  font-family:'Plus Jakarta Sans Fallback';
+  src:local('Arial');
+  ascent-override:98.88%;
+  descent-override:21.15%;
+  line-gap-override:0%;
+  size-adjust:104.98%;
+}
+@font-face{
+  font-family:'Playfair Display Fallback';
+  src:local('Times New Roman');
+  ascent-override:97.25%;
+  descent-override:22.56%;
+  line-gap-override:0%;
+  size-adjust:111.26%;
+}
+@font-face{
+  font-family:'Geist Mono Fallback';
+  src:local('Consolas');
+  ascent-override:74.67%;
+  descent-override:21.92%;
+  line-gap-override:0%;
+  size-adjust:134.59%;
+}
+
+:root{
+  --font-sans:'Plus Jakarta Sans','Plus Jakarta Sans Fallback',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-serif:'Playfair Display','Playfair Display Fallback',Georgia,'Times New Roman',serif;
+  --font-mono:'Geist Mono','Geist Mono Fallback','SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+  --font-weight-regular:400;
+  --font-weight-medium:500;
+  --font-weight-semibold:600;
+  --font-weight-bold:700;
+}
+
+html,
+body{
+  font-family:var(--font-sans)!important;
+  font-weight:var(--font-weight-regular)!important;
+  line-height:1.5!important;
+  font-feature-settings:'kern' 1,'liga' 1,'calt' 1;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+button,
+input,
+textarea,
+select,
+label,
+.portal-form input,
+.portal-form textarea,
+.login-studio-form input,
+.login-studio-form textarea,
+.dashboard-shell,
+.dashboard-shell input,
+.dashboard-shell textarea,
+.dashboard-shell select{
+  font-family:var(--font-sans)!important;
+}
+
+/* Display typography: premium label/editorial tone. */
+h1,
+.hero-copy h1,
+.page-hero h1,
+.section-header h2,
+.profile-card h3,
+.solo-profile h2,
+.catalogue-card h3,
+.spotlight-card h2,
+.glass-story h2,
+.official-stream-card h2,
+.login-studio-copy h1,
+.demo-studio-copy h1,
+.demo-portal-copy h1,
+.portal-card h1,
+.dash-title h1{
+  font-family:var(--font-serif)!important;
+  font-weight:var(--font-weight-bold)!important;
+  letter-spacing:-0.045em!important;
+  line-height:0.98!important;
+}
+
+h2,h3,h4,h5,h6,
+.card-title,
+.release-info h3,
+.service-card h3,
+.preview-slot-card h3,
+.future-artist-card h3,
+.dash-card h3,
+.artist-row h3,
+.track-library-table th,
+.player-meta strong,
+.nextstar-footer h3,
+.footer-sleek h3{
+  font-family:var(--font-sans)!important;
+  font-weight:var(--font-weight-bold)!important;
+  letter-spacing:-0.012em!important;
+}
+
+p,
+li,
+.profile-card p,
+.catalogue-card p,
+.solo-profile p,
+.hero-copy p,
+.page-hero p,
+.login-studio-copy p,
+.demo-studio-copy p,
+.demo-portal-copy p,
+.footer-sleek p,
+.nextstar-footer p{
+  font-family:var(--font-sans)!important;
+  font-weight:var(--font-weight-regular)!important;
+  line-height:1.68!important;
+}
+
+/* Studio labels and metadata: from the Geist Mono family in the uploaded font system. */
+.eyebrow,
+.section-kicker,
+.snippet-tag,
+.release-meta,
+.release-info small,
+.preview-slot-card small,
+.preview-slot-card .slot-number,
+.stat-label,
+.meta,
+.kicker,
+.badge,
+.dash-tabs button,
+.dashboard-sidebar small,
+.dashboard-meta,
+.track-library-table td:first-child,
+.player-status,
+.player-link,
+.nextstar-footer__badges span,
+.footer-v11__badges span,
+.footer-sleek__bottom,
+.nav-cta,
+.mini-play,
+.small-button,
+.portal-form label,
+.login-studio-form label,
+.demo-submit-button,
+.button{
+  font-family:var(--font-mono)!important;
+  font-weight:var(--font-weight-semibold)!important;
+  letter-spacing:.055em!important;
+}
+
+/* Navigation: clean modern sans, not heavy or fuzzy on mobile. */
+.main-nav a,
+.site-header .brand,
+.mobile-nav a{
+  font-family:var(--font-sans)!important;
+  font-weight:var(--font-weight-semibold)!important;
+  letter-spacing:-.006em!important;
+}
+.main-nav .nav-cta,
+.button.primary,
+.demo-submit-button,
+.login-studio-form .button{
+  font-weight:var(--font-weight-bold)!important;
+}
+
+/* Logo-adjacent text should stay crisp. */
+.brand img,
+.brand-mark,
+.brand-wordmark{
+  image-rendering:auto;
+}
+
+/* Typographic scale refinements for smaller screens. */
+@media(max-width:650px){
+  .hero-copy h1,
+  .page-hero h1,
+  .login-studio-copy h1,
+  .demo-studio-copy h1,
+  .demo-portal-copy h1{
+    letter-spacing:-0.035em!important;
+    line-height:1.02!important;
+  }
+  .hero-copy p,
+  .page-hero p,
+  .login-studio-copy p,
+  .demo-studio-copy p,
+  .demo-portal-copy p,
+  .profile-card p,
+  .catalogue-card p{
+    line-height:1.66!important;
+  }
+  .eyebrow,.section-kicker,.snippet-tag,.badge{
+    letter-spacing:.045em!important;
+  }
+  .button,.demo-submit-button,.mini-play,.small-button{
+    letter-spacing:.025em!important;
+  }
+}

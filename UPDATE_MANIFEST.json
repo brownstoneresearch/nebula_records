@@ -53,5 +53,17 @@
     "manifest and icon asset check"
   ],
   "official_domain": "https://nebularecordholdings.art/",
-  "x_handle": "@nebulamusic_rh"
+  "x_handle": "@nebulamusic_rh",
+  "v12_font_styling_upgrade": {
+    "added": [
+      "assets/nebula-font-system.css",
+      "V12_FONT_STYLING_UPGRADE.md"
+    ],
+    "basis": [
+      "Plus Jakarta Sans",
+      "Playfair Display",
+      "Geist Mono"
+    ],
+    "scope": "font styling only from uploaded CSS reference"
+  }
 }
