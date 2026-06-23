@@ -83,3 +83,14 @@ Dashboard flow:
 6. Save the update.
 
 The new MP3 is uploaded to Supabase Storage and its public URL is saved to `tracks.audio_url`. The public website player then reads published Supabase tracks and uses the latest preview URL.
+
+
+## Official site URL
+
+Set the Supabase config `siteUrl` to:
+
+```js
+siteUrl: "https://nebularecordholdings.art/"
+```
+
+In Supabase Auth settings, add this domain to the approved redirect/site URL settings when you activate production login.

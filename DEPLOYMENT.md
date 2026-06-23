@@ -23,3 +23,22 @@ Import the folder as a static project. `vercel.json` is already included.
 
 ## Audio previews
 `assets/jmapelle_hushpuppi.mp3` is wired to the Jmapelle_hushpuppi card. Replace any placeholder demo-loop audio with licensed snippets before a public launch.
+
+
+## Official domain
+
+Nebula Records official website URL:
+
+```txt
+https://nebularecordholdings.art/
+```
+
+After uploading the site to Netlify, Vercel, or another static host, add this domain in the host dashboard and point DNS from your registrar to the host. Keep the site published with HTTPS enabled.
+
+Recommended production checks:
+
+1. Open `https://nebularecordholdings.art/` and confirm the homepage loads.
+2. Open `https://nebularecordholdings.art/releases.html` and test all preview buttons.
+3. Open `https://nebularecordholdings.art/login.html` and test Supabase login.
+4. Submit one test demo from `https://nebularecordholdings.art/contact.html`.
+5. Confirm `sitemap.xml` and `robots.txt` are accessible at the domain root.

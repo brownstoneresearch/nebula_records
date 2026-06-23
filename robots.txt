@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /login.html
+Sitemap: https://nebularecordholdings.art/sitemap.xml

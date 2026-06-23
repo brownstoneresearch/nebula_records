@@ -117,3 +117,10 @@ main{position:relative;z-index:2}.section-wrap{width:min(1180px,calc(100% - 40px
 .upload-dropzone input{margin-top:8px;}
 .upload-dropzone small{display:block;color:#6d7b91;margin-top:8px;line-height:1.5;font-weight:700;}
 @media(max-width:780px){.track-edit-header{grid-template-columns:1fr;padding-right:0}.track-edit-header img{width:120px;height:120px}.track-edit-form{grid-template-columns:1fr}.track-edit-form .span-2{grid-column:auto}.library-actions{min-width:0}.track-library-table{min-width:760px}}
+
+
+/* Official domain footer refinements */
+.official-domain-footer .footer-pro-bottom { gap: 1rem; flex-wrap: wrap; }
+.official-domain-footer .footer-official-url { color: rgba(255,255,255,.82); text-decoration: none; letter-spacing: .02em; }
+.official-domain-footer .footer-official-url:hover { color: #fff; text-shadow: 0 0 18px rgba(126,166,255,.45); }
+.official-domain-footer .footer-pro-actions a:first-child { background: linear-gradient(135deg, rgba(113,142,255,.18), rgba(255,255,255,.06)); }

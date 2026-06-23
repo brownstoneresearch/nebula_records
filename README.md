@@ -28,3 +28,9 @@ This package is the cleaned and upgraded Supabase version of the Nebula Records 
 5. Upload/deploy the folder to your host.
 
 Do not place private passwords or service-role keys in frontend files. Supabase Auth should hold the admin password securely.
+
+## Official Website
+
+Production domain: `https://nebularecordholdings.art/`
+
+Use this as the canonical public URL for Nebula Records. Public pages include canonical and Open Graph tags pointing to this domain.
