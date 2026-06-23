@@ -1,145 +1,129 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Label &amp; Artist Portal Login | Nebula Records</title>
-  <meta name="description" content="Secure Nebula Records label and artist portal for admin and signed artist access." />
-  <meta name="robots" content="noindex, nofollow, noarchive" />
-  <meta name="googlebot" content="noindex, nofollow, noarchive" />
-  <link rel="canonical" href="https://nebularecordholdings.art/login.html" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="manifest" href="site.webmanifest" />
-  <link rel="image_src" href="assets/social-preview-nebula-records.png" />
-  <meta name="theme-color" content="#050814" />
-  <meta name="msapplication-TileColor" content="#050814" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:site_name" content="Nebula Records" />
-  <meta property="og:title" content="Nebula Records Label &amp; Artist Portal" />
-  <meta property="og:description" content="Secure Nebula Records label and artist portal for admin and signed artist access." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://nebularecordholdings.art/login.html" />
-  <meta property="og:image" content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Nebula Records official music label logo and social preview card" />
-  <meta property="og:logo" content="https://nebularecordholdings.art/assets/nebula-records-icon-512.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@nebulamusic_rh" />
-  <meta name="twitter:creator" content="@nebulamusic_rh" />
-  <meta name="twitter:title" content="Nebula Records Label &amp; Artist Portal" />
-  <meta name="twitter:description" content="Secure Nebula Records label and artist portal for admin and signed artist access." />
-  <meta name="twitter:image" content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" />
-  <meta name="twitter:image:alt" content="Nebula Records official music label logo and social preview card" />
-  <link rel="me" href="https://x.com/nebulamusic_rh" />
-  <link rel="me" href="https://instagram.com/nebulamusic_rh" />
-  <link rel="me" href="https://tiktok.com/@nebulamusic_rh" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body data-page="dashboard" class="portal-page">
-  <div class="page-noise" aria-hidden="true"></div>
-  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-  <header class="site-header" id="siteHeader">
-    <a class="brand" href="index.html" aria-label="Nebula Records home"><img src="assets/logo-nebula-transparent.png" alt="Nebula Records" /></a>
-    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
-      <a href="artists.html" data-nav="artists">Artists</a>
-      <a href="catalogue.html" data-nav="catalogue">Catalogue</a>
-      <a href="releases.html" data-nav="releases">Releases</a>
-      <a href="services.html" data-nav="services">Services</a>
-      <a href="about.html" data-nav="about">About</a>
-      <a href="login.html" data-nav="dashboard">Dashboard</a>
-      <a href="contact.html" data-nav="contact" class="nav-cta">Submit Demo</a>
-    </nav>
-  </header>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Label &amp; Artist Portal Login | Nebula Records</title>
+<meta content="Secure Nebula Records label and artist portal for admin and signed artist access." name="description"/>
+<meta content="noindex, nofollow, noarchive" name="robots"/>
+<meta content="noindex, nofollow, noarchive" name="googlebot"/>
+<link href="https://nebularecordholdings.art/login.html" rel="canonical"/>
 
-  <main>
-    <section class="login-studio-shell" aria-labelledby="loginTitle">
-      <div class="login-studio-bg" aria-hidden="true"></div>
-      <article class="login-studio-copy reveal">
-        <p class="section-kicker">Nebula Label Portal</p>
-        <h1 id="loginTitle">A clean gateway for the label and its signed stars.</h1>
-        <p>Nebula Records is building the next generation of artists. Admins manage the label. Signed artists access their own catalogue tools, snippet uploads and performance signals.</p>
-        <div class="login-studio-metrics">
-          <span><strong>Admin</strong><small>Roster, demos, releases, analytics</small></span>
-          <span><strong>Artist</strong><small>Catalogue, snippets, dashboard</small></span>
-          <span><strong>Future-ready</strong><small>New workspaces for new signings</small></span>
-        </div>
-      </article>
-      <article class="login-studio-card reveal">
-        <div class="login-card-shine" aria-hidden="true"></div>
-        <img src="assets/logo-nebula-white.png" alt="Nebula Records" class="login-logo" />
-        <p class="section-kicker">Secure Access</p>
-        <h2>Sign in to continue.</h2>
-        <form id="loginForm" class="portal-form login-studio-form">
-          <label>Email address<input id="loginEmail" name="email" type="email" placeholder="your@email.com" autocomplete="email" required /></label>
-          <label>Password<input id="loginPassword" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required /></label>
-          <button id="loginButton" class="button primary" type="submit">Open Workspace →</button>
-          <p id="loginMessage" class="login-message" role="status"></p>
-        </form>
-        <div class="login-access-note">
-          <strong>Role-based workspace</strong>
-          <span>Supabase assigns admin or signed-artist access after authentication. The login card does not expose admin credentials.</span>
-        </div>
-      </article>
-      <article class="login-partner-strip reveal">
-        <span>Media Partner</span>
-        <img src="assets/ekounlocked-powered.jpeg" alt="EKOUNLOCKED" />
-        <strong>EKOUNLOCKED supports visibility and cultural rollout energy.</strong>
-      </article>
-    </section>
-  </main>
 
-  
 
-<footer class="nextstar-footer" aria-label="Nebula Records footer">
-  <div class="nextstar-footer__glow" aria-hidden="true"></div>
-  <div class="nextstar-footer__grid">
-    <section class="nextstar-footer__brand">
-      <img src="assets/logo-nebula-white.png" alt="Nebula Records" />
-      <p>Nebula Records is the home for next-generation stars — a sharp label ecosystem for discovery, development, catalogue building and global-ready releases.</p>
-      <div class="nextstar-footer__badges" aria-label="Label focus areas">
-        <span>Artist-first</span><span>Catalogue-ready</span><span>Future stars</span>
-      </div>
-    </section>
-    <nav class="nextstar-footer__links" aria-label="Footer navigation">
-      <h3>Explore</h3>
-      <a href="artists.html">Artists</a>
-      <a href="catalogue.html">Artist Catalogue</a>
-      <a href="releases.html">Releases</a>
-      <a href="services.html">Services</a>
-      <a href="contact.html">Submit Demo</a>
-      <a href="login.html">Label Portal</a>
-    </nav>
-    <section class="nextstar-footer__first">
-      <h3>First Artist</h3>
-      <p><strong>Blocboykiddie</strong> is mirrored as Nebula Records’ first artist while the catalogue system stays open for every future signing.</p>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Open Songwhip hub ↗</a>
-    </section>
-    <section class="nextstar-footer__connect" aria-label="Nebula Records social links">
-      <h3>Connect</h3>
-      <div class="nextstar-social-icons">
-        <a href="https://nebularecordholdings.art/" target="_blank" rel="noopener" aria-label="Official Nebula Records website"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9M12 3c-2.6 2.7-4 5.7-4 9s1.4 6.3 4 9"></path></svg></a>
-        <a href="https://x.com/nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records on X"><svg class="icon-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 3H22l-6.8 7.8L23.2 21h-6.4l-5-6.5L6 21H2.9l7.3-8.4L2.6 3h6.5l4.5 5.9L18.9 3Zm-1.1 16h1.7L8.2 4.9H6.3L17.8 19Z"></path></svg></a>
-        <a href="https://instagram.com/nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1"></circle></svg></a>
-        <a href="https://tiktok.com/@nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.2a4.2 4.2 0 1 1-4.2-4.2c.4 0 .8.1 1.2.2v3.1a1.5 1.5 0 1 0 1 1.4V3h2zm0 0c.7 2.7 2.4 4.2 5 4.6v3.1c-2-.1-3.7-.8-5-2.1"></path></svg></a>
-        <a href="https://youtube.com/@nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"></rect><path d="M10 9.5l5 2.5-5 2.5z"></path></svg></a>
-        <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener" aria-label="Blocboykiddie listening hub"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M7.4 10.1c3.6-1 6.9-.7 9.6.9M8.1 13c2.8-.7 5.5-.5 7.6.7M8.7 15.7c2-.4 3.8-.3 5.6.5"></path></svg></a>
-      </div>
-      <a class="nextstar-mail" href="mailto:support@nebularecordholdings.art"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M4 7l8 6 8-6"></path></svg><span>support@nebularecordholdings.art</span></a>
-    </section>
-  </div>
-  <div class="nextstar-footer__bottom">
-    <span>© <span id="year"></span> Nebula Records.</span>
-    <span>Built for the next generation of stars.</span>
-  </div>
+
+
+<meta content="#050814" name="theme-color"/>
+<meta content="#050814" name="msapplication-TileColor"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="Nebula Records" property="og:site_name"/>
+<meta content="Nebula Records Label &amp; Artist Portal" property="og:title"/>
+<meta content="Secure Nebula Records label and artist portal for admin and signed artist access." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://nebularecordholdings.art/login.html" property="og:url"/>
+<meta content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" property="og:image"/>
+<meta content="image/png" property="og:image:type"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="Nebula Records official logo and social preview card" property="og:image:alt"/>
+<meta content="https://nebularecordholdings.art/assets/nebula-records-icon-512.png" property="og:logo"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="@nebulamusic_rh" name="twitter:site"/>
+<meta content="@nebulamusic_rh" name="twitter:creator"/>
+<meta content="Nebula Records Label &amp; Artist Portal" name="twitter:title"/>
+<meta content="Secure Nebula Records label and artist portal for admin and signed artist access." name="twitter:description"/>
+<meta content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" name="twitter:image"/>
+<meta content="Nebula Records official logo and social preview card" name="twitter:image:alt"/>
+<link href="https://x.com/nebulamusic_rh" rel="me"/>
+<link href="https://instagram.com/nebulamusic_rh" rel="me"/>
+<link href="https://tiktok.com/@nebulamusic_rh" rel="me"/>
+<link href="assets/social-preview-nebula-records.png" rel="image_src"/><link href="site.webmanifest" rel="manifest"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="assets/favicon.png" rel="icon" type="image/png"/><link href="assets/favicon.ico" rel="icon" sizes="any"/><link href="style.css" rel="stylesheet"/>
+<meta content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" property="og:image:secure_url"/></head>
+<body class="portal-page" data-page="dashboard">
+<div aria-hidden="true" class="page-noise"></div>
+<div aria-hidden="true" class="cursor-glow" id="cursorGlow"></div>
+<header class="site-header" id="siteHeader">
+<a aria-label="Nebula Records home" class="brand" href="index.html"><img alt="Nebula Records" src="assets/logo-nebula-transparent.png"/></a>
+<button aria-expanded="false" aria-label="Open menu" class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+<nav aria-label="Main navigation" class="main-nav" id="mainNav">
+<a data-nav="artists" href="artists.html">Artists</a>
+<a data-nav="catalogue" href="catalogue.html">Catalogue</a>
+<a data-nav="releases" href="releases.html">Releases</a>
+<a data-nav="services" href="services.html">Services</a>
+<a data-nav="about" href="about.html">About</a>
+<a data-nav="dashboard" href="login.html">Dashboard</a>
+<a class="nav-cta" data-nav="contact" href="contact.html">Submit Demo</a>
+</nav>
+</header>
+<main>
+<section aria-labelledby="loginTitle" class="login-studio-shell">
+<div aria-hidden="true" class="login-studio-bg"></div>
+<article class="login-studio-copy reveal">
+<p class="section-kicker">Nebula Label Portal</p>
+<h1 id="loginTitle">A clean gateway for the label and its signed stars.</h1>
+<p>Nebula Records is building the next generation of artists. Admins manage the label. Signed artists access their own catalogue tools, snippet uploads and performance signals.</p>
+<div class="login-studio-metrics">
+<span><strong>Admin</strong><small>Roster, demos, releases, analytics</small></span>
+<span><strong>Artist</strong><small>Catalogue, snippets, dashboard</small></span>
+<span><strong>Future-ready</strong><small>New workspaces for new signings</small></span>
+</div>
+</article>
+<article class="login-studio-card reveal">
+<div aria-hidden="true" class="login-card-shine"></div>
+<img alt="Nebula Records" class="login-logo" src="assets/logo-nebula-white.png"/>
+<p class="section-kicker">Secure Access</p>
+<h2>Sign in to continue.</h2>
+<form class="portal-form login-studio-form" id="loginForm">
+<label>Email address<input autocomplete="email" id="loginEmail" name="email" placeholder="your@email.com" required="" type="email"/></label>
+<label>Password<input autocomplete="current-password" id="loginPassword" name="password" placeholder="Enter your password" required="" type="password"/></label>
+<button class="button primary" id="loginButton" type="submit">Open Workspace →</button>
+<p class="login-message" id="loginMessage" role="status"></p>
+</form>
+<div class="login-access-note">
+<strong>Role-based workspace</strong>
+<span>Supabase assigns admin or signed-artist access after authentication. The login card does not expose admin credentials.</span>
+</div>
+</article>
+<article class="login-partner-strip reveal">
+<span>Media Partner</span>
+<img alt="EKOUNLOCKED" src="assets/ekounlocked-powered.jpeg"/>
+<strong>EKOUNLOCKED supports visibility and cultural rollout energy.</strong>
+</article>
+</section>
+</main>
+<footer aria-label="Nebula Records footer" class="footer-sleek">
+<div class="footer-sleek__shell">
+<section class="footer-sleek__brand">
+<img alt="Nebula Records" src="assets/logo-nebula-white.png"/>
+<p>Home for next-generation stars — artist development, catalogue building and global-ready releases.</p>
+</section>
+<nav aria-label="Footer navigation" class="footer-sleek__links">
+<h3>Explore</h3>
+<a href="artists.html">Artists</a>
+<a href="catalogue.html">Catalogue</a>
+<a href="releases.html">Releases</a>
+<a href="services.html">Services</a>
+<a href="contact.html">Submit Demo</a>
+<a href="login.html">Label Portal</a>
+</nav>
+<section aria-label="Nebula Records connect links" class="footer-sleek__connect">
+<h3>Connect</h3>
+<div aria-label="Social media links" class="footer-sleek__icons">
+<a aria-label="Official Nebula Records website" href="https://nebularecordholdings.art/" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9M12 3c-2.6 2.7-4 5.7-4 9s1.4 6.3 4 9"></path></svg></a>
+<a aria-label="Nebula Records on X" href="https://x.com/nebulamusic_rh" rel="noopener" target="_blank"><svg aria-hidden="true" class="icon-fill" viewbox="0 0 24 24"><path d="M18.9 3H22l-6.8 7.8L23.2 21h-6.4l-5-6.5L6 21H2.9l7.3-8.4L2.6 3h6.5l4.5 5.9L18.9 3Zm-1.1 16h1.7L8.2 4.9H6.3L17.8 19Z"></path></svg></a>
+<a aria-label="Nebula Records on Instagram" href="https://instagram.com/nebulamusic_rh" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1"></circle></svg></a>
+<a aria-label="Nebula Records on TikTok" href="https://tiktok.com/@nebulamusic_rh" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M14 3v10.2a4.2 4.2 0 1 1-4.2-4.2c.4 0 .8.1 1.2.2v3.1a1.5 1.5 0 1 0 1 1.4V3h2zm0 0c.7 2.7 2.4 4.2 5 4.6v3.1c-2-.1-3.7-.8-5-2.1"></path></svg></a>
+<a aria-label="Nebula Records on YouTube" href="https://youtube.com/@nebulamusic_rh" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="12" rx="4" width="18" x="3" y="6"></rect><path d="M10 9.5l5 2.5-5 2.5z"></path></svg></a>
+</div>
+<a class="footer-sleek__mail" href="mailto:support@nebularecordholdings.art"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="3" width="18" x="3" y="5"></rect><path d="M4 7l8 6 8-6"></path></svg><span>support@nebularecordholdings.art</span></a>
+</section>
+</div>
+<div class="footer-sleek__bottom"><span>© <span id="year"></span> Nebula Records.</span><span>Built for the next generation of stars.</span></div>
 </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script src="script.js"></script>
-  <script src="login.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+<script src="login.js"></script>
 </body>
 </html>
