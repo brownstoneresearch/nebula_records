@@ -1,0 +1,21 @@
+{
+  "version": "v6.1-next-generation-footer-clean",
+  "date": "2026-06-23",
+  "official_domain": "https://nebularecordholdings.art/",
+  "changes": [
+    "Removed visible hero official URL/X handle line",
+    "Removed visible footer X handle line",
+    "Added public artist catalogue page for all signed artists",
+    "Added Supabase artist_catalogue table and hotfix SQL",
+    "Repositioned site as a next-generation star label platform",
+    "Mirrored Blocboykiddie as first official artist",
+    "Upgraded login portal container",
+    "Upgraded demo submission container",
+    "Updated nav, footer and sitemap",
+    "Removed EKOUNLOCKED powered/footer lockup section",
+    "Rebalanced footer to a clean three-column layout"
+  ],
+  "validation": [
+    "No requested footer/hero removal strings remain in HTML"
+  ]
+}

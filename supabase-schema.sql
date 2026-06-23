@@ -2,7 +2,7 @@
 -- Run this in Supabase SQL Editor after creating your project.
 -- Supports admin and signed artist dashboards with role-based access.
 -- Creates: profiles, tracks, events, artists_pipeline, demo_leads, ensure_profile(), hardened RLS policies, and nebula-audio storage.
--- v4.2 adds track_key and cover_url so the six public preview slots can be edited/re-uploaded safely.
+-- v6 adds artist_catalogue so every signed artist can have a public catalogue lane with profile, official links, status and metadata.
 
 create extension if not exists pgcrypto;
 
@@ -51,6 +51,22 @@ create table if not exists public.artists_pipeline (
   created_at timestamptz default now()
 );
 
+
+create table if not exists public.artist_catalogue (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid references auth.users(id) on delete set null,
+  artist_name text not null,
+  stage_name text,
+  genre text default 'Open',
+  bio text,
+  status text not null default 'active' check (status in ('active','pipeline','paused','archived')),
+  official_link text,
+  image_url text,
+  sort_order integer default 100,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
 create table if not exists public.demo_leads (
   id uuid primary key default gen_random_uuid(),
   name text not null,
@@ -70,6 +86,7 @@ create index if not exists tracks_track_key_idx on public.tracks(track_key);
 create unique index if not exists tracks_owner_track_key_unique on public.tracks(owner_id, track_key) where track_key is not null;
 create index if not exists events_owner_created_idx on public.events(owner_id, created_at desc);
 create index if not exists demo_leads_created_idx on public.demo_leads(created_at desc);
+create index if not exists artist_catalogue_status_sort_idx on public.artist_catalogue(status, sort_order);
 
 create or replace function public.touch_updated_at()
 returns trigger
@@ -177,6 +194,7 @@ alter table public.tracks enable row level security;
 alter table public.events enable row level security;
 alter table public.artists_pipeline enable row level security;
 alter table public.demo_leads enable row level security;
+alter table public.artist_catalogue enable row level security;
 
 -- Drop policies first so this file can be safely rerun.
 drop policy if exists "profiles_select_own_or_admin" on public.profiles;
@@ -198,6 +216,9 @@ drop policy if exists "pipeline_admin_all" on public.artists_pipeline;
 drop policy if exists "demo_public_insert" on public.demo_leads;
 drop policy if exists "demo_admin_select" on public.demo_leads;
 drop policy if exists "demo_admin_update" on public.demo_leads;
+drop policy if exists "artist_catalogue_public_active" on public.artist_catalogue;
+drop policy if exists "artist_catalogue_admin_all" on public.artist_catalogue;
+drop policy if exists "artist_catalogue_artist_own_select" on public.artist_catalogue;
 
 -- Profiles: users can read/update their own artist profile; admins can manage all.
 create policy "profiles_select_own_or_admin" on public.profiles
@@ -229,6 +250,20 @@ for insert with check (auth.uid() is not null and (owner_id = auth.uid() or publ
 -- Future artist pipeline: admin only.
 create policy "pipeline_admin_all" on public.artists_pipeline
 for all using (public.is_admin()) with check (public.is_admin());
+
+
+-- Artist catalogue: public can read active artist lanes; admins manage all; assigned artists can read their own lane.
+create policy "artist_catalogue_public_active" on public.artist_catalogue
+for select using (status = 'active');
+create policy "artist_catalogue_artist_own_select" on public.artist_catalogue
+for select using (owner_id = auth.uid());
+create policy "artist_catalogue_admin_all" on public.artist_catalogue
+for all using (public.is_admin()) with check (public.is_admin());
+
+-- Seed current first artist catalogue lane. Update owner_id after creating the artist account if needed.
+insert into public.artist_catalogue (artist_name, stage_name, genre, bio, status, official_link, image_url, sort_order)
+select 'Faturoti Moses', 'Blocboykiddie', 'Hip-Hop / Afro-fusion / Melodic Trap', 'First official Nebula Records artist and opening catalogue mirror.', 'active', 'https://songwhip.com/blocboykiddie', 'assets/artist-blocboykiddie.svg', 1
+where not exists (select 1 from public.artist_catalogue where lower(stage_name) = 'blocboykiddie');
 
 -- Demo leads: public can submit; only admin can read/update.
 create policy "demo_public_insert" on public.demo_leads

@@ -1,7 +1,7 @@
 {
   "name": "Nebula Records",
   "short_name": "Nebula Records",
-  "description": "Official Nebula Records website. Listen to Blocboykiddie previews, explore releases, submit demos, and follow Nebula Records powered by EKOUNLOCKED.",
+  "description": "Nebula Records is a home for next-generation stars with artist catalogues, release previews, demo intake and a label portal.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
