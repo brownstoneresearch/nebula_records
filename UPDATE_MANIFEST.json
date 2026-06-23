@@ -1,5 +1,5 @@
 {
-  "version": "4.3-jmapelle-preview-fixed",
+  "version": "5.0-seo-social-brand-visibility",
   "brand": "Nebula Records",
   "powered_by": "EKOUNLOCKED",
   "current_artist": "Blocboykiddie",
@@ -31,12 +31,27 @@
     "Kept RLS-safe upload paths under authenticated user UID folders.",
     "Added fallback-safe public music player for broken/private Supabase audio URLs.",
     "Added hyphenated Jmapelle_Hushpuppi preview asset path for dashboard/upload consistency.",
-    "Added optional SQL cleanup for broken Jmapelle preview rows."
+    "Added optional SQL cleanup for broken Jmapelle preview rows.",
+    "Added advanced Google SEO meta tags for public pages.",
+    "Added canonical URLs, robots/googlebot directives and Google Search Console verification placeholder.",
+    "Added Organization, WebSite, WebPage, MusicGroup and release ItemList JSON-LD structured data.",
+    "Added Open Graph and X/Twitter summary_large_image meta tags with a branded Nebula Records preview image.",
+    "Created assets/social-preview-nebula-records.png and assets/nebula-records-icon-512.png for social previews and app icons.",
+    "Added X.com icon and handle for Nebula Records: @nebulamusic_rh.",
+    "Optimized footer into a cleaner compact music-label footer with social icon links and EKOUNLOCKED lockup.",
+    "Updated sitemap.xml with lastmod, priorities and public page coverage.",
+    "Added social-links.json and GOOGLE_SEO_SOCIAL_UPGRADE.md."
   ],
   "validated": [
     "node --check dashboard.js",
     "node --check script.js",
     "asset reference check",
-    "schema includes required tables, ensure_profile(), and RLS policies"
-  ]
+    "schema includes required tables, ensure_profile(), and RLS policies",
+    "JSON-LD parse validation across public pages",
+    "local asset reference validation",
+    "social preview image generated at 1200x630",
+    "manifest and icon asset check"
+  ],
+  "official_domain": "https://nebularecordholdings.art/",
+  "x_handle": "@nebulamusic_rh"
 }

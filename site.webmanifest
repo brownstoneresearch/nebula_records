@@ -1,0 +1,22 @@
+{
+  "name": "Nebula Records",
+  "short_name": "Nebula Records",
+  "description": "Official Nebula Records website. Listen to Blocboykiddie previews, explore releases, submit demos, and follow Nebula Records powered by EKOUNLOCKED.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050814",
+  "theme_color": "#050814",
+  "icons": [
+    {
+      "src": "assets/nebula-records-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
