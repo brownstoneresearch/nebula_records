@@ -29,7 +29,7 @@ create table if not exists public.tracks (
   track_key text,
   cover_url text,
   preview_enabled boolean not null default false,
-  preview_slot integer check (preview_slot between 1 and 6),
+  preview_slot integer check (preview_slot between 1 and 12),
   is_full_song boolean not null default false,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
@@ -68,8 +68,32 @@ create table if not exists public.demo_leads (
 alter table if exists public.tracks add column if not exists track_key text;
 alter table if exists public.tracks add column if not exists cover_url text;
 alter table if exists public.tracks add column if not exists preview_enabled boolean not null default false;
-alter table if exists public.tracks add column if not exists preview_slot integer check (preview_slot between 1 and 6);
+alter table if exists public.tracks add column if not exists preview_slot integer check (preview_slot between 1 and 12);
 alter table if exists public.tracks add column if not exists is_full_song boolean not null default false;
+
+-- v13: widen public catalogue preview positions to 12 slots.
+do $$
+declare
+  constraint_name text;
+begin
+  select c.conname into constraint_name
+  from pg_constraint c
+  join pg_class t on t.oid = c.conrelid
+  join pg_namespace n on n.oid = t.relnamespace
+  where n.nspname = 'public'
+    and t.relname = 'tracks'
+    and c.contype = 'c'
+    and pg_get_constraintdef(c.oid) ilike '%preview_slot%'
+  limit 1;
+
+  if constraint_name is not null then
+    execute format('alter table public.tracks drop constraint if exists %I', constraint_name);
+  end if;
+end $$;
+
+alter table public.tracks
+  add constraint tracks_preview_slot_check check (preview_slot is null or (preview_slot between 1 and 12));
+
 
 create index if not exists tracks_owner_created_idx on public.tracks(owner_id, created_at desc);
 create index if not exists tracks_track_key_idx on public.tracks(track_key);

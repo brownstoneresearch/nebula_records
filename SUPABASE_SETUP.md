@@ -60,11 +60,11 @@ This package includes a complete `supabase-schema.sql` that creates:
 - hardened Row Level Security policies
 - the public `nebula-audio` Storage bucket for preview MP3 files
 
-The `tracks` table also includes `track_key` and `cover_url`. These fields allow the six public Blocboykiddie preview songs in the dashboard Track Library to remain fixed as official preview slots while still being editable.
+The `tracks` table also includes `track_key` and `cover_url`. These fields allow the six editable Blocboykiddie starter songs in the dashboard Track Library to remain reusable, while the public Catalogue Preview Shelf now supports slots 01–12 plus pagination.
 
 To update an existing Supabase project, run either the full `supabase-schema.sql` again or run `SUPABASE_TRACK_LIBRARY_EDIT_HOTFIX.sql` once in Supabase SQL Editor.
 
-The six editable preview slots are:
+The six editable starter tracks are:
 
 1. Money
 2. Wacko Jacko
@@ -78,7 +78,7 @@ Dashboard flow:
 1. Sign in through `login.html`.
 2. Open `dashboard.html`.
 3. Go to **Library**.
-4. Click **Edit / Re-upload** beside any of the six preview songs.
+4. Click **Edit / Re-upload** beside any starter track or uploaded catalogue item.
 5. Choose a replacement MP3 preview.
 6. Save the update.
 
@@ -94,3 +94,13 @@ siteUrl: "https://nebularecordholdings.art/"
 ```
 
 In Supabase Auth settings, add this domain to the approved redirect/site URL settings when you activate production login.
+
+## v13 preview shelf pagination update
+
+For existing projects, run:
+
+```sql
+SUPABASE_CATALOGUE_PAGINATION_HOTFIX.sql
+```
+
+This widens `tracks.preview_slot` from slots 01–06 to slots 01–12. The homepage still renders slots 01–06 only, while `catalogue.html` and `releases.html` render 12 positions per page and paginate when more published preview-enabled tracks exist.

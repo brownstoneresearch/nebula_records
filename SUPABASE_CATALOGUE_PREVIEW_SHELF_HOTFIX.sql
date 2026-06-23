@@ -2,7 +2,7 @@
 -- Run this in Supabase SQL Editor for existing projects.
 
 alter table if exists public.tracks add column if not exists preview_enabled boolean not null default false;
-alter table if exists public.tracks add column if not exists preview_slot integer check (preview_slot between 1 and 6);
+alter table if exists public.tracks add column if not exists preview_slot integer check (preview_slot between 1 and 12);
 alter table if exists public.tracks add column if not exists is_full_song boolean not null default false;
 
 create index if not exists tracks_catalogue_preview_idx

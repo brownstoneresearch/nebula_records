@@ -54,16 +54,12 @@
   ],
   "official_domain": "https://nebularecordholdings.art/",
   "x_handle": "@nebulamusic_rh",
-  "v12_font_styling_upgrade": {
-    "added": [
-      "assets/nebula-font-system.css",
-      "V12_FONT_STYLING_UPGRADE.md"
-    ],
-    "basis": [
-      "Plus Jakarta Sans",
-      "Playfair Display",
-      "Geist Mono"
-    ],
-    "scope": "font styling only from uploaded CSS reference"
+  "v12_css_reference_upgrade": {
+    "summary": "Applied uploaded CSS design-system concepts to Nebula Records site: typography, HSL tokens, readable dark surfaces, focus rings, mobile refinements, footer/header polish.",
+    "files": [
+      "style.css",
+      "admin.html",
+      "V12_CSS_REFERENCE_DESIGN_UPGRADE.md"
+    ]
   }
 }

@@ -37,7 +37,11 @@
 <link href="https://x.com/nebulamusic_rh" rel="me"/>
 <link href="https://instagram.com/nebulamusic_rh" rel="me"/>
 <link href="https://tiktok.com/@nebulamusic_rh" rel="me"/>
-<link href="assets/social-preview-nebula-records.png" rel="image_src"/><link href="site.webmanifest" rel="manifest"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="assets/favicon.png" rel="icon" type="image/png"/><link href="assets/favicon.ico" rel="icon" sizes="any"/><link href="style.css" rel="stylesheet"/><link href="assets/nebula-font-system.css" rel="stylesheet"/>
+<link href="assets/social-preview-nebula-records.png" rel="image_src"/><link href="site.webmanifest" rel="manifest"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="assets/favicon.png" rel="icon" type="image/png"/><link href="assets/favicon.ico" rel="icon" sizes="any"/><link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<meta name="color-scheme" content="dark light"/>
+<link href="style.css" rel="stylesheet"/>
 <meta content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" property="og:image:secure_url"/></head>
 <body class="nebula-v11 dashboard-page" data-page="dashboard">
 <div aria-hidden="true" class="page-noise"></div>
@@ -129,7 +133,7 @@
 <label>Release Type<select id="uploadType" name="type"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
 <label>Audio Purpose<select id="uploadIsFullSong" name="is_full_song"><option value="false">Preview Snippet</option><option value="true">Full Song</option></select></label>
 <label class="shelf-toggle span-2"><input id="uploadPreviewEnabled" name="preview_enabled" type="checkbox" value="true"/><span>Add this upload to the public Catalogue Preview Shelf</span></label>
-<label>Preview Shelf Slot<select id="uploadPreviewSlot" name="preview_slot"><option value="">Auto / Not selected</option><option value="1">Slot 01</option><option value="2">Slot 02</option><option value="3">Slot 03</option><option value="4">Slot 04</option><option value="5">Slot 05</option><option value="6">Slot 06</option></select></label>
+<label>Preview Shelf Slot<select id="uploadPreviewSlot" name="preview_slot"><option value="">Auto / Not selected</option><option value="1">Slot 01</option><option value="2">Slot 02</option><option value="3">Slot 03</option><option value="4">Slot 04</option><option value="5">Slot 05</option><option value="6">Slot 06</option><option value="7">Slot 07</option><option value="8">Slot 08</option><option value="9">Slot 09</option><option value="10">Slot 10</option><option value="11">Slot 11</option><option value="12">Slot 12</option></select></label>
 <label>Status<select id="uploadStatusSelect" name="status"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
 <label>Songwhip / Stream Link<input id="uploadLink" name="link" type="url" value="https://songwhip.com/blocboykiddie"/></label>
 <label>Audio File<input accept="audio/*" id="uploadAudio" name="audio" type="file"/></label>
@@ -139,7 +143,7 @@
 </section>
 </div>
 <div class="dash-panel" data-panel="library">
-<section class="dash-card track-library-suite"><h2>Track Library</h2><p class="dash-note" id="libraryNote">All uploaded songs stay in the private library. Use <strong>Edit / Re-upload</strong> to replace audio, then optionally place any full song or snippet onto the public Catalogue Preview Shelf.</p><div class="table-wrap"><table class="track-library-table"><thead><tr><th>Cover</th><th>Title</th><th>Artist</th><th>Status</th><th>Shelf</th><th>Kind</th><th>Audio</th><th>Actions</th></tr></thead><tbody id="trackTable"></tbody></table></div></section>
+<section class="dash-card track-library-suite"><h2>Track Library</h2><p class="dash-note" id="libraryNote">All uploaded songs stay in the private library. Use <strong>Edit / Re-upload</strong> to replace audio, then optionally place any full song or snippet onto the public Catalogue Preview Shelf. Slots 01–06 feed the homepage; slots 07–12 expand the catalogue/release vault.</p><div class="table-wrap"><table class="track-library-table"><thead><tr><th>Cover</th><th>Title</th><th>Artist</th><th>Status</th><th>Shelf</th><th>Kind</th><th>Audio</th><th>Actions</th></tr></thead><tbody id="trackTable"></tbody></table></div></section>
 </div>
 <div class="dash-panel" data-panel="analytics">
 <section class="dash-card"><h2>Analytics Lab</h2><p class="dash-note">Track preview plays, portal actions and campaign events from Supabase. Artists see their own events; admin sees the label view.</p><div class="analytics-actions"><button class="button primary" id="simulateEvent" type="button">Log Demo Play</button><button class="button ghost" id="refreshDashboard" type="button">Refresh Data</button></div><canvas height="175" id="analyticsChart"></canvas></section>
@@ -176,7 +180,7 @@
 <label>Release Type<select id="editType" name="type"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
 <label>Audio Purpose<select id="editIsFullSong" name="is_full_song"><option value="false">Preview Snippet</option><option value="true">Full Song</option></select></label>
 <label class="shelf-toggle span-2"><input id="editPreviewEnabled" name="preview_enabled" type="checkbox" value="true"/><span>Show this song on the public Catalogue Preview Shelf</span></label>
-<label>Preview Shelf Slot<select id="editPreviewSlot" name="preview_slot"><option value="">Auto / Not selected</option><option value="1">Slot 01</option><option value="2">Slot 02</option><option value="3">Slot 03</option><option value="4">Slot 04</option><option value="5">Slot 05</option><option value="6">Slot 06</option></select></label>
+<label>Preview Shelf Slot<select id="editPreviewSlot" name="preview_slot"><option value="">Auto / Not selected</option><option value="1">Slot 01</option><option value="2">Slot 02</option><option value="3">Slot 03</option><option value="4">Slot 04</option><option value="5">Slot 05</option><option value="6">Slot 06</option><option value="7">Slot 07</option><option value="8">Slot 08</option><option value="9">Slot 09</option><option value="10">Slot 10</option><option value="11">Slot 11</option><option value="12">Slot 12</option></select></label>
 <label>Status<select id="editStatus" name="status"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
 <label class="span-2">Songwhip / Stream Link<input id="editLink" name="link" type="url" value="https://songwhip.com/blocboykiddie"/></label>
 <label class="span-2 upload-dropzone">Replace MP3 Preview<input accept="audio/mpeg,audio/mp3,audio/*" id="editAudio" name="audio" type="file"/><small id="editCurrentAudio">Choose a new MP3 only if you want to replace the current preview.</small></label>

@@ -1,5 +1,6 @@
 (() => {
   const SONGWHIP = 'https://songwhip.com/blocboykiddie';
+  const MAX_PREVIEW_SLOT = 12;
   const previewSlots = [
     { key:'money', title:'Money', artist:'Blocboykiddie', type:'Single', status:'Draft', link:SONGWHIP, audio_url:'', fallback_audio_url:'', cover:'assets/cover-money.svg', preview_slot:1 },
     { key:'wacko-jacko', title:'Wacko Jacko', artist:'Blocboykiddie', type:'Single', status:'Draft', link:SONGWHIP, audio_url:'', fallback_audio_url:'', cover:'assets/cover-wacko-jacko.svg', preview_slot:2 },
@@ -322,7 +323,7 @@
     if (file && file.size) audio_url = await uploadAudioFile(file, artistName);
     const previewEnabled = boolValue(fd.get('preview_enabled'));
     let previewSlot = Number(fd.get('preview_slot') || existingTrack?.preview_slot || slot?.preview_slot || 0);
-    if (previewEnabled && !(previewSlot >= 1 && previewSlot <= 6)) previewSlot = Number(slot?.preview_slot || 1);
+    if (previewEnabled && !(previewSlot >= 1 && previewSlot <= MAX_PREVIEW_SLOT)) previewSlot = slot?.preview_slot ? Number(slot.preview_slot) : null;
     if (previewEnabled && !audio_url) throw new Error('Upload an MP3 before adding this song to the public Catalogue Preview Shelf.');
 
     const payload = {
@@ -335,7 +336,7 @@
       track_key: key,
       cover_url: slot?.cover || existingTrack?.cover_url || '',
       preview_enabled: previewEnabled,
-      preview_slot: previewEnabled ? previewSlot : null,
+      preview_slot: previewEnabled && previewSlot ? previewSlot : null,
       is_full_song: boolValue(fd.get('is_full_song'))
     };
 

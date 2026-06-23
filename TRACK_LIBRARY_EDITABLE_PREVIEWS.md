@@ -1,6 +1,6 @@
 # Editable Preview Track Library
 
-The dashboard now treats the six Blocboykiddie preview songs as official editable slots.
+The dashboard now treats the six Blocboykiddie starter tracks as editable library templates and supports public preview slots 01–12.
 
 ## Included preview slots
 

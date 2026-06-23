@@ -1,5 +1,8 @@
 const SONGWHIP_URL = 'https://songwhip.com/blocboykiddie';
-const SHELF_SLOT_COUNT = 6;
+const HOME_SHELF_COUNT = 6;
+const DEFAULT_SHELF_PAGE_SIZE = 12;
+const MAX_EXPLICIT_PREVIEW_SLOT = 12;
+const shelfPages = {};
 let tracks = [];
 let currentTrack = 0;
 let audio = createAudioForTrack(null);
@@ -90,24 +93,71 @@ function slotPlaceholder(slot){
 function slotCard(track,index,slot){
   return `<article class="snippet-card release-card preview-slot-card is-filled" data-preview-slot="${slot}"><img src="${attr(track.cover)}" alt="${attr(track.title)} cover artwork"><div class="snippet-copy"><span class="snippet-tag">Catalogue Slot ${String(slot).padStart(2,'0')}</span><h3>${esc(track.title)}</h3><p>${esc(track.artist)} · ${esc(track.type)}</p><div class="snippet-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="snippet-actions"><button class="mini-play play-shelf-track" data-track-index="${index}" type="button">Play Preview</button><a href="${attr(track.link)}" target="_blank" rel="noopener">Full hub ↗</a></div></div></article>`;
 }
+function shelfKey(shelf, fallbackIndex=0){
+  if(!shelf.dataset.previewShelf) shelf.dataset.previewShelf = `shelf-${fallbackIndex}`;
+  return shelf.dataset.previewShelf;
+}
+function shelfPageSize(shelf){
+  const explicit=Number(shelf.dataset.previewLimit||0);
+  if(explicit>0) return explicit;
+  return document.body.dataset.page === 'home' ? HOME_SHELF_COUNT : DEFAULT_SHELF_PAGE_SIZE;
+}
+function shelfUsesPagination(shelf){ return shelf.dataset.previewPagination === 'true'; }
+function buildShelfSlots(pageSize){
+  const explicit = new Map();
+  const flexible = [];
+  tracks.forEach((track,index)=>{
+    const slot=Number(track.slot||0);
+    if(slot>=1 && slot<=MAX_EXPLICIT_PREVIEW_SLOT && !explicit.has(slot)) explicit.set(slot,{track,index,slot});
+    else flexible.push({track,index,slot:0});
+  });
+  const highestExplicit = explicit.size ? Math.max(...explicit.keys()) : 0;
+  const needed = Math.max(pageSize, highestExplicit, tracks.length);
+  const totalSlots = Math.max(pageSize, Math.ceil(needed/pageSize)*pageSize);
+  const slots = Array.from({length: totalSlots}, (_,i)=>({slot:i+1,item:null}));
+  explicit.forEach((item,slot)=>{ if(slots[slot-1]) slots[slot-1].item=item; });
+  flexible.forEach(item=>{
+    const empty = slots.find(cell=>!cell.item);
+    if(empty) { item.slot=empty.slot; empty.item=item; }
+    else { slots.push({slot:slots.length+1,item:{...item,slot:slots.length+1}}); }
+  });
+  return slots;
+}
+function renderShelfPagination(shelf,key,currentPage,totalPages,totalTracks){
+  if(!shelfUsesPagination(shelf)) return;
+  let nav = shelf.nextElementSibling;
+  if(!nav || !nav.classList?.contains('shelf-pagination')){
+    nav=document.createElement('div'); nav.className='shelf-pagination'; shelf.insertAdjacentElement('afterend',nav);
+  }
+  if(totalPages<=1){
+    nav.innerHTML = `<span class="shelf-count">${totalTracks || 0} public preview${totalTracks===1?'':'s'} selected</span>`;
+    return;
+  }
+  const buttons = Array.from({length:totalPages},(_,i)=>`<button type="button" class="${i+1===currentPage?'active':''}" data-shelf-page="${i+1}" data-shelf-key="${attr(key)}">${i+1}</button>`).join('');
+  nav.innerHTML = `<span class="shelf-count">${totalTracks} selected previews · Page ${currentPage} of ${totalPages}</span><div class="shelf-pages">${buttons}</div>`;
+  nav.querySelectorAll('[data-shelf-page]').forEach(btn=>btn.addEventListener('click',()=>{ shelfPages[key]=Number(btn.dataset.shelfPage||1); renderPreviewShelf(); }));
+}
 function renderPreviewShelf(){
   const shelves=document.querySelectorAll('[data-preview-shelf]');
   if(!shelves.length) return;
-  const bySlot = new Map();
-  tracks.forEach((track,index)=>{ const slot = Number(track.slot || index+1); if(slot>=1 && slot<=SHELF_SLOT_COUNT && !bySlot.has(slot)) bySlot.set(slot,{track,index}); });
-  shelves.forEach(shelf=>{
-    let html='';
-    for(let slot=1; slot<=SHELF_SLOT_COUNT; slot++){
-      const item=bySlot.get(slot);
-      html += item ? slotCard(item.track,item.index,slot) : slotPlaceholder(slot);
-    }
-    shelf.innerHTML = html;
+  shelves.forEach((shelf,idx)=>{
+    const key=shelfKey(shelf,idx);
+    const pageSize=shelfPageSize(shelf);
+    const slots=buildShelfSlots(pageSize);
+    const totalPages=Math.max(1,Math.ceil(slots.length/pageSize));
+    const currentPage=Math.min(Math.max(1,Number(shelfPages[key]||Number(shelf.dataset.previewPage||1)||1)),totalPages);
+    shelfPages[key]=currentPage;
+    const start=(currentPage-1)*pageSize;
+    const pageSlots=slots.slice(start,start+pageSize);
+    shelf.innerHTML=pageSlots.map(cell=> cell.item ? slotCard(cell.item.track,cell.item.index,cell.slot) : slotPlaceholder(cell.slot)).join('');
+    renderShelfPagination(shelf,key,currentPage,totalPages,tracks.length);
   });
   setupShelfButtons();
 }
+
 function setupShelfButtons(){ document.querySelectorAll('.play-shelf-track').forEach(btn=>{ if(btn.dataset.bound) return; btn.dataset.bound='1'; btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();loadTrack(Number(btn.dataset.trackIndex||0),true)}); }); }
 function setupTrackButtons(){
-  document.querySelectorAll('.play-track').forEach(btn=>{ if(btn.dataset.bound) return; btn.dataset.bound='1'; btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();loadTrack(0,true)}); });
+  document.querySelectorAll('.play-track').forEach(btn=>{ if(btn.dataset.bound) return; btn.dataset.bound='1'; btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const i=Number(btn.dataset.track||btn.dataset.trackIndex||0);loadTrack(Number.isFinite(i)?i:0,true)}); });
   document.querySelectorAll('.play-first-preview').forEach(btn=>{ if(btn.dataset.bound) return; btn.dataset.bound='1'; btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();loadTrack(0,true)}); });
 }
 function setupNavigation(){ const page=document.body.dataset.page; document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===page)a.classList.add('active')}); const toggle=document.getElementById('navToggle'), nav=document.getElementById('mainNav'); if(toggle&&nav){toggle.addEventListener('click',()=>{nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(nav.classList.contains('open')))});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false')}))} }
@@ -126,9 +176,9 @@ async function hydrateTracksFromSupabase(){
       .not('audio_url','is',null)
       .order('preview_slot',{ascending:true, nullsFirst:false})
       .order('created_at',{ascending:false})
-      .limit(24);
+      .limit(72);
     if(error && /preview_enabled|preview_slot|is_full_song|column/i.test(error.message || '')){
-      console.warn('Run the v9 Supabase shelf schema to enable dynamic public preview cards:', error.message);
+      console.warn('Run the latest Supabase shelf schema to enable dynamic public preview cards:', error.message);
       registerPlayerApi(); return;
     }
     if(error) throw error;
@@ -137,14 +187,16 @@ async function hydrateTracksFromSupabase(){
     (data || []).forEach(row=>{
       const t=publicTrack(row);
       if(!t.src) return;
-      let slot=Number(t.slot||0);
-      if(!(slot>=1 && slot<=SHELF_SLOT_COUNT)){
-        for(let i=1;i<=SHELF_SLOT_COUNT;i++){ if(!usedSlots.has(i)){ slot=i; break; } }
-      }
-      if(!(slot>=1 && slot<=SHELF_SLOT_COUNT) || usedSlots.has(slot)) return;
-      t.slot=slot; usedSlots.add(slot); selected.push(t);
+      const explicit=Number(t.slot||0);
+      if(explicit>=1 && explicit<=MAX_EXPLICIT_PREVIEW_SLOT && !usedSlots.has(explicit)) { t.slot=explicit; usedSlots.add(explicit); }
+      else t.slot=0;
+      selected.push(t);
     });
-    tracks = selected.sort((a,b)=>(a.slot||99)-(b.slot||99));
+    tracks = selected.sort((a,b)=>{
+      const sa=a.slot||9999, sb=b.slot||9999;
+      if(sa!==sb) return sa-sb;
+      return String(b.created_at||'').localeCompare(String(a.created_at||''));
+    });
     currentTrack = 0;
     audio = createAudioForTrack(tracks[0]); bindAudioEvents(); syncPlayer(); renderPreviewShelf(); registerPlayerApi();
   }catch(err){ console.warn('Supabase preview shelf hydration skipped:', err?.message || err); registerPlayerApi(); }
