@@ -136,3 +136,38 @@ function setupMagneticButtons(){ document.querySelectorAll('.magnetic').forEach(
 function setupContactForm(){ const form=document.getElementById('demoForm'), note=document.getElementById('formNote'); if(!form)return; form.addEventListener('submit',async e=>{e.preventDefault(); const payload=Object.fromEntries(new FormData(form).entries()); try{const leads=JSON.parse(localStorage.getItem('nebulaDemoLeads')||'[]'); leads.push({...payload,created_at:new Date().toISOString()}); localStorage.setItem('nebulaDemoLeads',JSON.stringify(leads));}catch(err){} let saved=false; try{ if(window.createNebulaSupabaseClient&&window.isNebulaSupabaseConfigured&&window.isNebulaSupabaseConfigured()){ const client=window.createNebulaSupabaseClient(); const res=await client.from('demo_leads').insert({name:payload.name||'',email:payload.email||'',link:payload.link||'',message:payload.message||'',status:'new'}); if(res.error) throw res.error; saved=true; }}catch(err){ console.warn('Supabase demo save failed:',err.message); } if(note){note.textContent=saved?'Demo submitted to Nebula Records. Thank you.':'Demo saved in site preview mode. Connect Supabase before public launch.';note.style.fontWeight='900'} form.reset();}); }
 document.addEventListener('DOMContentLoaded',()=>{ renderPlayer(); bindAudioEvents(); registerPlayerApi(); setupNavigation(); setupScrollEffects(); setupIntro(); setupTrackButtons(); setupMagneticButtons(); setupContactForm(); hydrateTracksFromSupabase(); const year=document.getElementById('year'); if(year) year.textContent=new Date().getFullYear(); });
 document.addEventListener('keydown',e=>{ const tag=document.activeElement?.tagName||''; const typing=['INPUT','TEXTAREA','SELECT','BUTTON'].includes(tag); if(e.key==='Escape'&&!isPlayerClosed()) closePlayer(); if(e.code==='Space'&&!typing&&!isPlayerClosed()){e.preventDefault();togglePlay()} });
+
+
+// V7: Dynamic signed artist catalogue hydration from Supabase.
+function renderSignedArtistCardV7(a){
+  const image = a.image_url || 'assets/artist-blocboykiddie.svg';
+  const name = a.stage_name || a.artist_name || 'Nebula Artist';
+  const genre = a.genre || 'Next-generation artist';
+  const bio = a.bio || a.headline || 'Signed to Nebula Records with a catalogue profile, release shelf and artist workspace.';
+  const hub = a.songwhip_url || a.catalogue_url || 'contact.html';
+  return `<article class="signed-artist-card first-signed-card">
+    <img src="${image}" alt="${name} artist artwork" />
+    <div class="signed-artist-copy">
+      <span class="snippet-tag">${a.featured ? 'Featured Signed Artist' : 'Signed Artist'}</span>
+      <h3>${name}</h3>
+      <p>${genre}</p>
+      <small>${bio}</small>
+      <div class="signed-artist-actions"><a href="${hub}" target="_blank" rel="noopener">Open artist hub ↗</a>${name.toLowerCase().includes('blocboy') ? '<button class="mini-play play-track" data-track="2" type="button">Play preview</button>' : ''}</div>
+    </div>
+  </article>`;
+}
+async function hydrateSignedArtistCatalogueV7(){
+  const grids = document.querySelectorAll('[data-signed-artist-grid]');
+  if(!grids.length) return;
+  try{
+    const cfg = window.NEBULA_SUPABASE_CONFIG;
+    if(!cfg || !cfg.url || !cfg.anonKey || String(cfg.url).includes('YOUR_') || !window.supabase) return;
+    const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
+    const {data, error} = await sb.from('signed_artists').select('*').eq('status','signed').order('signed_order',{ascending:true});
+    if(error || !data || !data.length) return;
+    const future = `<article class="signed-artist-card future-signed-card"><span>Future Slot</span><h3>Next Nebula Star</h3><p>Reserved for the next official signing.</p><a href="contact.html">Submit demo →</a></article>`;
+    grids.forEach(grid=>{ grid.innerHTML = data.map(renderSignedArtistCardV7).join('') + future; });
+    setupTrackButtons();
+  }catch(err){ console.warn('Signed artist catalogue hydration skipped:', err?.message || err); }
+}
+document.addEventListener('DOMContentLoaded', hydrateSignedArtistCatalogueV7);

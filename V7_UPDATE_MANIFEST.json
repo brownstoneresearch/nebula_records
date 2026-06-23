@@ -1,0 +1,12 @@
+{
+  "version": "v7-nextstars-catalogue-login-demo-clean",
+  "official_site": "https://nebularecordholdings.art/",
+  "changes": [
+    "cleaned hero/footer visible handle text",
+    "removed old EKOUNLOCKED powered footer block",
+    "created signed artist catalogue system with Supabase signed_artists table",
+    "reframed website around Nebula Records as home for next-generation stars",
+    "kept Blocboykiddie as first artist mirror",
+    "upgraded login page and demo submission containers"
+  ]
+}

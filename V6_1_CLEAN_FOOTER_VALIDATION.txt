@@ -1,0 +1,16 @@
+Removed footer-powered section counts:
+about.html: 1
+artists.html: 1
+catalogue.html: 1
+contact.html: 1
+dashboard.html: 1
+index.html: 1
+login.html: 1
+releases.html: 1
+services.html: 1
+
+Residual phrase checks:
+Official website hero text removed: OK
+: OK
+Old footer powered block removed: OK
+blockboy: OK

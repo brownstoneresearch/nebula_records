@@ -5,7 +5,7 @@ This package is the cleaned and upgraded Supabase version of the Nebula Records 
 ## Included
 
 - Cinematic Nebula Records homepage
-- Blocboykiddie current artist integration
+- Next-generation label concept with Blocboykiddie mirrored as the first signed artist
 - Jmapelle_hushpuppi preview card wired to `assets/jmapelle_hushpuppi.mp3`
 - Future artist roster slots
 - Popup player with close button and Esc-to-close behavior
