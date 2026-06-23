@@ -10,8 +10,8 @@
   Do NOT put private service-role keys or real passwords in frontend files.
 */
 window.NEBULA_SUPABASE_CONFIG = {
-  url: "https://YOUR_PROJECT_ID.supabase.co",
-  anonKey: "YOUR_SUPABASE_ANON_KEY",
+  url: "https://tuvqmpemblcwebjtmibd.supabase.co",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1dnFtcGVtYmxjd2VianRtaWJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNDQyMTAsImV4cCI6MjA5NzcyMDIxMH0.QF8x-WKSNEvuclJCpHXM3aXxG7seYY1opCSgubNthew",
   storageBucket: "nebula-audio",
   adminEmail: "nebulamusic_rh@outlook.com",
   siteUrl: "https://nebularecordholdings.art/"
