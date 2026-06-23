@@ -1,0 +1,19 @@
+{
+  "version": "v9-catalogue-preview-shelf-contrast-mobile",
+  "features": [
+    "dynamic empty preview shelf",
+    "optional shelf placement from dashboard",
+    "full-song or snippet upload purpose",
+    "supabase preview_enabled preview_slot is_full_song columns",
+    "high contrast readability CSS",
+    "mobile responsiveness polish",
+    "footer support email"
+  ],
+  "support_email": "support@nebularecordholdings.art",
+  "supabase_hotfix": "SUPABASE_CATALOGUE_PREVIEW_SHELF_HOTFIX.sql",
+  "removed": [
+    "backend duplicate folder",
+    "nested old nebula-records-website folder",
+    "firebase leftover files"
+  ]
+}

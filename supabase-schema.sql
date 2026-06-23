@@ -2,7 +2,7 @@
 -- Run this in Supabase SQL Editor after creating your project.
 -- Supports admin and signed artist dashboards with role-based access.
 -- Creates: profiles, tracks, events, artists_pipeline, demo_leads, ensure_profile(), hardened RLS policies, and nebula-audio storage.
--- v4.2 adds track_key and cover_url so the six public preview slots can be edited/re-uploaded safely.
+-- v9 adds optional Catalogue Preview Shelf controls: preview_enabled, preview_slot and is_full_song.
 
 create extension if not exists pgcrypto;
 
@@ -28,6 +28,9 @@ create table if not exists public.tracks (
   audio_url text,
   track_key text,
   cover_url text,
+  preview_enabled boolean not null default false,
+  preview_slot integer check (preview_slot between 1 and 6),
+  is_full_song boolean not null default false,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
@@ -64,9 +67,13 @@ create table if not exists public.demo_leads (
 -- Safe migrations for existing projects rerunning this schema.
 alter table if exists public.tracks add column if not exists track_key text;
 alter table if exists public.tracks add column if not exists cover_url text;
+alter table if exists public.tracks add column if not exists preview_enabled boolean not null default false;
+alter table if exists public.tracks add column if not exists preview_slot integer check (preview_slot between 1 and 6);
+alter table if exists public.tracks add column if not exists is_full_song boolean not null default false;
 
 create index if not exists tracks_owner_created_idx on public.tracks(owner_id, created_at desc);
 create index if not exists tracks_track_key_idx on public.tracks(track_key);
+create index if not exists tracks_catalogue_preview_idx on public.tracks(preview_enabled, preview_slot, created_at desc) where preview_enabled = true;
 create unique index if not exists tracks_owner_track_key_unique on public.tracks(owner_id, track_key) where track_key is not null;
 create index if not exists events_owner_created_idx on public.events(owner_id, created_at desc);
 create index if not exists demo_leads_created_idx on public.demo_leads(created_at desc);
@@ -187,6 +194,7 @@ drop policy if exists "profiles_update_self_artist_or_admin" on public.profiles;
 
 drop policy if exists "tracks_select_own_or_admin" on public.tracks;
 drop policy if exists "tracks_public_select_published" on public.tracks;
+drop policy if exists "tracks_public_select_catalogue_preview" on public.tracks;
 drop policy if exists "tracks_insert_own_or_admin" on public.tracks;
 drop policy if exists "tracks_update_own_or_admin" on public.tracks;
 drop policy if exists "tracks_delete_own_or_admin" on public.tracks;
@@ -211,8 +219,8 @@ with check ((auth.uid() = id and role = 'artist') or public.is_admin());
 -- Tracks
 create policy "tracks_select_own_or_admin" on public.tracks
 for select using (owner_id = auth.uid() or public.is_admin());
-create policy "tracks_public_select_published" on public.tracks
-for select using (lower(status) = 'published');
+create policy "tracks_public_select_catalogue_preview" on public.tracks
+for select using (lower(status) = 'published' and preview_enabled = true and audio_url is not null);
 create policy "tracks_insert_own_or_admin" on public.tracks
 for insert with check (owner_id = auth.uid() or public.is_admin());
 create policy "tracks_update_own_or_admin" on public.tracks

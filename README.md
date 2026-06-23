@@ -34,3 +34,7 @@ Do not place private passwords or service-role keys in frontend files. Supabase 
 Production domain: `https://nebularecordholdings.art/`
 
 Use this as the canonical public URL for Nebula Records. Public pages include canonical and Open Graph tags pointing to this domain.
+
+
+## v9 Catalogue Preview Shelf
+Public preview cards now remain empty until a track is selected from the admin or signed-artist portal. Upload a full song or snippet, tick **Add this upload to the public Catalogue Preview Shelf**, choose a slot, and publish it. Run `SUPABASE_CATALOGUE_PREVIEW_SHELF_HOTFIX.sql` for existing Supabase projects.

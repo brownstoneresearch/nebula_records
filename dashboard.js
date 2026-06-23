@@ -1,12 +1,12 @@
 (() => {
   const SONGWHIP = 'https://songwhip.com/blocboykiddie';
   const previewSlots = [
-    { key:'money', title:'Money', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-money.svg' },
-    { key:'wacko-jacko', title:'Wacko Jacko', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-wacko-jacko.svg' },
-    { key:'jmapelle-hushpuppi', title:'Jmapelle_Hushpuppi', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/jmapelle-hushpuppi.mp3', fallback_audio_url:'assets/jmapelle-hushpuppi.mp3', cover:'assets/cover-jmapelle-hushpuppi.svg' },
-    { key:'no-seke', title:'No Seke', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-no-seke.svg' },
-    { key:'rich-and-sad', title:'Rich and Sad', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-rich-and-sad.svg' },
-    { key:'mi-casa-su-casa', title:'Mi Casa Su Casa', artist:'Blocboykiddie', type:'Single', status:'Published', link:SONGWHIP, audio_url:'assets/nebula-demo-loop.wav', fallback_audio_url:'assets/nebula-demo-loop.wav', cover:'assets/cover-mi-casa-su-casa.svg' }
+    { key:'money', title:'Money', artist:'Blocboykiddie', type:'Single', status:'Draft', link:SONGWHIP, audio_url:'', fallback_audio_url:'', cover:'assets/cover-money.svg', preview_slot:1 },
+    { key:'wacko-jacko', title:'Wacko Jacko', artist:'Blocboykiddie', type:'Single', status:'Draft', link:SONGWHIP, audio_url:'', fallback_audio_url:'', cover:'assets/cover-wacko-jacko.svg', preview_slot:2 },
+    { key:'jmapelle-hushpuppi', title:'Jmapelle_Hushpuppi', artist:'Blocboykiddie', type:'Single', status:'Draft', link:SONGWHIP, audio_url:'', fallback_audio_url:'', cover:'assets/cover-jmapelle-hushpuppi.svg', preview_slot:3 },
+    { key:'no-seke', title:'No Seke', artist:'Blocboykiddie', type:'Single', status:'Draft', link:SONGWHIP, audio_url:'', fallback_audio_url:'', cover:'assets/cover-no-seke.svg', preview_slot:4 },
+    { key:'rich-and-sad', title:'Rich and Sad', artist:'Blocboykiddie', type:'Single', status:'Draft', link:SONGWHIP, audio_url:'', fallback_audio_url:'', cover:'assets/cover-rich-and-sad.svg', preview_slot:5 },
+    { key:'mi-casa-su-casa', title:'Mi Casa Su Casa', artist:'Blocboykiddie', type:'Single', status:'Draft', link:SONGWHIP, audio_url:'', fallback_audio_url:'', cover:'assets/cover-mi-casa-su-casa.svg', preview_slot:6 }
   ];
 
   let client = null;
@@ -35,6 +35,8 @@
   function slugify(value) {
     return String(value || 'track').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'track';
   }
+
+  function boolValue(value) { return value === true || value === 'true' || value === 'on' || value === '1'; }
 
   function slotForTitle(title) {
     const key = normalize(title);
@@ -71,6 +73,9 @@
         fallback_audio_url: slot.fallback_audio_url || slot.audio_url,
         cover: row?.cover_url || slot.cover,
         cover_url: row?.cover_url || slot.cover,
+        preview_enabled: Boolean(row?.preview_enabled),
+        preview_slot: row?.preview_slot || slot.preview_slot,
+        is_full_song: Boolean(row?.is_full_song),
         _slotIndex: index,
         _preset: true,
         _saved: Boolean(row?.id)
@@ -168,14 +173,19 @@
     if (trackTable) {
       trackTable.innerHTML = merged.map((t, index) => {
         const hasSupabase = Boolean(t._saved && t.audio_url);
-        const audioLabel = hasSupabase ? 'Uploaded preview' : (t.audio_url ? 'Local fallback' : 'No audio yet');
+        const audioLabel = hasSupabase ? 'Uploaded audio' : (t.audio_url ? 'Local fallback' : 'No audio yet');
         const statusClass = hasSupabase ? 'good' : 'pending';
+        const onShelf = Boolean(t.preview_enabled && Number(t.preview_slot || 0));
+        const shelfLabel = onShelf ? `Slot ${String(t.preview_slot).padStart(2,'0')}` : 'Not selected';
+        const kindLabel = t.is_full_song ? 'Full song' : 'Snippet';
         return `
           <tr data-track-row="${index}">
             <td><img class="track-library-cover" src="${escapeAttr(t.cover || t.cover_url || 'assets/cover-midnight-signal.svg')}" alt="${escapeAttr(t.title)} cover"></td>
             <td><strong>${escapeHtml(t.title || 'Untitled')}</strong><small class="library-key">${escapeHtml(t.key || t.track_key || 'custom')}</small></td>
             <td>${escapeHtml(t.artist || '')}</td>
             <td><span class="library-badge">${escapeHtml(t.status || 'Draft')}</span></td>
+            <td><span class="shelf-state ${onShelf ? 'active' : 'empty'}">${shelfLabel}</span></td>
+            <td><span class="library-badge kind-badge">${kindLabel}</span></td>
             <td><span class="audio-state ${statusClass}">${audioLabel}</span></td>
             <td class="library-actions">
               <button class="mini-play library-preview-btn" type="button" data-preview-track="${index}">Preview</button>
@@ -196,7 +206,7 @@
       artistPipeline.innerHTML = rows.map((a, i) => `<article class="pipeline-card"><span>Slot ${String(i+2).padStart(2,'0')}</span><h3>${escapeHtml(a.name||'Future Artist')}</h3><p>${escapeHtml(a.genre||'Open')}</p><small>${escapeHtml(a.status||'pipeline')}</small></article>`).join('');
     }
 
-    if (q('dashUploads')) q('dashUploads').textContent = String(merged.length);
+    if (q('dashUploads')) q('dashUploads').textContent = String(savedTracks.length);
     if (q('dashPlays')) q('dashPlays').textContent = String(events.length || JSON.parse(localStorage.getItem('nebulaAnalyticsEvents') || '[]').length || 0);
     if (q('dashLeads')) q('dashLeads').textContent = String(demos.length);
     const values = [6, 10, 8, 13, 12, 18, Math.max(5, events.length || 9)];
@@ -226,7 +236,7 @@
         if (!artistRes.error) artists = artistRes.data || [];
       }
       renderTables();
-      setStatus('Dashboard synced with Supabase. The six preview slots are editable from the Track Library.', 'success');
+      setStatus('Dashboard synced with Supabase. Public preview cards stay empty until a track is selected for the Catalogue Preview Shelf.', 'success');
     } catch (err) {
       setStatus(err.message || 'Could not sync Supabase data.', 'error');
       renderTables();
@@ -251,6 +261,10 @@
     if (form.elements.type) form.elements.type.value = slot.type || 'Single';
     if (form.elements.status) form.elements.status.value = slot.status || 'Published';
     if (form.elements.link) form.elements.link.value = slot.link || SONGWHIP;
+    if (form.elements.status) form.elements.status.value = 'Published';
+    if (form.elements.preview_enabled) form.elements.preview_enabled.checked = true;
+    if (form.elements.preview_slot) form.elements.preview_slot.value = String(slot.preview_slot || 3);
+    if (form.elements.is_full_song) form.elements.is_full_song.value = 'false';
     q('uploadAudio')?.focus();
   }
 
@@ -275,6 +289,9 @@
       const fallback = { ...payload };
       delete fallback.track_key;
       delete fallback.cover_url;
+      delete fallback.preview_enabled;
+      delete fallback.preview_slot;
+      delete fallback.is_full_song;
       return client.from('tracks').insert(fallback).select('*').single();
     }
     return res;
@@ -286,6 +303,9 @@
       const fallback = { ...payload };
       delete fallback.track_key;
       delete fallback.cover_url;
+      delete fallback.preview_enabled;
+      delete fallback.preview_slot;
+      delete fallback.is_full_song;
       return client.from('tracks').update(fallback).eq('id', id).select('*').single();
     }
     return res;
@@ -300,16 +320,23 @@
     let audio_url = existingTrack?.audio_url || slot?.audio_url || '';
     const file = fd.get('audio');
     if (file && file.size) audio_url = await uploadAudioFile(file, artistName);
+    const previewEnabled = boolValue(fd.get('preview_enabled'));
+    let previewSlot = Number(fd.get('preview_slot') || existingTrack?.preview_slot || slot?.preview_slot || 0);
+    if (previewEnabled && !(previewSlot >= 1 && previewSlot <= 6)) previewSlot = Number(slot?.preview_slot || 1);
+    if (previewEnabled && !audio_url) throw new Error('Upload an MP3 before adding this song to the public Catalogue Preview Shelf.');
 
     const payload = {
       title: slot ? slot.title : rawTitle,
       artist: artistName,
       type: String(fd.get('type') || slot?.type || 'Snippet'),
-      status: String(fd.get('status') || slot?.status || 'Draft'),
+      status: String(fd.get('status') || slot?.status || (previewEnabled ? 'Published' : 'Draft')),
       link: String(fd.get('link') || slot?.link || SONGWHIP),
       audio_url,
       track_key: key,
-      cover_url: slot?.cover || existingTrack?.cover_url || ''
+      cover_url: slot?.cover || existingTrack?.cover_url || '',
+      preview_enabled: previewEnabled,
+      preview_slot: previewEnabled ? previewSlot : null,
+      is_full_song: boolValue(fd.get('is_full_song'))
     };
 
     if (existingTrack?.id) {
@@ -342,8 +369,11 @@
     q('editType').value = t.type || 'Single';
     q('editStatus').value = t.status || 'Published';
     q('editLink').value = t.link || SONGWHIP;
+    if (q('editPreviewEnabled')) q('editPreviewEnabled').checked = Boolean(t.preview_enabled);
+    if (q('editPreviewSlot')) q('editPreviewSlot').value = t.preview_slot ? String(t.preview_slot) : '';
+    if (q('editIsFullSong')) q('editIsFullSong').value = t.is_full_song ? 'true' : 'false';
     q('editCurrentAudio').textContent = t.audio_url ? (t._saved ? 'Current Supabase preview is connected.' : 'Using local fallback until you upload MP3.') : 'No audio connected yet.';
-    q('trackEditStatus').textContent = 'Choose a new MP3 only if you want to replace the current preview.';
+    q('trackEditStatus').textContent = 'Choose a new MP3 only if you want to replace the current audio. Tick the shelf option only when this song should appear publicly.';
     modal.hidden = false;
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('open');
@@ -398,7 +428,7 @@
         form.reset();
         if (q('uploadArtist')) q('uploadArtist').value = profile?.artist_name || 'Blocboykiddie';
         renderTables();
-        if (status) status.textContent = slot ? `${slot.title} preview saved. You can re-upload it again from the Track Library.` : 'Track saved successfully.';
+        if (status) status.textContent = res.data?.preview_enabled ? `${res.data.title} is now on the public Catalogue Preview Shelf.` : `${res.data?.title || 'Track'} saved privately in the library.`;
         setStatus('Track saved to Supabase.', 'success');
       } catch (err) {
         const msg = friendlyErrorMessage(err);
@@ -418,10 +448,15 @@
       }
       if (previewBtn) {
         const index = Number(previewBtn.dataset.previewTrack || 0);
-        if (window.NEBULA_PLAYER?.tracks && tracks[index]) {
+        if (!tracks[index]?.audio_url && !tracks[index]?.fallback_audio_url) {
+          setStatus('No audio is connected to this track yet. Use Edit / Re-upload first.', 'error');
+          return;
+        }
+        if (window.NEBULA_PLAYER?.tracks && tracks[index]?.preview_enabled) {
           const playerTrack = window.NEBULA_PLAYER.tracks.findIndex(pt => normalize(pt.title) === normalize(tracks[index].title));
-          window.NEBULA_PLAYER.loadTrack(playerTrack > -1 ? playerTrack : index, true);
-        } else if (tracks[index]?.audio_url || tracks[index]?.fallback_audio_url) {
+          if (playerTrack > -1) { window.NEBULA_PLAYER.loadTrack(playerTrack, true); return; }
+        }
+        if (tracks[index]?.audio_url || tracks[index]?.fallback_audio_url) {
           const t = tracks[index];
           let previewAudio = new Audio(t.audio_url || t.fallback_audio_url);
           previewAudio.addEventListener('error', () => {

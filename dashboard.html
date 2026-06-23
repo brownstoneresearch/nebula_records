@@ -1,228 +1,237 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard | Nebula Records Label &amp; Artist Workspace</title>
-  <meta name="description" content="Private Nebula Records dashboard for label admin and signed artists." />
-  <meta name="robots" content="noindex, nofollow, noarchive" />
-  <meta name="googlebot" content="noindex, nofollow, noarchive" />
-  <link rel="canonical" href="https://nebularecordholdings.art/dashboard.html" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="manifest" href="site.webmanifest" />
-  <link rel="image_src" href="assets/social-preview-nebula-records.png" />
-  <meta name="theme-color" content="#050814" />
-  <meta name="msapplication-TileColor" content="#050814" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:site_name" content="Nebula Records" />
-  <meta property="og:title" content="Nebula Records Dashboard" />
-  <meta property="og:description" content="Private Nebula Records dashboard for label admin and signed artists." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://nebularecordholdings.art/dashboard.html" />
-  <meta property="og:image" content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Nebula Records official music label logo and social preview card" />
-  <meta property="og:logo" content="https://nebularecordholdings.art/assets/nebula-records-icon-512.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@nebulamusic_rh" />
-  <meta name="twitter:creator" content="@nebulamusic_rh" />
-  <meta name="twitter:title" content="Nebula Records Dashboard" />
-  <meta name="twitter:description" content="Private Nebula Records dashboard for label admin and signed artists." />
-  <meta name="twitter:image" content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" />
-  <meta name="twitter:image:alt" content="Nebula Records official music label logo and social preview card" />
-  <link rel="me" href="https://x.com/nebulamusic_rh" />
-  <link rel="me" href="https://instagram.com/nebulamusic_rh" />
-  <link rel="me" href="https://tiktok.com/@nebulamusic_rh" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard | Nebula Records Label &amp; Artist Workspace</title>
+<meta content="Private Nebula Records dashboard for label admin and signed artists." name="description"/>
+<meta content="noindex, nofollow, noarchive" name="robots"/>
+<meta content="noindex, nofollow, noarchive" name="googlebot"/>
+<link href="https://nebularecordholdings.art/dashboard.html" rel="canonical"/>
+<link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="site.webmanifest" rel="manifest"/>
+<link href="assets/social-preview-nebula-records.png" rel="image_src"/>
+<meta content="#050814" name="theme-color"/>
+<meta content="#050814" name="msapplication-TileColor"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="Nebula Records" property="og:site_name"/>
+<meta content="Nebula Records Dashboard" property="og:title"/>
+<meta content="Private Nebula Records dashboard for label admin and signed artists." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://nebularecordholdings.art/dashboard.html" property="og:url"/>
+<meta content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" property="og:image"/>
+<meta content="image/png" property="og:image:type"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="Nebula Records official music label logo and social preview card" property="og:image:alt"/>
+<meta content="https://nebularecordholdings.art/assets/nebula-records-icon-512.png" property="og:logo"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="@nebulamusic_rh" name="twitter:site"/>
+<meta content="@nebulamusic_rh" name="twitter:creator"/>
+<meta content="Nebula Records Dashboard" name="twitter:title"/>
+<meta content="Private Nebula Records dashboard for label admin and signed artists." name="twitter:description"/>
+<meta content="https://nebularecordholdings.art/assets/social-preview-nebula-records.png" name="twitter:image"/>
+<meta content="Nebula Records official music label logo and social preview card" name="twitter:image:alt"/>
+<link href="https://x.com/nebulamusic_rh" rel="me"/>
+<link href="https://instagram.com/nebulamusic_rh" rel="me"/>
+<link href="https://tiktok.com/@nebulamusic_rh" rel="me"/>
+<link href="style.css" rel="stylesheet"/>
 </head>
-<body data-page="dashboard" class="dashboard-page">
-  <div class="page-noise" aria-hidden="true"></div>
-  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-  <header class="site-header" id="siteHeader">
-    <a class="brand" href="index.html" aria-label="Nebula Records home"><img src="assets/logo-nebula-transparent.png" alt="Nebula Records" /></a>
-    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
-      <a href="artists.html" data-nav="artists">Artists</a>
-      <a href="catalogue.html" data-nav="catalogue">Catalogue</a>
-      <a href="releases.html" data-nav="releases">Releases</a>
-      <a href="services.html" data-nav="services">Services</a>
-      <a href="about.html" data-nav="about">About</a>
-      <a href="dashboard.html" data-nav="dashboard">Dashboard</a>
-      <a href="contact.html" data-nav="contact" class="nav-cta">Submit Demo</a>
-    </nav>
-  </header>
-  <main>
-    <section class="dashboard-shell role-dashboard-shell">
-      <aside class="dashboard-sidebar role-sidebar">
-        <img src="assets/logo-nebula-white.png" alt="Nebula Records" />
-        <p class="dash-powered"><img src="assets/ekounlocked-powered.jpeg" alt="EKOUNLOCKED"> Powered by EKOUNLOCKED</p>
-        <div class="workspace-card">
-          <span id="roleLabel">Checking role…</span>
-          <strong id="workspaceName">Nebula Workspace</strong>
-          <small id="workspaceEmail">Connecting to Supabase…</small>
-        </div>
-        <nav class="dash-tabs" aria-label="Dashboard sections">
-          <button data-tab="overview" class="active">Overview</button>
-          <button data-tab="uploads">Uploads</button>
-          <button data-tab="library">Library</button>
-          <button data-tab="analytics">Analytics</button>
-          <button data-tab="pipeline" data-admin-only>Roster Pipeline</button>
-          <button data-tab="demos" data-admin-only>Demo Leads</button>
-          <button data-tab="settings">Settings</button>
-        </nav>
-        <a class="button ghost small-button" href="index.html">View Website →</a>
-        <button id="logoutBtn" class="button ghost small-button logout-button" type="button">Sign Out</button>
-      </aside>
-      <section class="dashboard-content">
-        <div class="dashboard-header upgraded-dashboard-header">
-          <div>
-            <p class="section-kicker" id="dashboardKicker">Supabase Label Portal</p>
-            <h1 id="dashboardTitle">Welcome to your dashboard.</h1>
-            <p class="dashboard-subtitle" id="dashboardSubtitle">Loading your secure workspace…</p>
-          </div>
-          <button id="exportDashboard" class="button ghost" type="button">Export Report</button>
-        </div>
-        <p id="dashboardStatus" class="dashboard-status">Connecting to Supabase…</p>
-        <div class="dash-stat-grid upgraded-stats">
-          <article><span>Role</span><strong id="dashRole">—</strong><small>Access level</small></article>
-          <article><span>Tracks</span><strong id="dashUploads">0</strong><small>Saved uploads</small></article>
-          <article><span>Preview Plays</span><strong id="dashPlays">0</strong><small>Analytics events</small></article>
-          <article data-admin-only><span>Demo Leads</span><strong id="dashLeads">0</strong><small>Future artist pipeline</small></article>
-        </div>
-        <div class="dash-panel active" data-panel="overview">
-          <div class="dashboard-grid">
-            <section class="dash-card wide"><h2 id="overviewTitle">Label Overview</h2><canvas id="overviewChart" height="145"></canvas></section>
-            <section class="dash-card"><h2>Quick Actions</h2><button class="button primary" data-jump="uploads">Upload Song / Snippet</button><button class="button ghost" data-jump="library">Open Library</button><button class="button ghost" data-jump="pipeline" data-admin-only>Add Future Artist</button><a class="button ghost" href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Songwhip Hub ↗</a></section>
-          </div>
-        </div>
-        <div class="dash-panel" data-panel="uploads">
-          <section class="dash-card upload-suite">
-            <h2>Upload Song / Snippet</h2>
-            <p class="dash-note">Audio files are stored in Supabase Storage. Metadata is saved in Supabase Postgres so admin and artists have role-based dashboards.</p>
-            <div class="preset-upload-card jmapelle-upload-card" aria-label="Jmapelle Hushpuppi preview upload layout">
-              <div class="preset-cover-wrap">
-                <img src="assets/cover-jmapelle-hushpuppi.svg" alt="Jmapelle_Hushpuppi cover artwork">
-                <button class="mini-play play-track" data-track="2" type="button">Test Preview</button>
-              </div>
-              <div class="preset-upload-body">
-                <span class="dash-pill">Official preview upload layout</span>
-                <h3>Jmapelle_Hushpuppi</h3>
-                <p>Use this preset when uploading Blocboykiddie’s Jmapelle_Hushpuppi MP3 preview. Save it as <strong>Published</strong> so the public website player can use the uploaded Supabase URL.</p>
-                <div class="preset-meta-grid">
-                  <span><b>Artist</b>Blocboykiddie</span>
-                  <span><b>Type</b>Single</span>
-                  <span><b>Status</b>Published</span>
-                  <span><b>Bucket</b>nebula-audio</span>
-                  <span><b>Folder</b>previews/blocboykiddie</span>
-                  <span><b>File</b>jmapelle-hushpuppi.mp3</span>
-                </div>
-                <button class="button primary" id="loadJmapellePreset" type="button">Load Jmapelle Layout →</button>
-              </div>
-            </div>
-            <form id="uploadForm" class="dashboard-form">
-              <label>Track Title<input name="title" id="uploadTitle" required placeholder="Song title"></label>
-              <label>Artist<input name="artist" id="uploadArtist" required value="Blocboykiddie"></label>
-              <label>Release Type<select name="type" id="uploadType"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
-              <label>Status<select name="status" id="uploadStatusSelect"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
-              <label>Songwhip / Stream Link<input name="link" id="uploadLink" type="url" value="https://songwhip.com/blocboykiddie"></label>
-              <label>Audio File<input name="audio" id="uploadAudio" type="file" accept="audio/*"></label>
-              <button class="button primary" type="submit">Save to Supabase →</button>
-              <p id="uploadStatus" class="dashboard-status small-status"></p>
-            </form>
-          </section>
-        </div>
-        <div class="dash-panel" data-panel="library">
-          <section class="dash-card track-library-suite"><h2>Track Library</h2><p class="dash-note" id="libraryNote">The six public preview songs are now editable. Use <strong>Edit / Re-upload</strong> to replace any MP3 preview while keeping the public player connected to Supabase.</p><div class="table-wrap"><table class="track-library-table"><thead><tr><th>Cover</th><th>Title</th><th>Artist</th><th>Status</th><th>Audio</th><th>Actions</th></tr></thead><tbody id="trackTable"></tbody></table></div></section>
-        </div>
-        <div class="dash-panel" data-panel="analytics">
-          <section class="dash-card"><h2>Analytics Lab</h2><p class="dash-note">Track preview plays, portal actions and campaign events from Supabase. Artists see their own events; admin sees the label view.</p><div class="analytics-actions"><button id="simulateEvent" class="button primary" type="button">Log Demo Play</button><button id="refreshDashboard" class="button ghost" type="button">Refresh Data</button></div><canvas id="analyticsChart" height="175"></canvas></section>
-        </div>
-        <div class="dash-panel" data-panel="pipeline" data-admin-only>
-          <section class="dash-card"><h2>Future Artist Pipeline</h2><p class="dash-note">Use this panel to reserve spaces for artists before they are officially signed. When signed, create a Supabase Auth user and mark their profile as active.</p><form id="artistForm" class="dashboard-form inline"><input name="name" required placeholder="Future artist name"><input name="genre" placeholder="Genre / lane"><button class="button primary" type="submit">Add Artist Slot</button></form><div id="artistPipeline" class="pipeline-grid"></div></section>
-        </div>
-        <div class="dash-panel" data-panel="demos" data-admin-only>
-          <section class="dash-card"><h2>Demo Leads</h2><p class="dash-note">Public demo submissions saved into Supabase will appear here for admin review.</p><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Music Link</th><th>Status</th></tr></thead><tbody id="demoTable"></tbody></table></div></section>
-        </div>
-        <div class="dash-panel" data-panel="settings">
-          <section class="dash-card"><h2>Workspace Settings</h2><p class="dash-note">Admin users manage the label. Signed artists use their portal to upload snippets and track their own release progress.</p><div class="launch-checklist"><label><input type="checkbox"> Supabase URL and anon key added to supabase-config.js</label><label><input type="checkbox"> SQL schema and RLS policies applied</label><label><input type="checkbox"> Storage bucket named nebula-audio created</label><label><input type="checkbox"> Admin and artist users created in Supabase Auth</label><label><input type="checkbox"> Licensed audio snippets uploaded before launch</label></div><a class="button primary" href="SUPABASE_SETUP.md">Open Supabase setup guide</a></section>
-        </div>
-      </section>
-    </section>
-  </main>
-  
-  <div class="track-edit-modal" id="trackEditModal" hidden aria-hidden="true">
-    <div class="track-edit-card" role="dialog" aria-modal="true" aria-labelledby="editTrackTitleLabel">
-      <button class="track-edit-close" id="closeTrackEditor" type="button" aria-label="Close preview editor">×</button>
-      <div class="track-edit-header">
-        <img id="editTrackCover" src="assets/cover-jmapelle-hushpuppi.svg" alt="Preview cover artwork">
-        <div>
-          <span class="dash-pill">Editable preview slot</span>
-          <h2 id="editTrackTitleLabel">Edit preview song</h2>
-          <p>Replace the MP3 preview, update metadata, and keep Blocboykiddie’s six-track preview library fresh.</p>
-        </div>
-      </div>
-      <form id="trackEditForm" class="dashboard-form track-edit-form">
-        <input type="hidden" name="id" id="editTrackId">
-        <input type="hidden" name="key" id="editTrackKey">
-        <input type="hidden" id="editTrackIndex">
-        <label>Track Title<input name="title" id="editTitle" required></label>
-        <label>Artist<input name="artist" id="editArtist" required></label>
-        <label>Release Type<select name="type" id="editType"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
-        <label>Status<select name="status" id="editStatus"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
-        <label class="span-2">Songwhip / Stream Link<input name="link" id="editLink" type="url" value="https://songwhip.com/blocboykiddie"></label>
-        <label class="span-2 upload-dropzone">Replace MP3 Preview<input name="audio" id="editAudio" type="file" accept="audio/mpeg,audio/mp3,audio/*"><small id="editCurrentAudio">Choose a new MP3 only if you want to replace the current preview.</small></label>
-        <button class="button primary span-2" type="submit">Save Preview Update →</button>
-        <p id="trackEditStatus" class="dashboard-status small-status span-2"></p>
-      </form>
-    </div>
-  </div>
-<footer class="nextstar-footer compact-label-footer" aria-label="Nebula Records footer">
-  <div class="nextstar-footer__glow" aria-hidden="true"></div>
-  <div class="nextstar-footer__grid">
-    <section class="nextstar-footer__brand">
-      <img src="assets/logo-nebula-white.png" alt="Nebula Records" />
-      <p>Nebula Records is a home for next-generation stars — built for artist discovery, catalogue development, sharp releases and global-ready music careers.</p>
-      <div class="nextstar-footer__badges" aria-label="Label focus areas">
-        <span>Next stars</span><span>Artist-first</span><span>Catalogue-ready</span>
-      </div>
-    </section>
-    <nav class="nextstar-footer__links" aria-label="Footer navigation">
-      <h3>Label</h3>
-      <a href="artists.html">Artists</a>
-      <a href="catalogue.html">Artist Catalogue</a>
-      <a href="releases.html">Releases</a>
-      <a href="services.html">Services</a>
-      <a href="contact.html">Submit Demo</a>
-      <a href="login.html">Portal</a>
-    </nav>
-    <section class="nextstar-footer__first">
-      <h3>First Artist Mirror</h3>
-      <p><strong>Blocboykiddie</strong> is mirrored as Nebula Records’ first artist while the catalogue stays open for every future signing.</p>
-      <a href="https://songwhip.com/blocboykiddie" target="_blank" rel="noopener">Listen on Songwhip ↗</a>
-    </section>
-    <section class="nextstar-footer__connect" aria-label="Nebula Records social and contact links">
-      <h3>Connect</h3>
-      <div class="nextstar-social-icons" aria-label="Social links">
-        <a href="https://nebularecordholdings.art/" target="_blank" rel="noopener" aria-label="Official Nebula Records website"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9M12 3c-2.6 2.7-4 5.7-4 9s1.4 6.3 4 9"></path></svg></a>
-        <a href="https://x.com/nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records on X"><svg class="icon-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 3H22l-6.8 7.8L23.2 21h-6.4l-5-6.5L6 21H2.9l7.3-8.4L2.6 3h6.5l4.5 5.9L18.9 3Zm-1.1 16h1.7L8.2 4.9H6.3L17.8 19Z"></path></svg></a>
-        <a href="https://instagram.com/nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1"></circle></svg></a>
-        <a href="https://tiktok.com/@nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.2a4.2 4.2 0 1 1-4.2-4.2c.4 0 .8.1 1.2.2v3.1a1.5 1.5 0 1 0 1 1.4V3h2zm0 0c.7 2.7 2.4 4.2 5 4.6v3.1c-2-.1-3.7-.8-5-2.1"></path></svg></a>
-        <a href="https://youtube.com/@nebulamusic_rh" target="_blank" rel="noopener" aria-label="Nebula Records on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"></rect><path d="M10 9.5l5 2.5-5 2.5z"></path></svg></a>
-      </div>
-      <a class="nextstar-mail" href="mailto:support@nebularecordholdings.art" aria-label="Email Nebula Records support"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M4 7l8 6 8-6"></path></svg><span>support@nebularecordholdings.art</span></a>
-    </section>
-  </div>
-  <div class="nextstar-footer__bottom">
-    <span>© <span id="year"></span> Nebula Records.</span>
-    <span>Built for the next generation of stars.</span>
-  </div>
+<body class="dashboard-page" data-page="dashboard">
+<div aria-hidden="true" class="page-noise"></div>
+<div aria-hidden="true" class="cursor-glow" id="cursorGlow"></div>
+<header class="site-header" id="siteHeader">
+<a aria-label="Nebula Records home" class="brand" href="index.html"><img alt="Nebula Records" src="assets/logo-nebula-transparent.png"/></a>
+<button aria-expanded="false" aria-label="Open menu" class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+<nav aria-label="Main navigation" class="main-nav" id="mainNav">
+<a data-nav="artists" href="artists.html">Artists</a>
+<a data-nav="catalogue" href="catalogue.html">Catalogue</a>
+<a data-nav="releases" href="releases.html">Releases</a>
+<a data-nav="services" href="services.html">Services</a>
+<a data-nav="about" href="about.html">About</a>
+<a data-nav="dashboard" href="dashboard.html">Dashboard</a>
+<a class="nav-cta" data-nav="contact" href="contact.html">Submit Demo</a>
+</nav>
+</header>
+<main>
+<section class="dashboard-shell role-dashboard-shell">
+<aside class="dashboard-sidebar role-sidebar">
+<img alt="Nebula Records" src="assets/logo-nebula-white.png"/>
+<p class="dash-powered"><img alt="EKOUNLOCKED" src="assets/ekounlocked-powered.jpeg"/> Powered by EKOUNLOCKED</p>
+<div class="workspace-card">
+<span id="roleLabel">Checking role…</span>
+<strong id="workspaceName">Nebula Workspace</strong>
+<small id="workspaceEmail">Connecting to Supabase…</small>
+</div>
+<nav aria-label="Dashboard sections" class="dash-tabs">
+<button class="active" data-tab="overview">Overview</button>
+<button data-tab="uploads">Uploads</button>
+<button data-tab="library">Library</button>
+<button data-tab="analytics">Analytics</button>
+<button data-admin-only="" data-tab="pipeline">Roster Pipeline</button>
+<button data-admin-only="" data-tab="demos">Demo Leads</button>
+<button data-tab="settings">Settings</button>
+</nav>
+<a class="button ghost small-button" href="index.html">View Website →</a>
+<button class="button ghost small-button logout-button" id="logoutBtn" type="button">Sign Out</button>
+</aside>
+<section class="dashboard-content">
+<div class="dashboard-header upgraded-dashboard-header">
+<div>
+<p class="section-kicker" id="dashboardKicker">Supabase Label Portal</p>
+<h1 id="dashboardTitle">Welcome to your dashboard.</h1>
+<p class="dashboard-subtitle" id="dashboardSubtitle">Loading your secure workspace…</p>
+</div>
+<button class="button ghost" id="exportDashboard" type="button">Export Report</button>
+</div>
+<p class="dashboard-status" id="dashboardStatus">Connecting to Supabase…</p>
+<div class="dash-stat-grid upgraded-stats">
+<article><span>Role</span><strong id="dashRole">—</strong><small>Access level</small></article>
+<article><span>Tracks</span><strong id="dashUploads">0</strong><small>Saved uploads</small></article>
+<article><span>Preview Plays</span><strong id="dashPlays">0</strong><small>Analytics events</small></article>
+<article data-admin-only=""><span>Demo Leads</span><strong id="dashLeads">0</strong><small>Future artist pipeline</small></article>
+</div>
+<div class="dash-panel active" data-panel="overview">
+<div class="dashboard-grid">
+<section class="dash-card wide"><h2 id="overviewTitle">Label Overview</h2><canvas height="145" id="overviewChart"></canvas></section>
+<section class="dash-card"><h2>Quick Actions</h2><button class="button primary" data-jump="uploads">Upload Song / Snippet</button><button class="button ghost" data-jump="library">Open Library</button><button class="button ghost" data-admin-only="" data-jump="pipeline">Add Future Artist</button><a class="button ghost" href="https://songwhip.com/blocboykiddie" rel="noopener" target="_blank">Songwhip Hub ↗</a></section>
+</div>
+</div>
+<div class="dash-panel" data-panel="uploads">
+<section class="dash-card upload-suite">
+<h2>Upload Song / Snippet</h2>
+<p class="dash-note">Audio files are stored in Supabase Storage. Metadata is saved in Supabase Postgres so admin and artists have role-based dashboards.</p>
+<div aria-label="Jmapelle Hushpuppi preview upload layout" class="preset-upload-card jmapelle-upload-card">
+<div class="preset-cover-wrap">
+<img alt="Jmapelle_Hushpuppi cover artwork" src="assets/cover-jmapelle-hushpuppi.svg"/>
+<button class="mini-play play-track" data-track="2" type="button">Test Preview</button>
+</div>
+<div class="preset-upload-body">
+<span class="dash-pill">Official preview upload layout</span>
+<h3>Jmapelle_Hushpuppi</h3>
+<p>Use this preset for Jmapelle_Hushpuppi. Upload the MP3, then tick  only when you want it publicly visible.</p>
+<div class="preset-meta-grid">
+<span><b>Artist</b>Blocboykiddie</span>
+<span><b>Type</b>Single</span>
+<span><b>Status</b>Published</span>
+<span><b>Bucket</b>nebula-audio</span>
+<span><b>Folder</b>previews/blocboykiddie</span>
+<span><b>File</b>jmapelle-hushpuppi.mp3</span>
+</div>
+<button class="button primary" id="loadJmapellePreset" type="button">Load Jmapelle Layout →</button>
+</div>
+</div>
+<form class="dashboard-form" id="uploadForm">
+<label>Track Title<input id="uploadTitle" name="title" placeholder="Song title" required=""/></label>
+<label>Artist<input id="uploadArtist" name="artist" required="" value="Blocboykiddie"/></label>
+<label>Release Type<select id="uploadType" name="type"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
+<label>Audio Purpose<select id="uploadIsFullSong" name="is_full_song"><option value="false">Preview Snippet</option><option value="true">Full Song</option></select></label>
+<label class="shelf-toggle span-2"><input id="uploadPreviewEnabled" name="preview_enabled" type="checkbox" value="true"/><span>Add this upload to the public Catalogue Preview Shelf</span></label>
+<label>Preview Shelf Slot<select id="uploadPreviewSlot" name="preview_slot"><option value="">Auto / Not selected</option><option value="1">Slot 01</option><option value="2">Slot 02</option><option value="3">Slot 03</option><option value="4">Slot 04</option><option value="5">Slot 05</option><option value="6">Slot 06</option></select></label>
+
+<label>Status<select id="uploadStatusSelect" name="status"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
+<label>Songwhip / Stream Link<input id="uploadLink" name="link" type="url" value="https://songwhip.com/blocboykiddie"/></label>
+<label>Audio File<input accept="audio/*" id="uploadAudio" name="audio" type="file"/></label>
+<button class="button primary" type="submit">Save to Supabase →</button>
+<p class="dashboard-status small-status" id="uploadStatus"></p>
+</form>
+</section>
+</div>
+<div class="dash-panel" data-panel="library">
+<section class="dash-card track-library-suite"><h2>Track Library</h2><p class="dash-note" id="libraryNote">All uploaded songs stay in the private library. Use <strong>Edit / Re-upload</strong> to replace audio, then optionally place any full song or snippet onto the public Catalogue Preview Shelf.</p><div class="table-wrap"><table class="track-library-table"><thead><tr><th>Cover</th><th>Title</th><th>Artist</th><th>Status</th><th>Shelf</th><th>Kind</th><th>Audio</th><th>Actions</th></tr></thead><tbody id="trackTable"></tbody></table></div></section>
+</div>
+<div class="dash-panel" data-panel="analytics">
+<section class="dash-card"><h2>Analytics Lab</h2><p class="dash-note">Track preview plays, portal actions and campaign events from Supabase. Artists see their own events; admin sees the label view.</p><div class="analytics-actions"><button class="button primary" id="simulateEvent" type="button">Log Demo Play</button><button class="button ghost" id="refreshDashboard" type="button">Refresh Data</button></div><canvas height="175" id="analyticsChart"></canvas></section>
+</div>
+<div class="dash-panel" data-admin-only="" data-panel="pipeline">
+<section class="dash-card"><h2>Future Artist Pipeline</h2><p class="dash-note">Use this panel to reserve spaces for artists before they are officially signed. When signed, create a Supabase Auth user and mark their profile as active.</p><form class="dashboard-form inline" id="artistForm"><input name="name" placeholder="Future artist name" required=""/><input name="genre" placeholder="Genre / lane"/><button class="button primary" type="submit">Add Artist Slot</button></form><div class="pipeline-grid" id="artistPipeline"></div></section>
+</div>
+<div class="dash-panel" data-admin-only="" data-panel="demos">
+<section class="dash-card"><h2>Demo Leads</h2><p class="dash-note">Public demo submissions saved into Supabase will appear here for admin review.</p><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Music Link</th><th>Status</th></tr></thead><tbody id="demoTable"></tbody></table></div></section>
+</div>
+<div class="dash-panel" data-panel="settings">
+<section class="dash-card"><h2>Workspace Settings</h2><p class="dash-note">Admin users manage the label. Signed artists use their portal to upload snippets and track their own release progress.</p><div class="launch-checklist"><label><input type="checkbox"/> Supabase URL and anon key added to supabase-config.js</label><label><input type="checkbox"/> SQL schema and RLS policies applied</label><label><input type="checkbox"/> Storage bucket named nebula-audio created</label><label><input type="checkbox"/> Admin and artist users created in Supabase Auth</label><label><input type="checkbox"/> Licensed audio snippets uploaded before launch</label></div><a class="button primary" href="SUPABASE_SETUP.md">Open Supabase setup guide</a></section>
+</div>
+</section>
+</section>
+</main>
+<div aria-hidden="true" class="track-edit-modal" hidden="" id="trackEditModal">
+<div aria-labelledby="editTrackTitleLabel" aria-modal="true" class="track-edit-card" role="dialog">
+<button aria-label="Close preview editor" class="track-edit-close" id="closeTrackEditor" type="button">×</button>
+<div class="track-edit-header">
+<img alt="Preview cover artwork" id="editTrackCover" src="assets/cover-jmapelle-hushpuppi.svg"/>
+<div>
+<span class="dash-pill">Editable preview slot</span>
+<h2 id="editTrackTitleLabel">Edit preview song</h2>
+<p>Replace audio, update metadata, and decide whether this song should occupy a public Catalogue Preview Shelf slot.</p>
+</div>
+</div>
+<form class="dashboard-form track-edit-form" id="trackEditForm">
+<input id="editTrackId" name="id" type="hidden"/>
+<input id="editTrackKey" name="key" type="hidden"/>
+<input id="editTrackIndex" type="hidden"/>
+<label>Track Title<input id="editTitle" name="title" required=""/></label>
+<label>Artist<input id="editArtist" name="artist" required=""/></label>
+<label>Release Type<select id="editType" name="type"><option>Single</option><option>Snippet</option><option>EP</option><option>Album</option><option>Freestyle</option></select></label>
+<label>Audio Purpose<select id="editIsFullSong" name="is_full_song"><option value="false">Preview Snippet</option><option value="true">Full Song</option></select></label>
+<label class="shelf-toggle span-2"><input id="editPreviewEnabled" name="preview_enabled" type="checkbox" value="true"/><span>Show this song on the public Catalogue Preview Shelf</span></label>
+<label>Preview Shelf Slot<select id="editPreviewSlot" name="preview_slot"><option value="">Auto / Not selected</option><option value="1">Slot 01</option><option value="2">Slot 02</option><option value="3">Slot 03</option><option value="4">Slot 04</option><option value="5">Slot 05</option><option value="6">Slot 06</option></select></label>
+
+<label>Status<select id="editStatus" name="status"><option>Draft</option><option>Private Review</option><option>Ready for Release</option><option>Published</option></select></label>
+<label class="span-2">Songwhip / Stream Link<input id="editLink" name="link" type="url" value="https://songwhip.com/blocboykiddie"/></label>
+<label class="span-2 upload-dropzone">Replace MP3 Preview<input accept="audio/mpeg,audio/mp3,audio/*" id="editAudio" name="audio" type="file"/><small id="editCurrentAudio">Choose a new MP3 only if you want to replace the current preview.</small></label>
+<button class="button primary span-2" type="submit">Save Preview Update →</button>
+<p class="dashboard-status small-status span-2" id="trackEditStatus"></p>
+</form>
+</div>
+</div>
+<footer aria-label="Nebula Records footer" class="nextstar-footer">
+<div aria-hidden="true" class="nextstar-footer__glow"></div>
+<div class="nextstar-footer__grid">
+<section class="nextstar-footer__brand">
+<img alt="Nebula Records" src="assets/logo-nebula-white.png">
+<p>Nebula Records is the home for next-generation stars — a sharp label ecosystem for discovery, development, catalogue building and global-ready releases.</p>
+<div aria-label="Label focus areas" class="nextstar-footer__badges">
+<span>Artist-first</span><span>Catalogue-ready</span><span>Future stars</span>
+</div>
+</img></section>
+<nav aria-label="Footer navigation" class="nextstar-footer__links">
+<h3>Explore</h3>
+<a href="artists.html">Artists</a>
+<a href="catalogue.html">Artist Catalogue</a>
+<a href="releases.html">Releases</a>
+<a href="services.html">Services</a>
+<a href="contact.html">Submit Demo</a>
+<a href="login.html">Label Portal</a>
+</nav>
+<section class="nextstar-footer__first">
+<h3>First Artist</h3>
+<p><strong>Blocboykiddie</strong> is mirrored as Nebula Records’ first artist while the catalogue system stays open for every future signing.</p>
+<a href="https://songwhip.com/blocboykiddie" rel="noopener" target="_blank">Open Songwhip hub ↗</a>
+</section>
+<section aria-label="Nebula Records social links" class="nextstar-footer__connect">
+<h3>Connect</h3>
+<div class="nextstar-social-icons">
+<a aria-label="Official Nebula Records website" href="https://nebularecordholdings.art/" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9M12 3c-2.6 2.7-4 5.7-4 9s1.4 6.3 4 9"></path></svg></a>
+<a aria-label="Nebula Records on X" href="https://x.com/nebulamusic_rh" rel="noopener" target="_blank"><svg aria-hidden="true" class="icon-fill" viewbox="0 0 24 24"><path d="M18.9 3H22l-6.8 7.8L23.2 21h-6.4l-5-6.5L6 21H2.9l7.3-8.4L2.6 3h6.5l4.5 5.9L18.9 3Zm-1.1 16h1.7L8.2 4.9H6.3L17.8 19Z"></path></svg></a>
+<a aria-label="Nebula Records on Instagram" href="https://instagram.com/nebulamusic_rh" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1"></circle></svg></a>
+<a aria-label="Nebula Records on TikTok" href="https://tiktok.com/@nebulamusic_rh" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M14 3v10.2a4.2 4.2 0 1 1-4.2-4.2c.4 0 .8.1 1.2.2v3.1a1.5 1.5 0 1 0 1 1.4V3h2zm0 0c.7 2.7 2.4 4.2 5 4.6v3.1c-2-.1-3.7-.8-5-2.1"></path></svg></a>
+<a aria-label="Nebula Records on YouTube" href="https://youtube.com/@nebulamusic_rh" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="12" rx="4" width="18" x="3" y="6"></rect><path d="M10 9.5l5 2.5-5 2.5z"></path></svg></a>
+<a aria-label="Blocboykiddie listening hub" href="https://songwhip.com/blocboykiddie" rel="noopener" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M7.4 10.1c3.6-1 6.9-.7 9.6.9M8.1 13c2.8-.7 5.5-.5 7.6.7M8.7 15.7c2-.4 3.8-.3 5.6.5"></path></svg></a>
+</div>
+<a class="nextstar-mail" href="mailto:support@nebularecordholdings.art"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="3" width="18" x="3" y="5"></rect><path d="M4 7l8 6 8-6"></path></svg><span>support@nebularecordholdings.art</span></a>
+</section>
+</div>
+<div class="nextstar-footer__bottom">
+<span>© <span id="year"></span> Nebula Records.</span>
+<span>Built for the next generation of stars.</span>
+</div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script src="script.js"></script>
-  <script src="dashboard.js"></script>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+<script src="dashboard.js"></script>
 </body>
 </html>
