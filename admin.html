@@ -1,27 +1,23 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Admin Panel</title>
-<style>
-body{font-family:Arial;background:#111;color:white;padding:20px}
-.card{background:#222;padding:15px;margin:10px;border-radius:10px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Portal | Nebula Records</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta http-equiv="refresh" content="4; url=login.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-
-<h1>Admin Dashboard</h1>
-
-<div class="card">
-<h3>Upload Track</h3>
-<input type="file">
-</div>
-
-<div class="card">
-<h3>Artist Stats</h3>
-<p>Streams: 120,000</p>
-<p>Uploads: 12</p>
-</div>
-
+<body data-page="dashboard" class="portal-page">
+  <main class="admin-redirect-shell">
+    <article class="admin-redirect-card">
+      <img src="assets/logo-nebula-white.png" alt="Nebula Records" />
+      <p class="section-kicker">Secure Portal</p>
+      <h1>Admin access now lives inside the Nebula Label Portal.</h1>
+      <p>For security, admin and signed artist workspaces are handled through the Supabase login flow.</p>
+      <div class="hero-actions"><a class="button primary" href="login.html">Open Portal →</a><a class="button ghost" href="index.html">Back to Website</a></div>
+    </article>
+  </main>
 </body>
 </html>
