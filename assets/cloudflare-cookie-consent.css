@@ -1,0 +1,74 @@
+
+/* Cloudflare / Zaraz-ready Cookie Consent — Nebula Records */
+.cookie-settings-link,
+.footer-cookie-policy{
+  border:0!important;
+  background:transparent!important;
+  color:#cfe5df!important;
+  font:700 12px/1.2 var(--font-mono, "Geist Mono", monospace)!important;
+  letter-spacing:.06em!important;
+  text-decoration:none!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  cursor:pointer!important;
+}
+.cookie-settings-link:hover,
+.footer-cookie-policy:hover{color:#fff!important;text-decoration:underline!important;text-underline-offset:4px!important;}
+.footer-consent-links{display:inline-flex!important;align-items:center!important;gap:10px!important;flex-wrap:wrap!important;justify-content:center!important;}
+.footer-consent-links .dot{width:3px;height:3px;border-radius:999px;background:rgba(207,229,223,.45);display:inline-block;}
+
+.nebula-cookie-root{position:fixed;z-index:2147483000;left:0;right:0;bottom:0;pointer-events:none;font-family:var(--font-sans,"Plus Jakarta Sans",system-ui,sans-serif);}
+.nebula-cookie-banner{width:min(980px,calc(100% - 28px));margin:0 auto 18px;pointer-events:auto;border:1px solid rgba(159,225,203,.22);border-radius:24px;background:linear-gradient(135deg,rgba(7,18,30,.97),rgba(3,8,16,.96));box-shadow:0 32px 110px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.04) inset;color:#fff;overflow:hidden;backdrop-filter:blur(18px);transform:translateY(24px);opacity:0;transition:opacity .28s ease,transform .28s ease;}
+.nebula-cookie-banner.is-visible{transform:translateY(0);opacity:1;}
+.nebula-cookie-inner{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:18px;position:relative;}
+.nebula-cookie-inner:before{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(159,225,203,.7),rgba(239,159,39,.42),transparent);}
+.nebula-cookie-kicker{display:inline-flex;align-items:center;gap:8px;font:800 10.5px/1 var(--font-mono,"Geist Mono",monospace);letter-spacing:.18em;text-transform:uppercase;color:#8ceccf;margin-bottom:8px;}
+.nebula-cookie-kicker:before{content:"";width:8px;height:8px;border-radius:999px;background:#2bbd8e;box-shadow:0 0 18px rgba(43,189,142,.75);}
+.nebula-cookie-copy h2{margin:0 0 6px!important;color:#fff!important;font:800 clamp(18px,2vw,24px)/1.1 var(--font-serif,"Playfair Display",Georgia,serif)!important;letter-spacing:-.01em;}
+.nebula-cookie-copy p{margin:0!important;color:#cfe0db!important;font-size:13.5px!important;line-height:1.6!important;max-width:720px;}
+.nebula-cookie-copy a{color:#fff!important;text-decoration:underline;text-underline-offset:4px;}
+.nebula-cookie-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;min-width:320px;}
+.nebula-cookie-btn{min-height:42px;border-radius:999px!important;border:1px solid rgba(159,225,203,.22)!important;padding:0 16px!important;background:rgba(255,255,255,.075)!important;color:#fff!important;font:800 12px/1 var(--font-mono,"Geist Mono",monospace)!important;letter-spacing:.07em!important;text-transform:uppercase!important;cursor:pointer!important;transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease!important;}
+.nebula-cookie-btn:hover,.nebula-cookie-btn:focus-visible{transform:translateY(-1px);background:rgba(255,255,255,.11)!important;border-color:rgba(159,225,203,.45)!important;outline:none!important;box-shadow:0 0 0 3px rgba(43,189,142,.18)!important;}
+.nebula-cookie-btn.primary{background:linear-gradient(135deg,#2bbd8e,#86f7d5)!important;color:#03110d!important;border-color:transparent!important;box-shadow:0 14px 38px rgba(43,189,142,.24)!important;}
+.nebula-cookie-btn.ghost{background:transparent!important;color:#d9eee8!important;}
+.nebula-cookie-close{position:absolute;right:10px;top:10px;width:34px;height:34px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:20px;line-height:1;display:grid;place-items:center;cursor:pointer;}
+.nebula-cookie-close:hover{background:rgba(255,255,255,.12);}
+
+.nebula-consent-modal{position:fixed;z-index:2147483001;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.62);backdrop-filter:blur(10px);font-family:var(--font-sans,"Plus Jakarta Sans",system-ui,sans-serif);}
+.nebula-consent-modal.is-visible{display:flex;}
+.nebula-consent-panel{width:min(760px,100%);max-height:min(760px,92vh);overflow:auto;border-radius:28px;border:1px solid rgba(159,225,203,.22);background:linear-gradient(145deg,rgba(8,20,31,.98),rgba(3,8,16,.99));box-shadow:0 36px 140px rgba(0,0,0,.72);color:#fff;}
+.nebula-consent-head{padding:22px 22px 14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:14px;justify-content:space-between;align-items:flex-start;}
+.nebula-consent-head h2{margin:0 0 7px!important;color:#fff!important;font:800 26px/1.05 var(--font-serif,"Playfair Display",Georgia,serif)!important;}
+.nebula-consent-head p{margin:0!important;color:#cfe0db!important;line-height:1.55!important;font-size:13.5px!important;}
+.nebula-consent-x{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:#fff;font-size:22px;display:grid;place-items:center;cursor:pointer;flex:0 0 auto;}
+.nebula-consent-body{padding:18px 22px;display:grid;gap:12px;}
+.consent-row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:15px;border-radius:18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);}
+.consent-row h3{margin:0 0 5px!important;color:#fff!important;font:800 13px/1.1 var(--font-mono,"Geist Mono",monospace)!important;text-transform:uppercase;letter-spacing:.12em;}
+.consent-row p{margin:0!important;color:#c6d7d2!important;font-size:13px!important;line-height:1.55!important;}
+.nebula-switch{position:relative;display:inline-flex;width:54px;height:31px;align-items:center;}
+.nebula-switch input{position:absolute;opacity:0;width:1px;height:1px;}
+.nebula-slider{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.16);transition:.2s ease;}
+.nebula-slider:before{content:"";position:absolute;width:23px;height:23px;left:3px;top:3px;border-radius:999px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.35);transition:.2s ease;}
+.nebula-switch input:checked + .nebula-slider{background:linear-gradient(135deg,#2bbd8e,#86f7d5);border-color:transparent;}
+.nebula-switch input:checked + .nebula-slider:before{transform:translateX(23px);background:#06120f;}
+.nebula-switch input:disabled + .nebula-slider{opacity:.75;background:rgba(43,189,142,.28);}
+.nebula-consent-foot{padding:16px 22px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
+.nebula-cookie-status{margin-top:8px;color:#93ada7!important;font:700 11px/1.45 var(--font-mono,"Geist Mono",monospace)!important;letter-spacing:.06em;text-transform:uppercase;}
+@media(max-width:760px){
+  .nebula-cookie-banner{width:calc(100% - 16px);margin-bottom:8px;border-radius:20px;}
+  .nebula-cookie-inner{grid-template-columns:1fr;padding:16px;gap:14px;}
+  .nebula-cookie-actions{min-width:0;width:100%;display:grid;grid-template-columns:1fr;}
+  .nebula-cookie-btn{width:100%;min-height:46px;}
+  .nebula-cookie-copy h2{font-size:20px!important;padding-right:28px;}
+  .nebula-consent-modal{padding:10px;align-items:flex-end;}
+  .nebula-consent-panel{border-radius:24px 24px 18px 18px;max-height:90vh;}
+  .nebula-consent-head{padding:18px 16px 12px;}
+  .nebula-consent-head h2{font-size:22px!important;}
+  .nebula-consent-body{padding:14px 14px;}
+  .consent-row{grid-template-columns:1fr;gap:12px;}
+  .nebula-consent-foot{padding:14px;display:grid;grid-template-columns:1fr;}
+  .footer-consent-links{width:100%;}
+}

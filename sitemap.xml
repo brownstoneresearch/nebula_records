@@ -42,4 +42,11 @@
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
+
+  <url>
+    <loc>https://nebularecordholdings.art/cookies.html</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.35</priority>
+  </url>
 </urlset>
