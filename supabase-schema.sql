@@ -3,6 +3,7 @@
 -- Supports admin and signed artist dashboards with role-based access.
 -- Creates: profiles, tracks, events, artists_pipeline, demo_leads, ensure_profile(), hardened RLS policies, and nebula-audio storage.
 -- v9 adds optional Catalogue Preview Shelf controls: preview_enabled, preview_slot and is_full_song.
+-- v15 adds storage-backed MP3 playback fields: audio_path, audio_bucket, audio_mime_type, audio_size_bytes, audio_uploaded_at.
 
 create extension if not exists pgcrypto;
 
@@ -26,6 +27,11 @@ create table if not exists public.tracks (
   status text default 'Draft',
   link text,
   audio_url text,
+  audio_path text,
+  audio_bucket text default 'nebula-audio',
+  audio_mime_type text,
+  audio_size_bytes bigint,
+  audio_uploaded_at timestamptz,
   track_key text,
   cover_url text,
   preview_enabled boolean not null default false,
@@ -70,6 +76,11 @@ alter table if exists public.tracks add column if not exists cover_url text;
 alter table if exists public.tracks add column if not exists preview_enabled boolean not null default false;
 alter table if exists public.tracks add column if not exists preview_slot integer check (preview_slot between 1 and 12);
 alter table if exists public.tracks add column if not exists is_full_song boolean not null default false;
+alter table if exists public.tracks add column if not exists audio_path text;
+alter table if exists public.tracks add column if not exists audio_bucket text default 'nebula-audio';
+alter table if exists public.tracks add column if not exists audio_mime_type text;
+alter table if exists public.tracks add column if not exists audio_size_bytes bigint;
+alter table if exists public.tracks add column if not exists audio_uploaded_at timestamptz;
 
 -- v13: widen public catalogue preview positions to 12 slots.
 do $$
@@ -98,6 +109,7 @@ alter table public.tracks
 create index if not exists tracks_owner_created_idx on public.tracks(owner_id, created_at desc);
 create index if not exists tracks_track_key_idx on public.tracks(track_key);
 create index if not exists tracks_catalogue_preview_idx on public.tracks(preview_enabled, preview_slot, created_at desc) where preview_enabled = true;
+create index if not exists tracks_audio_path_idx on public.tracks(audio_path) where audio_path is not null;
 create unique index if not exists tracks_owner_track_key_unique on public.tracks(owner_id, track_key) where track_key is not null;
 create index if not exists events_owner_created_idx on public.events(owner_id, created_at desc);
 create index if not exists demo_leads_created_idx on public.demo_leads(created_at desc);
@@ -244,7 +256,11 @@ with check ((auth.uid() = id and role = 'artist') or public.is_admin());
 create policy "tracks_select_own_or_admin" on public.tracks
 for select using (owner_id = auth.uid() or public.is_admin());
 create policy "tracks_public_select_catalogue_preview" on public.tracks
-for select using (lower(status) = 'published' and preview_enabled = true and audio_url is not null);
+for select using (
+  lower(status) = 'published'
+  and preview_enabled = true
+  and (nullif(audio_url, '') is not null or nullif(audio_path, '') is not null)
+);
 create policy "tracks_insert_own_or_admin" on public.tracks
 for insert with check (owner_id = auth.uid() or public.is_admin());
 create policy "tracks_update_own_or_admin" on public.tracks
@@ -277,6 +293,7 @@ on conflict (id) do update set public = true;
 
 drop policy if exists "audio_authenticated_upload" on storage.objects;
 drop policy if exists "audio_owner_or_admin_read" on storage.objects;
+drop policy if exists "audio_public_read" on storage.objects;
 drop policy if exists "audio_owner_or_admin_update" on storage.objects;
 drop policy if exists "audio_owner_or_admin_delete" on storage.objects;
 
@@ -290,7 +307,7 @@ with check (
   )
 );
 
-create policy "audio_owner_or_admin_read" on storage.objects
+create policy "audio_public_read" on storage.objects
 for select using (bucket_id = 'nebula-audio');
 
 create policy "audio_owner_or_admin_update" on storage.objects

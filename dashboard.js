@@ -23,6 +23,24 @@
   const q = (id) => document.getElementById(id);
   const all = (sel) => [...document.querySelectorAll(sel)];
   const bucket = () => window.NEBULA_SUPABASE_CONFIG?.storageBucket || 'nebula-audio';
+  const cleanUrl = (value) => {
+    const url = String(value || '').trim();
+    if (!url || url === 'null' || url === 'undefined') return '';
+    if (url.includes('File stream access denied')) return '';
+    return url;
+  };
+  const storagePublicUrl = (path, bucketName=bucket()) => {
+    const cleanPath = cleanUrl(path);
+    if (!cleanPath) return '';
+    if (/^https?:\/\//i.test(cleanPath)) return cleanPath;
+    const cfg = window.NEBULA_SUPABASE_CONFIG || {};
+    const base = cleanUrl(cfg.url).replace(/\/$/, '');
+    if (!base || base.includes('YOUR_PROJECT_ID')) return '';
+    const encodedBucket = encodeURIComponent(bucketName || bucket());
+    const encodedPath = cleanPath.split('/').map(part => encodeURIComponent(part)).join('/');
+    return `${base}/storage/v1/object/public/${encodedBucket}/${encodedPath}`;
+  };
+  const audioUrlForRow = (row) => cleanUrl(row?.audio_url) || storagePublicUrl(row?.audio_path || row?.storage_path, row?.audio_bucket || bucket());
   const isAdmin = () => profile?.role === 'admin';
   const setStatus = (text, tone='info') => {
     const el = q('dashboardStatus');
@@ -70,7 +88,12 @@
         type: row?.type || slot.type,
         status: row?.status || slot.status,
         link: row?.link || slot.link,
-        audio_url: row?.audio_url || slot.audio_url,
+        audio_url: audioUrlForRow(row) || slot.audio_url,
+        audio_path: row?.audio_path || row?.storage_path || '',
+        audio_bucket: row?.audio_bucket || bucket(),
+        audio_mime_type: row?.audio_mime_type || '',
+        audio_size_bytes: row?.audio_size_bytes || null,
+        audio_uploaded_at: row?.audio_uploaded_at || null,
         fallback_audio_url: slot.fallback_audio_url || slot.audio_url,
         cover: row?.cover_url || slot.cover,
         cover_url: row?.cover_url || slot.cover,
@@ -88,6 +111,9 @@
       .map(row => ({
         ...row,
         key: row.track_key || slugify(row.title),
+        audio_url: audioUrlForRow(row),
+        audio_path: row.audio_path || row.storage_path || '',
+        audio_bucket: row.audio_bucket || bucket(),
         cover: row.cover_url || 'assets/cover-midnight-signal.svg',
         _slotIndex: -1,
         _preset: false,
@@ -173,8 +199,8 @@
     const trackTable = q('trackTable');
     if (trackTable) {
       trackTable.innerHTML = merged.map((t, index) => {
-        const hasSupabase = Boolean(t._saved && t.audio_url);
-        const audioLabel = hasSupabase ? 'Uploaded audio' : (t.audio_url ? 'Local fallback' : 'No audio yet');
+        const hasSupabase = Boolean(t._saved && (t.audio_url || t.audio_path));
+        const audioLabel = hasSupabase ? 'Uploaded MP3 connected' : (t.audio_url ? 'Local fallback' : 'No audio yet');
         const statusClass = hasSupabase ? 'good' : 'pending';
         const onShelf = Boolean(t.preview_enabled && Number(t.preview_slot || 0));
         const shelfLabel = onShelf ? `Slot ${String(t.preview_slot).padStart(2,'0')}` : 'Not selected';
@@ -270,18 +296,31 @@
   }
 
   async function uploadAudioFile(file, artistName) {
-    if (!file || !file.size) return '';
-    const safe = file.name.replace(/[^a-z0-9_.-]/gi, '-').toLowerCase();
+    if (!file || !file.size) return null;
+    const extension = (file.name.split('.').pop() || 'mp3').toLowerCase();
+    const mime = file.type || (extension === 'mp3' ? 'audio/mpeg' : 'application/octet-stream');
+    if (!/^audio\//i.test(mime) && !/mp3|mpeg|wav|m4a|aac|ogg/i.test(extension)) {
+      throw new Error('Please upload a valid audio file. MP3 is recommended for public previews.');
+    }
+    const safeBase = file.name.replace(/\.[^.]+$/, '').replace(/[^a-z0-9_.-]/gi, '-').toLowerCase() || 'preview';
+    const safeName = `${safeBase}.${extension}`;
     const artistFolder = slugify(artistName || profile?.artist_name || 'artist');
-    const path = `${user.id}/previews/${artistFolder}/${Date.now()}-${safe}`;
+    const path = `${user.id}/previews/${artistFolder}/${Date.now()}-${safeName}`;
     const up = await client.storage.from(bucket()).upload(path, file, {
       cacheControl: '3600',
       upsert: false,
-      contentType: file.type || 'audio/mpeg'
+      contentType: mime
     });
     if (up.error) throw up.error;
-    const publicData = client.storage.from(bucket()).getPublicUrl(path);
-    return publicData.data?.publicUrl || '';
+    const publicUrl = storagePublicUrl(path, bucket());
+    return {
+      audio_url: publicUrl,
+      audio_path: path,
+      audio_bucket: bucket(),
+      audio_mime_type: mime,
+      audio_size_bytes: file.size,
+      audio_uploaded_at: new Date().toISOString()
+    };
   }
 
   async function insertTrack(payload) {
@@ -293,6 +332,11 @@
       delete fallback.preview_enabled;
       delete fallback.preview_slot;
       delete fallback.is_full_song;
+      delete fallback.audio_path;
+      delete fallback.audio_bucket;
+      delete fallback.audio_mime_type;
+      delete fallback.audio_size_bytes;
+      delete fallback.audio_uploaded_at;
       return client.from('tracks').insert(fallback).select('*').single();
     }
     return res;
@@ -307,6 +351,11 @@
       delete fallback.preview_enabled;
       delete fallback.preview_slot;
       delete fallback.is_full_song;
+      delete fallback.audio_path;
+      delete fallback.audio_bucket;
+      delete fallback.audio_mime_type;
+      delete fallback.audio_size_bytes;
+      delete fallback.audio_uploaded_at;
       return client.from('tracks').update(fallback).eq('id', id).select('*').single();
     }
     return res;
@@ -318,13 +367,29 @@
     const slot = slotForTitle(rawTitle) || slotForKey(String(fd.get('key') || ''));
     const key = slot?.key || String(fd.get('key') || slugify(rawTitle));
     const artistName = String(fd.get('artist') || slot?.artist || 'Blocboykiddie').trim();
-    let audio_url = existingTrack?.audio_url || slot?.audio_url || '';
+
+    let audio_url = audioUrlForRow(existingTrack) || slot?.audio_url || '';
+    let audio_path = existingTrack?.audio_path || existingTrack?.storage_path || '';
+    let audio_bucket = existingTrack?.audio_bucket || bucket();
+    let audio_mime_type = existingTrack?.audio_mime_type || '';
+    let audio_size_bytes = existingTrack?.audio_size_bytes || null;
+    let audio_uploaded_at = existingTrack?.audio_uploaded_at || null;
+
     const file = fd.get('audio');
-    if (file && file.size) audio_url = await uploadAudioFile(file, artistName);
+    if (file && file.size) {
+      const uploaded = await uploadAudioFile(file, artistName);
+      audio_url = uploaded.audio_url;
+      audio_path = uploaded.audio_path;
+      audio_bucket = uploaded.audio_bucket;
+      audio_mime_type = uploaded.audio_mime_type;
+      audio_size_bytes = uploaded.audio_size_bytes;
+      audio_uploaded_at = uploaded.audio_uploaded_at;
+    }
+
     const previewEnabled = boolValue(fd.get('preview_enabled'));
     let previewSlot = Number(fd.get('preview_slot') || existingTrack?.preview_slot || slot?.preview_slot || 0);
     if (previewEnabled && !(previewSlot >= 1 && previewSlot <= MAX_PREVIEW_SLOT)) previewSlot = slot?.preview_slot ? Number(slot.preview_slot) : null;
-    if (previewEnabled && !audio_url) throw new Error('Upload an MP3 before adding this song to the public Catalogue Preview Shelf.');
+    if (previewEnabled && !audio_url && !audio_path) throw new Error('Upload an MP3 before adding this song to the public Catalogue Preview Shelf.');
 
     const payload = {
       title: slot ? slot.title : rawTitle,
@@ -333,8 +398,13 @@
       status: String(fd.get('status') || slot?.status || (previewEnabled ? 'Published' : 'Draft')),
       link: String(fd.get('link') || slot?.link || SONGWHIP),
       audio_url,
+      audio_path,
+      audio_bucket,
+      audio_mime_type,
+      audio_size_bytes,
+      audio_uploaded_at,
       track_key: key,
-      cover_url: slot?.cover || existingTrack?.cover_url || '',
+      cover_url: slot?.cover || existingTrack?.cover_url || 'assets/cover-midnight-signal.svg',
       preview_enabled: previewEnabled,
       preview_slot: previewEnabled && previewSlot ? previewSlot : null,
       is_full_song: boolValue(fd.get('is_full_song'))
@@ -373,7 +443,7 @@
     if (q('editPreviewEnabled')) q('editPreviewEnabled').checked = Boolean(t.preview_enabled);
     if (q('editPreviewSlot')) q('editPreviewSlot').value = t.preview_slot ? String(t.preview_slot) : '';
     if (q('editIsFullSong')) q('editIsFullSong').value = t.is_full_song ? 'true' : 'false';
-    q('editCurrentAudio').textContent = t.audio_url ? (t._saved ? 'Current Supabase preview is connected.' : 'Using local fallback until you upload MP3.') : 'No audio connected yet.';
+    q('editCurrentAudio').textContent = (t.audio_url || t.audio_path) ? (t._saved ? 'Current Supabase MP3 preview is connected.' : 'Using local fallback until you upload MP3.') : 'No audio connected yet.';
     q('trackEditStatus').textContent = 'Choose a new MP3 only if you want to replace the current audio. Tick the shelf option only when this song should appear publicly.';
     modal.hidden = false;
     modal.setAttribute('aria-hidden', 'false');
@@ -449,7 +519,7 @@
       }
       if (previewBtn) {
         const index = Number(previewBtn.dataset.previewTrack || 0);
-        if (!tracks[index]?.audio_url && !tracks[index]?.fallback_audio_url) {
+        if (!tracks[index]?.audio_url && !tracks[index]?.audio_path && !tracks[index]?.fallback_audio_url) {
           setStatus('No audio is connected to this track yet. Use Edit / Re-upload first.', 'error');
           return;
         }
@@ -457,9 +527,10 @@
           const playerTrack = window.NEBULA_PLAYER.tracks.findIndex(pt => normalize(pt.title) === normalize(tracks[index].title));
           if (playerTrack > -1) { window.NEBULA_PLAYER.loadTrack(playerTrack, true); return; }
         }
-        if (tracks[index]?.audio_url || tracks[index]?.fallback_audio_url) {
+        if (tracks[index]?.audio_url || tracks[index]?.audio_path || tracks[index]?.fallback_audio_url) {
           const t = tracks[index];
-          let previewAudio = new Audio(t.audio_url || t.fallback_audio_url);
+          const primarySrc = audioUrlForRow(t) || t.fallback_audio_url;
+          let previewAudio = new Audio(primarySrc);
           previewAudio.addEventListener('error', () => {
             if (t.fallback_audio_url && previewAudio.src !== new URL(t.fallback_audio_url, window.location.href).href) {
               previewAudio = new Audio(t.fallback_audio_url);

@@ -11,25 +11,82 @@ function esc(value){return String(value ?? '').replace(/[&<>"']/g, m => ({'&':'&
 function attr(value){return esc(value).replace(/`/g,'&#096;');}
 function normalizeTrackTitle(value){return String(value||'').toLowerCase().replace(/[^a-z0-9]/g,'')}
 function formatTime(seconds){ if(!Number.isFinite(seconds)) return '0:00'; const m=Math.floor(seconds/60); const s=String(Math.floor(seconds%60)).padStart(2,'0'); return `${m}:${s}`; }
-function cleanAudioUrl(value){ const url=String(value||'').trim(); if(!url || url==='null' || url==='undefined') return ''; if(url.includes('File stream access denied')) return ''; return url; }
+function cleanAudioUrl(value){
+  const url=String(value||'').trim();
+  if(!url || url==='null' || url==='undefined') return '';
+  if(url.includes('File stream access denied')) return '';
+  return url;
+}
+function audioBucketName(row){ return row?.audio_bucket || window.NEBULA_SUPABASE_CONFIG?.storageBucket || 'nebula-audio'; }
+function supabaseStoragePublicUrl(path,bucketName){
+  const cleanPath = cleanAudioUrl(path);
+  if(!cleanPath) return '';
+  if(/^https?:\/\//i.test(cleanPath)) return cleanPath;
+  const cfg = window.NEBULA_SUPABASE_CONFIG || {};
+  const base = cleanAudioUrl(cfg.url).replace(/\/$/, '');
+  if(!base || base.includes('YOUR_PROJECT_ID')) return '';
+  const bucket = encodeURIComponent(bucketName || cfg.storageBucket || 'nebula-audio');
+  const encodedPath = cleanPath.split('/').map(part => encodeURIComponent(part)).join('/');
+  return `${base}/storage/v1/object/public/${bucket}/${encodedPath}`;
+}
+function uniqueUrls(values){
+  const seen = new Set();
+  return values.map(cleanAudioUrl).filter(url => {
+    if(!url || seen.has(url)) return false;
+    seen.add(url);
+    return true;
+  });
+}
+function audioCandidatesFromRow(row){
+  return uniqueUrls([
+    row?.audio_url,
+    row?.audio_public_url,
+    supabaseStoragePublicUrl(row?.audio_path || row?.storage_path, audioBucketName(row)),
+    row?.src
+  ]);
+}
 function publicTrack(row){
+  const candidates = audioCandidatesFromRow(row);
   return {
     id: row.id || '',
     title: row.title || 'Untitled Preview',
     artist: row.artist || 'Nebula Artist',
-    src: cleanAudioUrl(row.audio_url || row.src),
+    src: candidates[0] || '',
+    audio_candidates: candidates,
+    audio_path: row.audio_path || row.storage_path || '',
+    audio_bucket: audioBucketName(row),
     cover: row.cover_url || row.cover || 'assets/cover-midnight-signal.svg',
     type: row.is_full_song === true || row.is_full_song === 'true' ? 'Full song preview' : (row.type ? `${row.type} preview` : 'Catalogue preview'),
     link: row.link || SONGWHIP_URL,
     slot: Number(row.preview_slot || row.slot || 0),
-    created_at: row.created_at || ''
+    created_at: row.created_at || '',
+    _audioCandidateIndex: 0
   };
 }
 function createAudioForTrack(track){
-  const nextAudio = new Audio(track?.src || '');
+  const candidates = Array.isArray(track?.audio_candidates) ? track.audio_candidates : uniqueUrls([track?.src]);
+  const idx = Math.max(0, Number(track?._audioCandidateIndex || 0));
+  const nextAudio = new Audio(candidates[idx] || track?.src || '');
   nextAudio.preload = 'metadata';
   nextAudio.loop = false;
+  nextAudio.crossOrigin = 'anonymous';
   return nextAudio;
+}
+function tryNextAudioCandidate(){
+  const t = activeTrack();
+  const candidates = Array.isArray(t.audio_candidates) ? t.audio_candidates : uniqueUrls([t.src]);
+  const nextIndex = Number(t._audioCandidateIndex || 0) + 1;
+  if(nextIndex < candidates.length){
+    t._audioCandidateIndex = nextIndex;
+    try{ audio.pause(); }catch(e){}
+    audio = createAudioForTrack(t);
+    bindAudioEvents();
+    syncPlayer();
+    setPlayerStatus('Trying alternate uploaded preview source…');
+    audio.play().catch(() => setPlayerStatus('Tap play to start preview.'));
+    return true;
+  }
+  return false;
 }
 function setPlayerStatus(message){ const s=document.getElementById('playerStatus'); if(s) s.textContent=message || ''; }
 function clearPlayerStatus(){ setPlayerStatus(''); }
@@ -69,11 +126,12 @@ function bindAudioEvents(){
   audio.addEventListener('pause',syncPlayer);
   audio.addEventListener('ended',nextTrack);
   audio.addEventListener('loadedmetadata',()=>{ clearPlayerStatus(); syncPlayer(); });
-  audio.addEventListener('error',()=>setPlayerStatus(`${activeTrack().title || 'Preview'} file unavailable. Re-upload the MP3 from the portal or open the full hub.`));
+  audio.addEventListener('error',()=>{ if(tryNextAudioCandidate()) return; setPlayerStatus(`${activeTrack().title || 'Preview'} file unavailable. Re-upload the MP3 from the portal, confirm the nebula-audio bucket is public, or open the full hub.`); });
 }
 function loadTrack(index, autoplay=false){
   if(!tracks.length){ renderPlayer(); openPlayer(); setPlayerStatus('No song has been selected for the Catalogue Preview Shelf yet. Select one from the admin or artist portal.'); return; }
   currentTrack=(Number(index)+tracks.length)%tracks.length;
+  if(tracks[currentTrack]) tracks[currentTrack]._audioCandidateIndex = 0;
   const wasPlaying=!audio.paused;
   try{ audio.pause(); }catch(e){}
   audio = createAudioForTrack(tracks[currentTrack]);
@@ -163,23 +221,37 @@ function setupTrackButtons(){
 function setupNavigation(){ const page=document.body.dataset.page; document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===page)a.classList.add('active')}); const toggle=document.getElementById('navToggle'), nav=document.getElementById('mainNav'); if(toggle&&nav){toggle.addEventListener('click',()=>{nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(nav.classList.contains('open')))});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false')}))} }
 function setupScrollEffects(){ const header=document.getElementById('siteHeader'); const cursor=document.getElementById('cursorGlow'); window.addEventListener('mousemove',e=>{if(cursor){cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'}}); const onScroll=()=>{ if(header) header.classList.toggle('scrolled',window.scrollY>30); document.querySelectorAll('[data-parallax]').forEach(el=>{const speed=Number(el.dataset.parallax||.12); el.style.transform=`translate3d(0,${window.scrollY*speed}px,0)`});}; window.addEventListener('scroll',onScroll,{passive:true}); onScroll(); const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('in-view')})},{threshold:.12}); document.querySelectorAll('.reveal').forEach(el=>observer.observe(el)); }
 function setupIntro(){ const intro=document.getElementById('introScreen'); if(!intro) return; const hide=()=>{intro.classList.add('hide'); sessionStorage.setItem('nebulaIntroSeen','1')}; document.getElementById('skipIntro')?.addEventListener('click',hide); if(sessionStorage.getItem('nebulaIntroSeen')){intro.classList.add('hide');return;} setTimeout(hide,3800); }
+async function fetchPublishedPreviewRows(sb){
+  const fullColumns = 'id,title,artist,type,status,link,audio_url,audio_path,audio_bucket,audio_mime_type,audio_size_bytes,track_key,cover_url,preview_enabled,preview_slot,is_full_song,created_at';
+  const legacyColumns = 'id,title,artist,type,status,link,audio_url,track_key,cover_url,preview_enabled,preview_slot,is_full_song,created_at';
+  const makeQuery = cols => sb.from('tracks')
+    .select(cols)
+    .eq('preview_enabled', true)
+    .ilike('status','published')
+    .order('preview_slot',{ascending:true, nullsFirst:false})
+    .order('created_at',{ascending:false})
+    .limit(120);
+  let result = await makeQuery(fullColumns);
+  if(result.error && /audio_path|audio_bucket|audio_mime_type|audio_size_bytes|column/i.test(result.error.message || '')){
+    result = await makeQuery(legacyColumns);
+  }
+  return result;
+}
 async function hydrateTracksFromSupabase(){
   renderPreviewShelf();
   try{
     const cfg = window.NEBULA_SUPABASE_CONFIG;
     if(!cfg || !cfg.url || !cfg.anonKey || String(cfg.url).includes('YOUR_') || !window.supabase) { registerPlayerApi(); return; }
-    const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
-    let {data, error} = await sb.from('tracks')
-      .select('id,title,artist,type,status,link,audio_url,track_key,cover_url,preview_enabled,preview_slot,is_full_song,created_at')
-      .eq('preview_enabled', true)
-      .ilike('status','published')
-      .not('audio_url','is',null)
-      .order('preview_slot',{ascending:true, nullsFirst:false})
-      .order('created_at',{ascending:false})
-      .limit(72);
+    const sb = window.createNebulaSupabaseClient ? window.createNebulaSupabaseClient() : window.supabase.createClient(cfg.url, cfg.anonKey);
+    const {data, error} = await fetchPublishedPreviewRows(sb);
     if(error && /preview_enabled|preview_slot|is_full_song|column/i.test(error.message || '')){
       console.warn('Run the latest Supabase shelf schema to enable dynamic public preview cards:', error.message);
-      registerPlayerApi(); return;
+      tracks = [];
+      audio = createAudioForTrack(null);
+      bindAudioEvents();
+      renderPreviewShelf();
+      registerPlayerApi();
+      return;
     }
     if(error) throw error;
     const selected=[];
@@ -198,8 +270,20 @@ async function hydrateTracksFromSupabase(){
       return String(b.created_at||'').localeCompare(String(a.created_at||''));
     });
     currentTrack = 0;
-    audio = createAudioForTrack(tracks[0]); bindAudioEvents(); syncPlayer(); renderPreviewShelf(); registerPlayerApi();
-  }catch(err){ console.warn('Supabase preview shelf hydration skipped:', err?.message || err); registerPlayerApi(); }
+    if(tracks[0]) tracks[0]._audioCandidateIndex = 0;
+    audio = createAudioForTrack(tracks[0] || null);
+    bindAudioEvents();
+    syncPlayer();
+    renderPreviewShelf();
+    registerPlayerApi();
+  }catch(err){
+    console.warn('Supabase preview shelf hydration skipped:', err?.message || err);
+    tracks = [];
+    audio = createAudioForTrack(null);
+    bindAudioEvents();
+    renderPreviewShelf();
+    registerPlayerApi();
+  }
 }
 function registerPlayerApi(){ window.NEBULA_PLAYER = { tracks, loadTrack, closePlayer, openPlayer, refresh: hydrateTracksFromSupabase, renderPreviewShelf }; }
 function setupMagneticButtons(){ document.querySelectorAll('.magnetic').forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(); const x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;el.style.transform=`translate(${x*.08}px,${y*.12}px)`});el.addEventListener('mouseleave',()=>{el.style.transform=''})}); }
